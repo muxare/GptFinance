@@ -9,7 +9,7 @@
     using System.Threading.Tasks;
     using YahooFinanceAPI.Models;
 
-    public class YahooSearchService
+    public class YahooSearchService : IYahooSearchService<Company>
     {
         private const string YahooFinanceApiBaseUrl = "https://query1.finance.yahoo.com";
 
@@ -66,20 +66,5 @@
             // Removing duplicates
             return companies.GroupBy(c => c.Symbol).Select(g => g.First()).ToList();
         }
-    }
-
-    public class YahooSearchResults
-    {
-        [JsonProperty("quotes")]
-        public List<YahooSearchResult> Quotes { get; set; }
-    }
-
-    public class YahooSearchResult
-    {
-        [JsonProperty("symbol")]
-        public string Symbol { get; set; }
-
-        [JsonProperty("shortname")]
-        public string CompanyName { get; set; }
     }
 }

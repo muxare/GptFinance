@@ -4,14 +4,13 @@
 
     using CsvHelper;
     using CsvHelper.Configuration;
-    using Microsoft.Extensions.Configuration;
     using System.Globalization;
     using System.IO;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using YahooFinanceAPI.Models;
+    using Models;
 
-    public class YahooFinanceService
+    public class YahooFinanceService : IYahooFinanceService<CsvRecord>
     {
         private const string BaseUrl = "https://query1.finance.yahoo.com/v7/finance/download/";
         private readonly HttpClient _httpClient;
@@ -51,7 +50,7 @@
             }
         }
 
-        private List<EODData> Convert(List<CsvRecord> csvRecords)
+        public List<EODData> Convert(List<CsvRecord> csvRecords)
         {
             return csvRecords.Select(r =>
             {

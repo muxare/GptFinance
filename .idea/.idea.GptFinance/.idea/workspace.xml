@@ -9,24 +9,54 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GetSolutionContent.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/GetSolutionContent.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OutputFile.txt" beforeDir="false" afterPath="$PROJECT_DIR$/OutputFile.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/CompaniesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/CompaniesController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Data/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Data/AppDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Models/EMAData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Models/EMAData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Services/TechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Services/TechnicalIndicatorsService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Interfaces/ICompanyService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Interfaces/ITechnicalIndicatorsService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Interfaces/IYahooSearchService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Models/YahooSearchResult.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Models/YahooSearchResults.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Infrastructure/Models/CsvRecord.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Class1.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/GptFinance.Application.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Application/GptFinance.Application.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/Class1.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/GptFinance.Domain.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/GptFinance.Domain.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Class1.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/GptFinance.Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/GptFinance.Infrastructure.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Data/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Data/AppDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Migrations/20230319084836_InitialMigration.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Migrations/20230319084836_InitialMigration.Designer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Migrations/20230319084836_InitialMigration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Migrations/20230319084836_InitialMigration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Migrations/20230319121100_MadeValuesOfEodDataToNullable.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Migrations/20230319121100_MadeValuesOfEodDataToNullable.Designer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Migrations/20230319121100_MadeValuesOfEodDataToNullable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Migrations/20230319121100_MadeValuesOfEodDataToNullable.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Migrations/AppDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Migrations/AppDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Models/Company.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/Company.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Models/EMAData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/EMAData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Models/EODData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/EODData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Models/MACDData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/MACDData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Services/CompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/CompanyService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Services/CsvRecordMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Mappings/CsvRecordMap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Services/NullableDecimalConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Converters/NullableDecimalConverter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Services/NullableLongConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Converters/NullableLongConverter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Services/TechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Services/YahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Services/YahooSearchService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooSearchService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/YahooFinanceAPI.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/YahooFinanceAPI.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f4708639776589f5ac2739f6fcbfc67343b1f9dac51cc1dbfdb003eef77cc1c/Monitor.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2NoeqRkO21hKargzoFGHuCfmLvL" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -94,7 +124,7 @@
       <updated>1680335053401</updated>
       <workItem from="1680335056794" duration="33000" />
       <workItem from="1680335309655" duration="70000" />
-      <workItem from="1680335397510" duration="1558000" />
+      <workItem from="1680335397510" duration="6487000" />
     </task>
     <servers />
   </component>

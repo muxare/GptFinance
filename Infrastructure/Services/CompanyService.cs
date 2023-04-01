@@ -5,7 +5,7 @@
     using YahooFinanceAPI.Data;
     using YahooFinanceAPI.Models;
 
-    public class CompanyService
+    public class CompanyService : ICompanyService
     {
         private readonly AppDbContext _dbContext;
 

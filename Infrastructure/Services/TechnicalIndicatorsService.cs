@@ -1,7 +1,8 @@
 ﻿namespace YahooFinanceAPI.Services
 {
     // Services/YahooFinanceService.cs
-    public class TechnicalIndicatorsService
+
+    public class TechnicalIndicatorsService : ITechnicalIndicatorsService
     {
         public decimal CalculateEMA(decimal previousEMA, decimal currentPrice, int period)
         {
