@@ -11,7 +11,7 @@
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<EODData> EODData { get; set; }
-        public DbSet<EMAData> EMAData { get; set; }
+        public DbSet<EmaData> EMAData { get; set; }
         public DbSet<MACDData> MACDData { get; set; }
     }
 }

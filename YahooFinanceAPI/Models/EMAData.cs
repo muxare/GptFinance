@@ -1,7 +1,7 @@
 ﻿namespace YahooFinanceAPI.Models
 {
     // Models/EMAData.cs
-    public class EMAData
+    public class EmaData
     {
         public int Id { get; set; }
         public int CompanyId { get; set; }

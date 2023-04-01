@@ -212,7 +212,7 @@ namespace YahooFinanceAPI.Controllers
                     continue;
                 decimal ema = _technicalIndicatorsService.CalculateEMA(previousEMA, eodData.Close.Value, period);
 
-                _context.EMAData.Add(new EMAData
+                _context.EMAData.Add(new EmaData
                 {
                     CompanyId = id,
                     Date = eodData.Date,

@@ -1,6 +1,6 @@
 # Set your solution file path
-$solutionFilePath = "C:\source\repos\Me\GptFinance\GptFinance.sln"
-$outputFilePath = "C:\source\repos\Me\GptFinance\OutputFile.txt"
+$solutionFilePath = "C:\source\repos\Me\test\GptFinance\GptFinance.sln"
+$outputFilePath = "C:\source\repos\Me\test\GptFinance\OutputFile.txt"
 
 # Check if the solution file exists
 if (-not (Test-Path -Path $solutionFilePath -PathType Leaf)) {
@@ -69,9 +69,19 @@ foreach ($projectFilePath in $projectFilePaths) {
 
     # Process and concatenate code from each C# file
     foreach ($csFile in $csFiles) {
+        if ($csFile.FullName -like "*Migration*") {
+            continue;
+        }
+        if ($csFile.FullName -like "*\obj\*") {
+            continue;
+        }
+        if ($csFile.FullName -like "*OutputFile.txt") {
+            continue;
+        }
         $processedCode = ProcessCodeFile -filePath $csFile.FullName
         if (-not [string]::IsNullOrWhiteSpace($processedCode)) {
-            $outputFileContent += "`n`n----- $($csFile.FullName) ----`n`n" + $processedCode
+            #$outputFileContent += "`n`n----- $($csFile.FullName) ----`n`n" + $processedCode
+            $outputFileContent += $processedCode
         }
     }
 }

@@ -1,7 +1,3 @@
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Controllers\CompaniesController.cs ----
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YahooFinanceAPI.Data;
@@ -165,7 +161,7 @@ namespace YahooFinanceAPI.Controllers
                 if (eodData.Close == null)
                     continue;
                 decimal ema = _technicalIndicatorsService.CalculateEMA(previousEMA, eodData.Close.Value, period);
-                _context.EMAData.Add(new EMAData
+                _context.EMAData.Add(new EmaData
                 {
                     CompanyId = id,
                     Date = eodData.Date,
@@ -228,10 +224,6 @@ namespace YahooFinanceAPI.Controllers
         }
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Data\AppDbContext.cs ----
-
 namespace YahooFinanceAPI.Data
 {
     using Microsoft.EntityFrameworkCore;
@@ -243,654 +235,10 @@ namespace YahooFinanceAPI.Data
         }
         public DbSet<Company> Companies { get; set; }
         public DbSet<EODData> EODData { get; set; }
-        public DbSet<EMAData> EMAData { get; set; }
+        public DbSet<EmaData> EMAData { get; set; }
         public DbSet<MACDData> MACDData { get; set; }
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Migrations\20230319084836_InitialMigration.cs ----
-
-using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-#nullable disable
-namespace YahooFinanceAPI.Migrations
-{
-    public partial class InitialMigration : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.CreateTable(
-                name: "Companies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Symbol = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Companies", x => x.Id);
-                });
-            migrationBuilder.CreateTable(
-                name: "EMAData",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Period = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EMAData", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EMAData_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-            migrationBuilder.CreateTable(
-                name: "EODData",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Open = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    High = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Low = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Close = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Volume = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EODData", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EODData_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-            migrationBuilder.CreateTable(
-                name: "MACDData",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ShortPeriod = table.Column<int>(type: "int", nullable: false),
-                    LongPeriod = table.Column<int>(type: "int", nullable: false),
-                    SignalPeriod = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MACDData", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MACDData_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-            migrationBuilder.CreateIndex(
-                name: "IX_EMAData_CompanyId",
-                table: "EMAData",
-                column: "CompanyId");
-            migrationBuilder.CreateIndex(
-                name: "IX_EODData_CompanyId",
-                table: "EODData",
-                column: "CompanyId");
-            migrationBuilder.CreateIndex(
-                name: "IX_MACDData_CompanyId",
-                table: "MACDData",
-                column: "CompanyId");
-        }
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "EMAData");
-            migrationBuilder.DropTable(
-                name: "EODData");
-            migrationBuilder.DropTable(
-                name: "MACDData");
-            migrationBuilder.DropTable(
-                name: "Companies");
-        }
-    }
-}
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Migrations\20230319084836_InitialMigration.Designer.cs ----
-
-using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using YahooFinanceAPI.Data;
-#nullable disable
-namespace YahooFinanceAPI.Migrations
-{
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20230319084836_InitialMigration")]
-    partial class InitialMigration
-    {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
-        {
-#pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-            modelBuilder.Entity("YahooFinanceAPI.Models.Company", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-                    b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime2");
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-                    b.Property<string>("Symbol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-                    b.HasKey("Id");
-                    b.ToTable("Companies");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.EMAData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-                    b.Property<int>("Period")
-                        .HasColumnType("int");
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-                    b.HasKey("Id");
-                    b.HasIndex("CompanyId");
-                    b.ToTable("EMAData");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.EODData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-                    b.Property<decimal>("Close")
-                        .HasColumnType("decimal(18,2)");
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-                    b.Property<decimal>("High")
-                        .HasColumnType("decimal(18,2)");
-                    b.Property<decimal>("Low")
-                        .HasColumnType("decimal(18,2)");
-                    b.Property<decimal>("Open")
-                        .HasColumnType("decimal(18,2)");
-                    b.Property<long>("Volume")
-                        .HasColumnType("bigint");
-                    b.HasKey("Id");
-                    b.HasIndex("CompanyId");
-                    b.ToTable("EODData");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.MACDData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-                    b.Property<int>("LongPeriod")
-                        .HasColumnType("int");
-                    b.Property<int>("ShortPeriod")
-                        .HasColumnType("int");
-                    b.Property<int>("SignalPeriod")
-                        .HasColumnType("int");
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-                    b.HasKey("Id");
-                    b.HasIndex("CompanyId");
-                    b.ToTable("MACDData");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.EMAData", b =>
-                {
-                    b.HasOne("YahooFinanceAPI.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                    b.Navigation("Company");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.EODData", b =>
-                {
-                    b.HasOne("YahooFinanceAPI.Models.Company", "Company")
-                        .WithMany("EODData")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                    b.Navigation("Company");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.MACDData", b =>
-                {
-                    b.HasOne("YahooFinanceAPI.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                    b.Navigation("Company");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.Company", b =>
-                {
-                    b.Navigation("EODData");
-                });
-#pragma warning restore 612, 618
-        }
-    }
-}
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Migrations\20230319121100_MadeValuesOfEodDataToNullable.cs ----
-
-using Microsoft.EntityFrameworkCore.Migrations;
-#nullable disable
-namespace YahooFinanceAPI.Migrations
-{
-    public partial class MadeValuesOfEodDataToNullable : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AlterColumn<long>(
-                name: "Volume",
-                table: "EODData",
-                type: "bigint",
-                nullable: true,
-                oldClrType: typeof(long),
-                oldType: "bigint");
-            migrationBuilder.AlterColumn<decimal>(
-                name: "Open",
-                table: "EODData",
-                type: "decimal(18,2)",
-                nullable: true,
-                oldClrType: typeof(decimal),
-                oldType: "decimal(18,2)");
-            migrationBuilder.AlterColumn<decimal>(
-                name: "Low",
-                table: "EODData",
-                type: "decimal(18,2)",
-                nullable: true,
-                oldClrType: typeof(decimal),
-                oldType: "decimal(18,2)");
-            migrationBuilder.AlterColumn<decimal>(
-                name: "High",
-                table: "EODData",
-                type: "decimal(18,2)",
-                nullable: true,
-                oldClrType: typeof(decimal),
-                oldType: "decimal(18,2)");
-            migrationBuilder.AlterColumn<decimal>(
-                name: "Close",
-                table: "EODData",
-                type: "decimal(18,2)",
-                nullable: true,
-                oldClrType: typeof(decimal),
-                oldType: "decimal(18,2)");
-        }
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AlterColumn<long>(
-                name: "Volume",
-                table: "EODData",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L,
-                oldClrType: typeof(long),
-                oldType: "bigint",
-                oldNullable: true);
-            migrationBuilder.AlterColumn<decimal>(
-                name: "Open",
-                table: "EODData",
-                type: "decimal(18,2)",
-                nullable: false,
-                defaultValue: 0m,
-                oldClrType: typeof(decimal),
-                oldType: "decimal(18,2)",
-                oldNullable: true);
-            migrationBuilder.AlterColumn<decimal>(
-                name: "Low",
-                table: "EODData",
-                type: "decimal(18,2)",
-                nullable: false,
-                defaultValue: 0m,
-                oldClrType: typeof(decimal),
-                oldType: "decimal(18,2)",
-                oldNullable: true);
-            migrationBuilder.AlterColumn<decimal>(
-                name: "High",
-                table: "EODData",
-                type: "decimal(18,2)",
-                nullable: false,
-                defaultValue: 0m,
-                oldClrType: typeof(decimal),
-                oldType: "decimal(18,2)",
-                oldNullable: true);
-            migrationBuilder.AlterColumn<decimal>(
-                name: "Close",
-                table: "EODData",
-                type: "decimal(18,2)",
-                nullable: false,
-                defaultValue: 0m,
-                oldClrType: typeof(decimal),
-                oldType: "decimal(18,2)",
-                oldNullable: true);
-        }
-    }
-}
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Migrations\20230319121100_MadeValuesOfEodDataToNullable.Designer.cs ----
-
-using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using YahooFinanceAPI.Data;
-#nullable disable
-namespace YahooFinanceAPI.Migrations
-{
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20230319121100_MadeValuesOfEodDataToNullable")]
-    partial class MadeValuesOfEodDataToNullable
-    {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
-        {
-#pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-            modelBuilder.Entity("YahooFinanceAPI.Models.Company", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-                    b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime2");
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-                    b.Property<string>("Symbol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-                    b.HasKey("Id");
-                    b.ToTable("Companies");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.EMAData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-                    b.Property<int>("Period")
-                        .HasColumnType("int");
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-                    b.HasKey("Id");
-                    b.HasIndex("CompanyId");
-                    b.ToTable("EMAData");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.EODData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-                    b.Property<decimal?>("Close")
-                        .HasColumnType("decimal(18,2)");
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-                    b.Property<decimal?>("High")
-                        .HasColumnType("decimal(18,2)");
-                    b.Property<decimal?>("Low")
-                        .HasColumnType("decimal(18,2)");
-                    b.Property<decimal?>("Open")
-                        .HasColumnType("decimal(18,2)");
-                    b.Property<long?>("Volume")
-                        .HasColumnType("bigint");
-                    b.HasKey("Id");
-                    b.HasIndex("CompanyId");
-                    b.ToTable("EODData");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.MACDData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-                    b.Property<int>("LongPeriod")
-                        .HasColumnType("int");
-                    b.Property<int>("ShortPeriod")
-                        .HasColumnType("int");
-                    b.Property<int>("SignalPeriod")
-                        .HasColumnType("int");
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-                    b.HasKey("Id");
-                    b.HasIndex("CompanyId");
-                    b.ToTable("MACDData");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.EMAData", b =>
-                {
-                    b.HasOne("YahooFinanceAPI.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                    b.Navigation("Company");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.EODData", b =>
-                {
-                    b.HasOne("YahooFinanceAPI.Models.Company", "Company")
-                        .WithMany("EODData")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                    b.Navigation("Company");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.MACDData", b =>
-                {
-                    b.HasOne("YahooFinanceAPI.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                    b.Navigation("Company");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.Company", b =>
-                {
-                    b.Navigation("EODData");
-                });
-#pragma warning restore 612, 618
-        }
-    }
-}
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Migrations\AppDbContextModelSnapshot.cs ----
-
-using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using YahooFinanceAPI.Data;
-#nullable disable
-namespace YahooFinanceAPI.Migrations
-{
-    [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
-    {
-        protected override void BuildModel(ModelBuilder modelBuilder)
-        {
-#pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-            modelBuilder.Entity("YahooFinanceAPI.Models.Company", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-                    b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime2");
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-                    b.Property<string>("Symbol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-                    b.HasKey("Id");
-                    b.ToTable("Companies");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.EMAData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-                    b.Property<int>("Period")
-                        .HasColumnType("int");
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-                    b.HasKey("Id");
-                    b.HasIndex("CompanyId");
-                    b.ToTable("EMAData");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.EODData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-                    b.Property<decimal?>("Close")
-                        .HasColumnType("decimal(18,2)");
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-                    b.Property<decimal?>("High")
-                        .HasColumnType("decimal(18,2)");
-                    b.Property<decimal?>("Low")
-                        .HasColumnType("decimal(18,2)");
-                    b.Property<decimal?>("Open")
-                        .HasColumnType("decimal(18,2)");
-                    b.Property<long?>("Volume")
-                        .HasColumnType("bigint");
-                    b.HasKey("Id");
-                    b.HasIndex("CompanyId");
-                    b.ToTable("EODData");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.MACDData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-                    b.Property<int>("LongPeriod")
-                        .HasColumnType("int");
-                    b.Property<int>("ShortPeriod")
-                        .HasColumnType("int");
-                    b.Property<int>("SignalPeriod")
-                        .HasColumnType("int");
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-                    b.HasKey("Id");
-                    b.HasIndex("CompanyId");
-                    b.ToTable("MACDData");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.EMAData", b =>
-                {
-                    b.HasOne("YahooFinanceAPI.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                    b.Navigation("Company");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.EODData", b =>
-                {
-                    b.HasOne("YahooFinanceAPI.Models.Company", "Company")
-                        .WithMany("EODData")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                    b.Navigation("Company");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.MACDData", b =>
-                {
-                    b.HasOne("YahooFinanceAPI.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                    b.Navigation("Company");
-                });
-            modelBuilder.Entity("YahooFinanceAPI.Models.Company", b =>
-                {
-                    b.Navigation("EODData");
-                });
-#pragma warning restore 612, 618
-        }
-    }
-}
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Models\Company.cs ----
-
 namespace YahooFinanceAPI.Models
 {
     public class Company
@@ -902,13 +250,9 @@ namespace YahooFinanceAPI.Models
         public ICollection<EODData> EODData { get; set; } = new List<EODData>();
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Models\EMAData.cs ----
-
 namespace YahooFinanceAPI.Models
 {
-    public class EMAData
+    public class EmaData
     {
         public int Id { get; set; }
         public int CompanyId { get; set; }
@@ -918,10 +262,6 @@ namespace YahooFinanceAPI.Models
         public Company Company { get; set; }
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Models\EODData.cs ----
-
 using System.Text.Json.Serialization;
 namespace YahooFinanceAPI.Models
 {
@@ -939,10 +279,6 @@ namespace YahooFinanceAPI.Models
         public Company Company { get; set; }
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Models\MACDData.cs ----
-
 namespace YahooFinanceAPI.Models
 {
     public class MACDData
@@ -957,57 +293,7 @@ namespace YahooFinanceAPI.Models
         public Company Company { get; set; }
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\obj\Debug\net6.0\.NETCoreApp,Version=v6.0.AssemblyAttributes.cs ----
-
-using System;
-using System.Reflection;
-[assembly: global::System.Runtime.Versioning.TargetFrameworkAttribute(".NETCoreApp,Version=v6.0", FrameworkDisplayName = "")]
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\obj\Debug\net6.0\YahooFinanceAPI.AssemblyInfo.cs ----
-
-using System;
-using System.Reflection;
-[assembly: System.Reflection.AssemblyCompanyAttribute("YahooFinanceAPI")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("YahooFinanceAPI")]
-[assembly: System.Reflection.AssemblyTitleAttribute("YahooFinanceAPI")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\obj\Debug\net6.0\YahooFinanceAPI.GlobalUsings.g.cs ----
-
-global using global::Microsoft.AspNetCore.Builder;
-global using global::Microsoft.AspNetCore.Hosting;
-global using global::Microsoft.AspNetCore.Http;
-global using global::Microsoft.AspNetCore.Routing;
-global using global::Microsoft.Extensions.Configuration;
-global using global::Microsoft.Extensions.DependencyInjection;
-global using global::Microsoft.Extensions.Hosting;
-global using global::Microsoft.Extensions.Logging;
-global using global::System;
-global using global::System.Collections.Generic;
-global using global::System.IO;
-global using global::System.Linq;
-global using global::System.Net.Http;
-global using global::System.Net.Http.Json;
-global using global::System.Threading;
-global using global::System.Threading.Tasks;
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\obj\Debug\net6.0\YahooFinanceAPI.MvcApplicationPartsAssemblyInfo.cs ----
-
-using System;
-using System.Reflection;
-[assembly: Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPartAttribute("Swashbuckle.AspNetCore.SwaggerGen")]
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Services\CompanyService.cs ----
-
+--------------------
 namespace YahooFinanceAPI.Services
 {
     using Microsoft.EntityFrameworkCore;
@@ -1040,10 +326,6 @@ namespace YahooFinanceAPI.Services
         }
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Services\CsvRecordMap.cs ----
-
 namespace YahooFinanceAPI.Services
 {
     using CsvHelper.Configuration;
@@ -1062,10 +344,6 @@ namespace YahooFinanceAPI.Services
         }
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Services\NullableDecimalConverter.cs ----
-
 namespace YahooFinanceAPI.Services
 {
     using CsvHelper;
@@ -1083,10 +361,6 @@ namespace YahooFinanceAPI.Services
         }
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Services\NullableLongConverter.cs ----
-
 namespace YahooFinanceAPI.Services
 {
     using CsvHelper;
@@ -1117,10 +391,6 @@ namespace YahooFinanceAPI.Services
         }
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Services\TechnicalIndicatorsService.cs ----
-
 namespace YahooFinanceAPI.Services
 {
     public class TechnicalIndicatorsService
@@ -1132,18 +402,15 @@ namespace YahooFinanceAPI.Services
         }
         public (decimal macdLine, decimal signalLine) CalculateMACD(IEnumerable<decimal> closingPrices, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
         {
-            decimal shortEma = closingPrices.Take(shortPeriod).Average();
-            decimal longEma = closingPrices.Take(longPeriod).Average();
-            decimal macdLine = shortEma - longEma;
-            decimal signalLine = closingPrices.Skip(longPeriod).Take(signalPeriod).Average();
+            var enumerable = closingPrices as decimal[] ?? closingPrices.ToArray();
+            var shortEma = enumerable.Take(shortPeriod).Average();
+            var longEma = enumerable.Take(longPeriod).Average();
+            var macdLine = shortEma - longEma;
+            var signalLine = enumerable.Skip(longPeriod).Take(signalPeriod).Average();
             return (macdLine, signalLine);
         }
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Services\YahooFinanceService.cs ----
-
 namespace YahooFinanceAPI.Services
 {
     using CsvHelper;
@@ -1236,10 +503,6 @@ namespace YahooFinanceAPI.Services
         public long? Volume { get; set; }
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Services\YahooSearchService.cs ----
-
 namespace YahooFinanceAPI.Services
 {
     using Flurl;
@@ -1309,10 +572,6 @@ namespace YahooFinanceAPI.Services
         public string CompanyName { get; set; }
     }
 }
-
-
------ C:\source\repos\Me\GptFinance\YahooFinanceAPI\Program.cs ----
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;

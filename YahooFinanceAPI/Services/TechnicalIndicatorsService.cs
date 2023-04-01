@@ -11,11 +11,12 @@
 
         public (decimal macdLine, decimal signalLine) CalculateMACD(IEnumerable<decimal> closingPrices, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
         {
-            decimal shortEma = closingPrices.Take(shortPeriod).Average();
-            decimal longEma = closingPrices.Take(longPeriod).Average();
+            var enumerable = closingPrices as decimal[] ?? closingPrices.ToArray();
+            var shortEma = enumerable.Take(shortPeriod).Average();
+            var longEma = enumerable.Take(longPeriod).Average();
 
-            decimal macdLine = shortEma - longEma;
-            decimal signalLine = closingPrices.Skip(longPeriod).Take(signalPeriod).Average();
+            var macdLine = shortEma - longEma;
+            var signalLine = enumerable.Skip(longPeriod).Take(signalPeriod).Average();
 
             return (macdLine, signalLine);
         }
