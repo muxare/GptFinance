@@ -1,4 +1,5 @@
-﻿using GptFinance.Infrastructure.Models;
+﻿using GptFinance.Domain.Entities;
+using GptFinance.Infrastructure.Models;
 
 namespace YahooFinanceAPI.Services
 {
@@ -10,7 +11,6 @@ namespace YahooFinanceAPI.Services
     using System.IO;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using Models;
 
     public class YahooFinanceService : IYahooFinanceService<CsvRecord>
     {
@@ -22,7 +22,7 @@ namespace YahooFinanceAPI.Services
             _httpClient = new HttpClient();
         }
 
-        public async Task<List<EODData>> GetHistoricalDataAsync(string? symbol, DateTime startDate, DateTime endDate)
+        public async Task<List<EodData>> GetHistoricalDataAsync(string? symbol, DateTime startDate, DateTime endDate)
         {
             string url = $"https://query1.finance.yahoo.com/v7/finance/download/{symbol}?period1={ToUnixTimestamp(startDate)}&period2={ToUnixTimestamp(endDate)}&interval=1d&events=history&includeAdjustedClose=true";
 
@@ -41,7 +41,7 @@ namespace YahooFinanceAPI.Services
                     {
                         csvReader.Context.RegisterClassMap<CsvRecordMap>();
                         var r = csvReader.GetRecords<CsvRecord>();
-                        var records = new List<EODData>(Convert(csvReader.GetRecords<CsvRecord>().ToList()));
+                        var records = new List<EodData>(Convert(csvReader.GetRecords<CsvRecord>().ToList()));
                         return records;
                     }
                 }
@@ -52,11 +52,11 @@ namespace YahooFinanceAPI.Services
             }
         }
 
-        public List<EODData> Convert(List<CsvRecord> csvRecords)
+        public List<EodData> Convert(List<CsvRecord> csvRecords)
         {
             return csvRecords.Select(r =>
             {
-                return new EODData
+                return new EodData
                 {
                     Id = 0,
                     Date = r.Date,

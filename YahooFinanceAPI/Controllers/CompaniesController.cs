@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GptFinance.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YahooFinanceAPI.Data;
-using YahooFinanceAPI.Models;
 using YahooFinanceAPI.Services;
 
 namespace YahooFinanceAPI.Controllers
@@ -151,9 +151,9 @@ namespace YahooFinanceAPI.Controllers
 
         // GET: api/companies/5/eoddata
         [HttpGet("{id}/eoddata")]
-        public async Task<ActionResult<IEnumerable<EODData>>> GetEODData(int id)
+        public async Task<ActionResult<IEnumerable<EodData>>> GetEODData(int id)
         {
-            var eodData = await _context.EODData.Where(e => e.CompanyId == id).ToListAsync();
+            var eodData = await _context.EodData.Where(e => e.CompanyId == id).ToListAsync();
 
             if (eodData == null || eodData.Count == 0)
             {
@@ -165,7 +165,7 @@ namespace YahooFinanceAPI.Controllers
 
         // POST: api/companies/5/historical
         [HttpPost("{id}/historical")]
-        public async Task<ActionResult<IEnumerable<EODData>>> FetchHistoricalData(int id, DateTime? startDate, DateTime? endDate)
+        public async Task<ActionResult<IEnumerable<EodData>>> FetchHistoricalData(int id, DateTime? startDate, DateTime? endDate)
         {
             var company = await _context.Companies.FindAsync(id);
 
@@ -185,7 +185,7 @@ namespace YahooFinanceAPI.Controllers
                 eodData.CompanyId = id;
             }
 
-            _context.EODData.AddRange(eodDataList);
+            _context.EodData.AddRange(eodDataList);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetEODData), new { id = company.Id }, eodDataList);
@@ -212,7 +212,7 @@ namespace YahooFinanceAPI.Controllers
                     continue;
                 decimal ema = _technicalIndicatorsService.CalculateEMA(previousEma, eodData.Close.Value, period);
 
-                _context.EMAData.Add(new EmaData
+                _context.EmaData.Add(new EmaData
                 {
                     CompanyId = id,
                     Date = eodData.Date,
@@ -245,7 +245,7 @@ namespace YahooFinanceAPI.Controllers
             {
                 var (macdLine, signalLine) = _technicalIndicatorsService.CalculateMACD(closingPrices.Take(index + 1).Where(x => x.HasValue).Select(x => x.Value), shortPeriod, longPeriod, signalPeriod);
 
-                _context.MACDData.Add(new MACDData
+                _context.MacdData.Add(new MacdData
                 {
                     CompanyId = id,
                     Date = eodData.Date,

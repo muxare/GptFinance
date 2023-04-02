@@ -1,15 +1,13 @@
-﻿namespace YahooFinanceAPI.Models
+﻿namespace GptFinance.Domain.Entities
 {
-    // Models/MACDData.cs
-    public class MACDData
+    // Models/EMAData.cs
+    public class EmaData
     {
         public int Id { get; set; }
         public int CompanyId { get; set; }
         public DateTime Date { get; set; }
         public decimal Value { get; set; }
-        public int ShortPeriod { get; set; }
-        public int LongPeriod { get; set; }
-        public int SignalPeriod { get; set; }
+        public int Period { get; set; }
 
         public Company? Company { get; set; }
     }

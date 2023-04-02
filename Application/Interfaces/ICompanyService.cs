@@ -1,4 +1,4 @@
-﻿using YahooFinanceAPI.Models;
+﻿using GptFinance.Domain.Entities;
 
 namespace YahooFinanceAPI.Services;
 

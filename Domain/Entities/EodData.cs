@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace YahooFinanceAPI.Models
+namespace GptFinance.Domain.Entities
 {
-    public class EODData
+    public class EodData
     {
         public int Id { get; set; }
         public int CompanyId { get; set; }

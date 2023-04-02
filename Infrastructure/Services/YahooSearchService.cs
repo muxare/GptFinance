@@ -1,4 +1,6 @@
-﻿namespace YahooFinanceAPI.Services
+﻿using GptFinance.Domain.Entities;
+
+namespace YahooFinanceAPI.Services
 {
     using Flurl;
     using Flurl.Http;
@@ -7,7 +9,6 @@
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using YahooFinanceAPI.Models;
 
     public class YahooSearchService : IYahooSearchService<Company>
     {

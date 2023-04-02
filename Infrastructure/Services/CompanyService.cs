@@ -1,9 +1,10 @@
-﻿namespace YahooFinanceAPI.Services
+﻿using GptFinance.Domain.Entities;
+
+namespace YahooFinanceAPI.Services
 {
     using Microsoft.EntityFrameworkCore;
     using System.Threading.Tasks;
     using YahooFinanceAPI.Data;
-    using YahooFinanceAPI.Models;
 
     public class CompanyService : ICompanyService
     {

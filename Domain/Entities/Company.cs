@@ -1,4 +1,4 @@
-﻿namespace YahooFinanceAPI.Models
+﻿namespace GptFinance.Domain.Entities
 {
     // Models/Company.cs
     public class Company
@@ -8,6 +8,6 @@
         public string? Name { get; set; }
         public DateTime LastUpdated { get; set; }
 
-        public ICollection<EODData> EodData { get; set; } = new List<EODData>();
+        public ICollection<EodData> EodData { get; set; } = new List<EodData>();
     }
 }

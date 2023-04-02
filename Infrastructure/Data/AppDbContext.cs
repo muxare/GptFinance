@@ -1,7 +1,8 @@
-﻿namespace YahooFinanceAPI.Data
+﻿using GptFinance.Domain.Entities;
+
+namespace YahooFinanceAPI.Data
 {
     using Microsoft.EntityFrameworkCore;
-    using YahooFinanceAPI.Models;
 
     public class AppDbContext : DbContext
     {
@@ -10,8 +11,8 @@
         }
 
         public DbSet<Company> Companies { get; set; }
-        public DbSet<EODData> EODData { get; set; }
-        public DbSet<EmaData> EMAData { get; set; }
-        public DbSet<MACDData> MACDData { get; set; }
+        public DbSet<EodData> EodData { get; set; }
+        public DbSet<EmaData> EmaData { get; set; }
+        public DbSet<MacdData> MacdData { get; set; }
     }
 }
