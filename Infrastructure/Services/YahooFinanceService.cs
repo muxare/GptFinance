@@ -1,4 +1,6 @@
-﻿namespace YahooFinanceAPI.Services
+﻿using GptFinance.Infrastructure.Models;
+
+namespace YahooFinanceAPI.Services
 {
     // Services/YahooFinanceService.cs
 
@@ -20,7 +22,7 @@
             _httpClient = new HttpClient();
         }
 
-        public async Task<List<EODData>> GetHistoricalDataAsync(string symbol, DateTime startDate, DateTime endDate)
+        public async Task<List<EODData>> GetHistoricalDataAsync(string? symbol, DateTime startDate, DateTime endDate)
         {
             string url = $"https://query1.finance.yahoo.com/v7/finance/download/{symbol}?period1={ToUnixTimestamp(startDate)}&period2={ToUnixTimestamp(endDate)}&interval=1d&events=history&includeAdjustedClose=true";
 
@@ -85,7 +87,7 @@
             return (long)(dateTime.ToUniversalTime() - unixEpoch).TotalSeconds;
         }
 
-        public async Task<Company> GetQuoteAsync(string symbol)
+        public async Task<Company?> GetQuoteAsync(string? symbol)
         {
             var httpClient = new HttpClient();
             var url = $"{BaseUrl}{symbol}?interval=1d&events=history&includeAdjustedClose=true";
@@ -97,7 +99,7 @@
                 return null;
             }
 
-            using var stream = await response.Content.ReadAsStreamAsync();
+            await using var stream = await response.Content.ReadAsStreamAsync();
             using var streamReader = new StreamReader(stream);
             using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
 
@@ -110,15 +112,15 @@
         }
     }
 
-    public class CsvRecord
-    {
-        public DateTime Date { get; set; }
-
-        public decimal? Open { get; set; }
-        public decimal? High { get; set; }
-        public decimal? Low { get; set; }
-        public decimal? Close { get; set; }
-        public decimal? AdjClose { get; set; }
-        public long? Volume { get; set; }
-    }
+    // public class CsvRecord
+    // {
+    //     public DateTime Date { get; set; }
+    //
+    //     public decimal? Open { get; set; }
+    //     public decimal? High { get; set; }
+    //     public decimal? Low { get; set; }
+    //     public decimal? Close { get; set; }
+    //     public decimal? AdjClose { get; set; }
+    //     public long? Volume { get; set; }
+    // }
 }

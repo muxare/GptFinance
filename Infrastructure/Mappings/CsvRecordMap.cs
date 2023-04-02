@@ -1,9 +1,11 @@
-﻿namespace YahooFinanceAPI.Services
+﻿using GptFinance.Infrastructure.Models;
+
+namespace YahooFinanceAPI.Services
 {
     using CsvHelper.Configuration;
     using System.ComponentModel;
 
-    public class CsvRecordMap : ClassMap<CsvRecord>
+    public sealed class CsvRecordMap : ClassMap<CsvRecord>
     {
         public CsvRecordMap()
         {

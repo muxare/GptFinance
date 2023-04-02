@@ -9,6 +9,6 @@
         public decimal Value { get; set; }
         public int Period { get; set; }
 
-        public Company Company { get; set; }
+        public Company? Company { get; set; }
     }
 }

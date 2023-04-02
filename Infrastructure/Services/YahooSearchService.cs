@@ -20,14 +20,14 @@
             _httpClient = httpClient;
         }
 
-        public async Task<List<YahooSearchResult>> SearchCompaniesAsync(string query)
+        public async Task<List<YahooSearchResult>?> SearchCompaniesAsync(string query)
         {
             var response = await $"{YahooFinanceApiBaseUrl}/v1/finance/search"
                 .SetQueryParams(new { q = query, quotesCount = 10, newsCount = 0 })
                 .GetStringAsync();
 
             var searchResults = JsonConvert.DeserializeObject<YahooSearchResults>(response);
-            return searchResults.Quotes;
+            return searchResults?.Quotes;
         }
 
         public async Task<List<Company>> SearchCompaniesAsync(IEnumerable<string> queries)

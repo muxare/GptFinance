@@ -11,6 +11,6 @@
         public int LongPeriod { get; set; }
         public int SignalPeriod { get; set; }
 
-        public Company Company { get; set; }
+        public Company? Company { get; set; }
     }
 }

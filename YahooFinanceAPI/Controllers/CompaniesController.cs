@@ -193,24 +193,24 @@ namespace YahooFinanceAPI.Controllers
 
         // POST: api/companies/5/ema
         [HttpPost("{id}/ema")]
-        public async Task<IActionResult> CalculateEMA(int id, int period)
+        public async Task<IActionResult> CalculateEma(int id, int period)
         {
-            var company = await _context.Companies.Include(c => c.EODData).FirstOrDefaultAsync(c => c.Id == id);
+            var company = await _context.Companies.Include(c => c.EodData).FirstOrDefaultAsync(c => c.Id == id);
 
             if (company == null)
             {
                 return NotFound();
             }
 
-            var closingPrices = company.EODData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
-            decimal previousEMA = (decimal)closingPrices.Take(period).Average();
-            int index = period;
+            var closingPrices = company.EodData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
+            var previousEma = (decimal)closingPrices.Take(period).Average();
+            var index = period;
 
-            foreach (var eodData in company.EODData.Skip(period))
+            foreach (var eodData in company.EodData.Skip(period))
             {
                 if (eodData.Close == null)
                     continue;
-                decimal ema = _technicalIndicatorsService.CalculateEMA(previousEMA, eodData.Close.Value, period);
+                decimal ema = _technicalIndicatorsService.CalculateEMA(previousEma, eodData.Close.Value, period);
 
                 _context.EMAData.Add(new EmaData
                 {
@@ -220,7 +220,7 @@ namespace YahooFinanceAPI.Controllers
                     Period = period
                 });
 
-                previousEMA = ema;
+                previousEma = ema;
                 index++;
             }
 
@@ -232,16 +232,16 @@ namespace YahooFinanceAPI.Controllers
         [HttpPost("{id}/macd")]
         public async Task<IActionResult> CalculateMACD(int id, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
         {
-            var company = await _context.Companies.Include(c => c.EODData).FirstOrDefaultAsync(c => c.Id == id);
+            var company = await _context.Companies.Include(c => c.EodData).FirstOrDefaultAsync(c => c.Id == id);
             if (company == null)
             {
                 return NotFound();
             }
 
-            var closingPrices = company.EODData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
+            var closingPrices = company.EodData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
 
             int index = longPeriod - 1;
-            foreach (var eodData in company.EODData.Skip(longPeriod - 1))
+            foreach (var eodData in company.EodData.Skip(longPeriod - 1))
             {
                 var (macdLine, signalLine) = _technicalIndicatorsService.CalculateMACD(closingPrices.Take(index + 1).Where(x => x.HasValue).Select(x => x.Value), shortPeriod, longPeriod, signalPeriod);
 

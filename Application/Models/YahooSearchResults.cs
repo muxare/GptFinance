@@ -5,5 +5,5 @@ namespace YahooFinanceAPI.Services;
 public class YahooSearchResults
 {
     [JsonProperty("quotes")]
-    public List<YahooSearchResult> Quotes { get; set; }
+    public List<YahooSearchResult>? Quotes { get; set; }
 }

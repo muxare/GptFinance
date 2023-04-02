@@ -14,6 +14,6 @@ namespace YahooFinanceAPI.Models
         public long? Volume { get; set; }
 
         [JsonIgnore]
-        public Company Company { get; set; }
+        public Company? Company { get; set; }
     }
 }

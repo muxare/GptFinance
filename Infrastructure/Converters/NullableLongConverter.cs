@@ -7,7 +7,7 @@
 
     public class NullableLongConverter : DefaultTypeConverter
     {
-        public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+        public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
         {
             if (string.IsNullOrWhiteSpace(text) || text.Equals("null", StringComparison.OrdinalIgnoreCase))
             {
@@ -22,7 +22,7 @@
             return base.ConvertFromString(text, row, memberMapData);
         }
 
-        public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
+        public override string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
         {
             if (value == null)
             {

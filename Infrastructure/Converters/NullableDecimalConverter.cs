@@ -6,7 +6,7 @@
 
     public class NullableDecimalConverter : DecimalConverter
     {
-        public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+        public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
         {
             if (string.IsNullOrEmpty(text) || text.Trim().Equals("null", StringComparison.OrdinalIgnoreCase))
             {
