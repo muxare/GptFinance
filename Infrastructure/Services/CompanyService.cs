@@ -35,5 +35,33 @@ namespace YahooFinanceAPI.Services
             await _dbContext.Companies.AddRangeAsync(companies);
             await _dbContext.SaveChangesAsync();
         }
+
+        /*
+        public async Task UpsertEodDataAsync(List<EodData> eodDataList)
+        {
+            foreach (var eodData in eodDataList)
+            {
+                var existingEodData = _dbContext.EodData
+                    .FirstOrDefault(d => d.CompanyId == eodData.CompanyId && d.Date == eodData.Date);
+
+                if (existingEodData != null)
+                {
+                    // Update the existing record
+                    existingEodData.Open = eodData.Open;
+                    existingEodData.High = eodData.High;
+                    existingEodData.Low = eodData.Low;
+                    existingEodData.Close = eodData.Close;
+                    existingEodData.Volume = eodData.Volume;
+                }
+                else
+                {
+                    // Insert new record
+                    _dbContext.EodData.Add(eodData);
+                }
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
+        */
     }
 }

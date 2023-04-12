@@ -6,4 +6,5 @@ public interface ICompanyService
 {
     Task<Company> AddCompanyAsync(YahooSearchResult searchResult);
     Task AddMultipleCompaniesAsync(List<Company> companies);
+    //Task UpsertEodDataAsync(List<EodData> eodDataList);
 }

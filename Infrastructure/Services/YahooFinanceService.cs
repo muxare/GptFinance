@@ -22,6 +22,7 @@ namespace YahooFinanceAPI.Services
             _httpClient = new HttpClient();
         }
 
+        // TODO: The argument should be Company entity instead of ust the symbol.
         public async Task<List<EodData>> GetHistoricalDataAsync(string? symbol, DateTime startDate, DateTime endDate)
         {
             string url = $"https://query1.finance.yahoo.com/v7/finance/download/{symbol}?period1={ToUnixTimestamp(startDate)}&period2={ToUnixTimestamp(endDate)}&interval=1d&events=history&includeAdjustedClose=true";
@@ -42,6 +43,9 @@ namespace YahooFinanceAPI.Services
                         csvReader.Context.RegisterClassMap<CsvRecordMap>();
                         var r = csvReader.GetRecords<CsvRecord>();
                         var records = new List<EodData>(Convert(csvReader.GetRecords<CsvRecord>().ToList()));
+
+                        //await _companyService.UpsertEodDataAsync(records);
+
                         return records;
                     }
                 }
@@ -51,6 +55,8 @@ namespace YahooFinanceAPI.Services
                 }
             }
         }
+
+
 
         public List<EodData> Convert(List<CsvRecord> csvRecords)
         {

@@ -9,24 +9,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/TechnicalIndicatorsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/Interfaces/ICompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/ICompanyService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Domain/Entities/Company.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/Company.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Domain/Entities/EMAData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/EmaData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Domain/Entities/EODData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/EODData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Domain/Entities/MACDData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/MACDData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Data/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Data/AppDbContext.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Services/CompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/CompanyService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/YahooSearchService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooSearchService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/CompaniesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/CompaniesController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/19ba5a289f2afd3f4d5e862cb3f3efee6181683a31ee31b86c2298b1f51114b/ServiceProvider.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f4708639776589f5ac2739f6fcbfc67343b1f9dac51cc1dbfdb003eef77cc1c/Monitor.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -44,14 +45,16 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "TODO_SCOPE": "All Places",
     "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "SolutionBuilderGeneralOptionsPage",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -107,6 +110,8 @@
       <workItem from="1680335397510" duration="6487000" />
       <workItem from="1680359082691" duration="915000" />
       <workItem from="1680420705612" duration="296000" />
+      <workItem from="1681218422125" duration="5225000" />
+      <workItem from="1681312796433" duration="2253000" />
     </task>
     <servers />
   </component>
@@ -114,7 +119,62 @@
     <option name="version" value="3" />
   </component>
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs</url>
+          <line>46</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\YahooFinanceService.cs" initialLine="47" containingFunctionPresentation="Method 'GetHistoricalDataAsync'">
+            <startOffsets>
+              <option value="1976" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2026" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Infrastructure/Services/CompanyService.cs</url>
+          <line>44</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\CompanyService.cs" initialLine="43" containingFunctionPresentation="Lambda expression inside Method 'UpsertEodDataAsync'">
+            <startOffsets>
+              <option value="1302" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1360" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
