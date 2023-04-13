@@ -6,14 +6,13 @@ using YahooFinanceAPI.Services;
 
 namespace YahooFinanceAPI.Controllers;
 
-[Route("api/companies/{companyId}/eoddata")]
+[Route("api/eoddata")]
 [ApiController]
 public class EodDataController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly YahooFinanceService _yahooFinanceService;
 
-    // ... Constructor, DI services, and private methods
     public EodDataController(AppDbContext context, YahooFinanceService yahooFinanceService)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -48,16 +47,7 @@ public class EodDataController : ControllerBase
         startDate ??= DateTime.MinValue;
         endDate ??= DateTime.UtcNow;
 
-        var eodDataList = await _yahooFinanceService.GetHistoricalDataAsync(company.Symbol, startDate.Value, endDate.Value);
-
-        // Add company id to each EODData item
-        foreach (var eodData in eodDataList)
-        {
-            eodData.CompanyId = id;
-        }
-
-        _context.EodData.AddRange(eodDataList);
-        await _context.SaveChangesAsync();
+        var eodDataList = await _yahooFinanceService.GetHistoricalDataAsync(company, startDate.Value, endDate.Value);
 
         return CreatedAtAction(nameof(GetEODData), new { id = company.Id }, eodDataList);
     }

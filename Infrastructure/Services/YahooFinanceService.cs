@@ -1,5 +1,6 @@
 ﻿using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Models;
+using YahooFinanceAPI.Data;
 
 namespace YahooFinanceAPI.Services
 {
@@ -14,18 +15,20 @@ namespace YahooFinanceAPI.Services
 
     public class YahooFinanceService : IYahooFinanceService<CsvRecord>
     {
+        private readonly AppDbContext _context;
         private const string BaseUrl = "https://query1.finance.yahoo.com/v7/finance/download/";
         private readonly HttpClient _httpClient;
 
-        public YahooFinanceService()
+        public YahooFinanceService(AppDbContext context)
         {
+            _context = context;
             _httpClient = new HttpClient();
         }
 
         // TODO: The argument should be Company entity instead of ust the symbol.
-        public async Task<List<EodData>> GetHistoricalDataAsync(string? symbol, DateTime startDate, DateTime endDate)
+        public async Task<List<EodData>> GetHistoricalDataAsync(Company company, DateTime startDate, DateTime endDate)
         {
-            string url = $"https://query1.finance.yahoo.com/v7/finance/download/{symbol}?period1={ToUnixTimestamp(startDate)}&period2={ToUnixTimestamp(endDate)}&interval=1d&events=history&includeAdjustedClose=true";
+            string url = $"https://query1.finance.yahoo.com/v7/finance/download/{company.Symbol}?period1={ToUnixTimestamp(startDate)}&period2={ToUnixTimestamp(endDate)}&interval=1d&events=history&includeAdjustedClose=true";
 
             using (var response = await _httpClient.GetAsync(url))
             {
@@ -42,23 +45,24 @@ namespace YahooFinanceAPI.Services
                     {
                         csvReader.Context.RegisterClassMap<CsvRecordMap>();
                         var r = csvReader.GetRecords<CsvRecord>();
-                        var records = new List<EodData>(Convert(csvReader.GetRecords<CsvRecord>().ToList()));
+                        var records = new List<EodData>(Convert(csvReader.GetRecords<CsvRecord>().ToList(), company.Id));
 
-                        //await _companyService.UpsertEodDataAsync(records);
+                        _context.EodData.AddRange(records);
+                        await _context.SaveChangesAsync();
 
                         return records;
                     }
                 }
                 else
                 {
-                    throw new Exception($"Failed to fetch historical data for {symbol}: {response.ReasonPhrase}");
+                    throw new Exception($"Failed to fetch historical data for {company.Symbol}: {response.ReasonPhrase}");
                 }
             }
         }
 
 
 
-        public List<EodData> Convert(List<CsvRecord> csvRecords)
+        public List<EodData> Convert(List<CsvRecord> csvRecords, int companyId)
         {
             return csvRecords.Select(r =>
             {
@@ -70,7 +74,8 @@ namespace YahooFinanceAPI.Services
                     High = r.High.HasValue ? r.High.Value : (decimal?)null,
                     Low = r.Low.HasValue ? r.Low.Value : (decimal?)null,
                     Close = r.Close.HasValue ? r.Close.Value : (decimal?)null,
-                    Volume = r.Volume.HasValue ? r.Volume.Value : (long?)null
+                    Volume = r.Volume.HasValue ? r.Volume.Value : (long?)null,
+                    CompanyId = companyId
                 };
             }).ToList();
         }
