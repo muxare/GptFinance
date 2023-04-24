@@ -1,5 +1,7 @@
-﻿using GptFinance.Domain.Entities;
+﻿using GptFinance.Domain;
+using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
 using YahooFinanceAPI.Data;
 
 namespace YahooFinanceAPI.Services
@@ -120,6 +122,12 @@ namespace YahooFinanceAPI.Services
             var quote = csvReader.GetRecords<Company>().FirstOrDefault();
 
             return quote;
+        }
+
+        public async Task<Maybe<ICollection<EodData>>> GetQuotesByCompanyId(int id)
+        {
+            var eodData = await _context.EodData.Where(e => e.CompanyId == id).OrderByDescending(o => o.Date).Take(100).ToListAsync();
+            return eodData.ToMaybe<ICollection<EodData>>();
         }
     }
 

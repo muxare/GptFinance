@@ -12,25 +12,31 @@ public class EodDataController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly YahooFinanceService _yahooFinanceService;
+    private readonly CompanyService _companyService;
 
-    public EodDataController(AppDbContext context, YahooFinanceService yahooFinanceService)
+    public EodDataController(AppDbContext context, YahooFinanceService yahooFinanceService, CompanyService companyService)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
         _yahooFinanceService = yahooFinanceService ?? throw new ArgumentNullException(nameof(yahooFinanceService));
+        _companyService = companyService ?? throw new ArgumentNullException(nameof(companyService));
     }
 
-    // GET: api/companies/5/eoddata
-    [HttpGet("{id}/eoddata")]
-    public async Task<ActionResult<IEnumerable<EodData>>> GetEODData(int id)
+    // GET: api/companies/5
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ICollection<EodData>>> GetEodData(int id)
     {
-        var eodData = await _context.EodData.Where(e => e.CompanyId == id).ToListAsync();
+        var eodData = await _yahooFinanceService.GetQuotesByCompanyId(id).ConfigureAwait(false);
+        if (eodData.HasValue )
+        {
+
+        }
 
         if (eodData == null || eodData.Count == 0)
         {
             return NotFound();
         }
 
-        return eodData;
+        return Ok(eodData);
     }
 
     // POST: api/companies/5/historical
@@ -47,8 +53,8 @@ public class EodDataController : ControllerBase
         startDate ??= DateTime.MinValue;
         endDate ??= DateTime.UtcNow;
 
-        var eodDataList = await _yahooFinanceService.GetHistoricalDataAsync(company, startDate.Value, endDate.Value);
+        var _ = await _yahooFinanceService.GetHistoricalDataAsync(company, startDate.Value, endDate.Value);
 
-        return CreatedAtAction(nameof(GetEODData), new { id = company.Id }, eodDataList);
+        return CreatedAtAction(nameof(GetEodData), new { id = company.Id }, null);
     }
 }
