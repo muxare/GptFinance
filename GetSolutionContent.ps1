@@ -20,6 +20,8 @@ foreach ($line in $solutionFileContent) {
     }
 }
 
+echo("mu")
+
 # Function to process and concatenate code from C# files
 function ProcessCodeFile {
     param (
@@ -54,6 +56,10 @@ function ProcessCodeFile {
 # Concatenate the content of all project files
 $outputFileContent = ""
 foreach ($projectFilePath in $projectFilePaths) {
+    echo($projectFilePath -eq "src")
+    if ($projectFilePath -eq "src" -or $projectFilePath -eq "test") {
+	continue
+    }
     # Resolve the absolute project file path
     $absoluteProjectFilePath = (Resolve-Path -Path (Join-Path -Path (Split-Path -Path $solutionFilePath) -ChildPath $projectFilePath)).Path
 
@@ -88,4 +94,8 @@ foreach ($projectFilePath in $projectFilePaths) {
 
 # Write the concatenated content to the output file
 Set-Content -Path $outputFilePath -Value $outputFileContent
+
+# Write the output content to clipboard
+Set-Clipboard -Value $outputFileContent
+
 Write-Output "Code content concatenated to: $outputFilePath"

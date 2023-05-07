@@ -9,34 +9,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Infrastructure/Services/CompanyNotFoundException.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Interfaces/ICompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/ICompanyService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Interfaces/ITechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/ITechnicalIndicatorsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IYahooSearchService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IYahooSearchService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/Models/YahooSearchResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Models/YahooSearchResult.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Models/YahooSearchResults.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Models/YahooSearchResults.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GetSolutionContent.ps1" beforeDir="false" afterPath="$PROJECT_DIR$/GetSolutionContent.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GptFinance.sln" beforeDir="false" afterPath="$PROJECT_DIR$/GptFinance.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Converters/NullableDecimalConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Converters/NullableDecimalConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Converters/NullableLongConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Converters/NullableLongConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Data/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Data/AppDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Mappings/CsvRecordMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Mappings/CsvRecordMap.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230319084836_InitialMigration.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Migrations/20230319084836_InitialMigration.Designer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230319121100_MadeValuesOfEodDataToNullable.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Migrations/20230319121100_MadeValuesOfEodDataToNullable.Designer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230401154620_Restructure.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Migrations/20230401154620_Restructure.Designer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230402074009_Rename.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Migrations/20230402074009_Rename.Designer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/AppDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Migrations/AppDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/CompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/CompanyService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/YahooSearchService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooSearchService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OutputFile.txt" beforeDir="false" afterPath="$PROJECT_DIR$/OutputFile.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/CompaniesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/CompaniesController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/TechnicalIndicatorsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/TechnicalIndicatorsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +36,8 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c1da7b6c7c71a954fe3eb2531c6476711b3e6d93a8d76795386d326bb9dbc/ExecutionContext.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/cf91eb35ab781c324ad4fa382dce85631ec37cf3813529f7c92208d866c851/TaskContinuation.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f4708639776589f5ac2739f6fcbfc67343b1f9dac51cc1dbfdb003eef77cc1c/Monitor.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/YahooFinanceAPI/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/YahooFinanceAPI/Program.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -70,31 +50,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.757315&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "TODO_SCOPE": "All Places",
+    "WebServerToolWindowFactoryState": "false",
+    "XThreadsFramesViewSplitterKey": "0.757315",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.maddyhome.idea.vim.ui.VimEmulationConfigurable",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\MikaelAxelsson\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\MikaelAxelsson\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\SourcesCache&quot;,
-      &quot;C:\\Users\\MikaelAxelsson\\AppData\\Local\\Symbols\\src&quot;
+  "keyToStringList": {
+    "rider.external.source.directories": [
+      "C:\\Users\\MikaelAxelsson\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\DecompilerCache",
+      "C:\\Users\\MikaelAxelsson\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\SourcesCache",
+      "C:\\Users\\MikaelAxelsson\\AppData\\Local\\Symbols\\src"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.YahooFinanceAPI">
     <configuration name="YahooFinanceAPI" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/YahooFinanceAPI/YahooFinanceAPI.csproj" />
@@ -148,7 +128,7 @@
       <workItem from="1682232695490" duration="6124000" />
       <workItem from="1682783789456" duration="2951000" />
       <workItem from="1683367603657" duration="6883000" />
-      <workItem from="1683440762687" duration="3542000" />
+      <workItem from="1683440762687" duration="8056000" />
     </task>
     <servers />
   </component>
@@ -162,6 +142,13 @@
         <entry key="MAIN">
           <value>
             <State>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Author.ColumnIdWidth" value="79" />
+                  <entry key="Table.Default.Date.ColumnIdWidth" value="72" />
+                  <entry key="Table.Space.CommitStatus.ColumnIdWidth" value="72" />
+                </map>
+              </option>
               <option name="FILTERS">
                 <map>
                   <entry key="branch">

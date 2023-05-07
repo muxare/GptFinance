@@ -17,7 +17,6 @@ namespace YahooFinanceAPI.Controllers
             IYahooSearchService<Company> yahooSearchService,
             ICompanyService companyService)
         {
-            //_context = context;
             _yahooSearchService = yahooSearchService;
             _companyService = companyService;
         }

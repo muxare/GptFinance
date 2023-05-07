@@ -4,8 +4,6 @@ using GptFinance.Infrastructure.Data;
 
 namespace GptFinance.Infrastructure.Services
 {
-    // Services/YahooFinanceService.cs
-
     public class TechnicalIndicatorsService : ITechnicalIndicatorsService
     {
         private readonly AppDbContext _context;
@@ -62,6 +60,7 @@ namespace GptFinance.Infrastructure.Services
 
             await _context.SaveChangesAsync();
         }
+
         public async Task CalculateAndStoreMacd(int id, int shortPeriod, int longPeriod, int signalPeriod, Company company)
         {
             var closingPrices = company.EodData.OrderBy(e => e.Date).Select(e => e.Close).ToList();

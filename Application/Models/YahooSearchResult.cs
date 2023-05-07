@@ -2,7 +2,7 @@
 
 namespace GptFinance.Application.Models;
 
-public class YahooSearchResult
+public record YahooSearchResult
 {
     [JsonProperty("symbol")]
     public string? Symbol { get; set; }
