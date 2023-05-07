@@ -1,18 +1,26 @@
-﻿using GptFinance.Domain.Entities;
+﻿using GptFinance.Application.Interfaces;
+using GptFinance.Application.Models;
+using GptFinance.Domain.Entities;
+using GptFinance.Infrastructure.Data;
+using GptFinance.Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace YahooFinanceAPI.Services
+namespace GptFinance.Infrastructure.Services
 {
-    using Microsoft.EntityFrameworkCore;
-    using System.Threading.Tasks;
-    using YahooFinanceAPI.Data;
-
     public class CompanyService : ICompanyService
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContext _context;
+        private readonly IYahooFinanceService<CsvRecord> _yahooFinanceService;
 
-        public CompanyService(AppDbContext dbContext)
+        public CompanyService(AppDbContext context, IYahooFinanceService<CsvRecord> yahooFinanceService)
         {
-            _dbContext = dbContext;
+            _context = context;
+            _yahooFinanceService = yahooFinanceService ?? throw new ArgumentNullException(nameof(yahooFinanceService));
+        }
+
+        public async Task<ICollection<Company>> GetAll()
+        {
+            return await _context.Companies.ToListAsync();
         }
 
         public async Task<Company> AddCompanyAsync(YahooSearchResult searchResult)
@@ -24,44 +32,81 @@ namespace YahooFinanceAPI.Services
                 LastUpdated = DateTime.UtcNow
             };
 
-            _dbContext.Companies.Add(company);
-            await _dbContext.SaveChangesAsync();
+            _context.Companies.Add(company);
+            await _context.SaveChangesAsync();
 
             return company;
         }
 
         public async Task AddMultipleCompaniesAsync(List<Company> companies)
         {
-            await _dbContext.Companies.AddRangeAsync(companies);
-            await _dbContext.SaveChangesAsync();
+            await _context.Companies.AddRangeAsync(companies);
+            await _context.SaveChangesAsync();
         }
 
-        /*
-        public async Task UpsertEodDataAsync(List<EodData> eodDataList)
+        public async Task UpdateCompany(int id, Company company)
         {
-            foreach (var eodData in eodDataList)
-            {
-                var existingEodData = _dbContext.EodData
-                    .FirstOrDefault(d => d.CompanyId == eodData.CompanyId && d.Date == eodData.Date);
+            _context.Entry(company).State = EntityState.Modified;
 
-                if (existingEodData != null)
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CompanyExists(id))
                 {
-                    // Update the existing record
-                    existingEodData.Open = eodData.Open;
-                    existingEodData.High = eodData.High;
-                    existingEodData.Low = eodData.Low;
-                    existingEodData.Close = eodData.Close;
-                    existingEodData.Volume = eodData.Volume;
+                    throw new CompanyNotFoundException();
                 }
                 else
                 {
-                    // Insert new record
-                    _dbContext.EodData.Add(eodData);
+                    throw;
                 }
             }
-
-            await _dbContext.SaveChangesAsync();
         }
-        */
+
+        public async Task UpdateCompanyData(Company company)
+        {
+            var quote = await _yahooFinanceService.GetQuoteAsync(company.Symbol);
+
+            if (quote == null)
+            {
+                throw new ArgumentException();
+            }
+
+            company.LastUpdated = DateTime.Now;
+
+            _context.Entry(company).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task DeleteCompany(int id)
+        {
+            var company = await _context.Companies.FindAsync(id);
+            if (company == null)
+            {
+                throw new CompanyNotFoundException();
+            }
+
+            _context.Companies.Remove(company);
+            await _context.SaveChangesAsync();
+
+        }
+
+        private bool CompanyExists(int id)
+        {
+            return _context.Companies.Any(e => e.Id == id);
+        }
+
+        public async Task<Company> FindAsync(int id)
+        {
+            return await _context.Companies.FindAsync(id);
+        }
+
+        public async Task<Company?> FindWithEodDataAsync(int id)
+        {
+            return await _context.Companies.Include(c => c.EodData).FirstOrDefaultAsync(c => c.Id == id);
+        }
     }
 }

@@ -1,15 +1,13 @@
-﻿using GptFinance.Domain.Entities;
+﻿using Flurl;
+using Flurl.Http;
+using GptFinance.Application.Interfaces;
+using GptFinance.Application.Models;
+using GptFinance.Domain.Entities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace YahooFinanceAPI.Services
+namespace GptFinance.Infrastructure.Services
 {
-    using Flurl;
-    using Flurl.Http;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-    using System.Collections.Generic;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-
     public class YahooSearchService : IYahooSearchService<Company>
     {
         private const string YahooFinanceApiBaseUrl = "https://query1.finance.yahoo.com";

@@ -1,10 +1,10 @@
-﻿namespace YahooFinanceAPI.Services
-{
-    using CsvHelper;
-    using CsvHelper.Configuration;
-    using CsvHelper.TypeConversion;
-    using System.Globalization;
+﻿using System.Globalization;
+using CsvHelper;
+using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 
+namespace GptFinance.Infrastructure.Converters
+{
     public class NullableLongConverter : DefaultTypeConverter
     {
         public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)

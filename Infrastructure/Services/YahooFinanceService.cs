@@ -1,20 +1,17 @@
-﻿using GptFinance.Domain;
+﻿using System.Globalization;
+using CsvHelper;
+using CsvHelper.Configuration;
+using GptFinance.Application.Interfaces;
+using GptFinance.Domain;
 using GptFinance.Domain.Entities;
+using GptFinance.Infrastructure.Data;
+using GptFinance.Infrastructure.Mappings;
 using GptFinance.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
-using YahooFinanceAPI.Data;
 
-namespace YahooFinanceAPI.Services
+namespace GptFinance.Infrastructure.Services
 {
     // Services/YahooFinanceService.cs
-
-    using CsvHelper;
-    using CsvHelper.Configuration;
-    using System.Globalization;
-    using System.IO;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-
     public class YahooFinanceService : IYahooFinanceService<CsvRecord>
     {
         private readonly AppDbContext _context;

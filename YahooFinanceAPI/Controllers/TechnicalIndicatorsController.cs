@@ -1,8 +1,9 @@
-﻿using GptFinance.Domain.Entities;
+﻿using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Entities;
+using GptFinance.Infrastructure.Data;
+using GptFinance.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using YahooFinanceAPI.Data;
-using YahooFinanceAPI.Services;
 
 namespace YahooFinanceAPI.Controllers;
 
@@ -11,12 +12,14 @@ namespace YahooFinanceAPI.Controllers;
 public class TechnicalIndicatorsController : ControllerBase
 {
     private readonly AppDbContext _context;
-    private readonly TechnicalIndicatorsService _technicalIndicatorsService;
+    private readonly ICompanyService _companyService;
+    private readonly ITechnicalIndicatorsService _technicalIndicatorsService;
 
     // ... Constructor, DI services, and private methods
-    public TechnicalIndicatorsController(AppDbContext context, TechnicalIndicatorsService technicalIndicatorsService)
+    public TechnicalIndicatorsController(ICompanyService companyService, ITechnicalIndicatorsService technicalIndicatorsService, AppDbContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _companyService = companyService ?? throw new ArgumentNullException(nameof(companyService));
         _technicalIndicatorsService = technicalIndicatorsService ?? throw new ArgumentNullException(nameof(technicalIndicatorsService));
     }
 
@@ -24,38 +27,18 @@ public class TechnicalIndicatorsController : ControllerBase
     [HttpPost("{id}/ema")]
     public async Task<IActionResult> CalculateEma(int id, int period)
     {
-        var company = await _context.Companies.Include(c => c.EodData).FirstOrDefaultAsync(c => c.Id == id);
+        // var company =
+        var company = await _companyService.FindWithEodDataAsync(id);
 
         if (company == null)
         {
             return NotFound();
         }
 
-        var closingPrices = company.EodData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
-        var previousEma = (decimal)closingPrices.Take(period).Average();
-        var index = period;
-
-        foreach (var eodData in company.EodData.Skip(period))
-        {
-            if (eodData.Close == null)
-                continue;
-            decimal ema = _technicalIndicatorsService.CalculateEMA(previousEma, eodData.Close.Value, period);
-
-            _context.EmaData.Add(new EmaData
-            {
-                CompanyId = id,
-                Date = eodData.Date,
-                Value = ema,
-                Period = period
-            });
-
-            previousEma = ema;
-            index++;
-        }
-
-        await _context.SaveChangesAsync();
+        await _technicalIndicatorsService.CalculateAndStore(id, period, company);
         return NoContent();
     }
+
 
     // POST: api/companies/5/macd
     [HttpPost("{id}/macd")]
@@ -67,27 +50,8 @@ public class TechnicalIndicatorsController : ControllerBase
             return NotFound();
         }
 
-        var closingPrices = company.EodData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
-
-        int index = longPeriod - 1;
-        foreach (var eodData in company.EodData.Skip(longPeriod - 1))
-        {
-            var (macdLine, signalLine) = _technicalIndicatorsService.CalculateMACD(closingPrices.Take(index + 1).Where(x => x.HasValue).Select(x => x.Value), shortPeriod, longPeriod, signalPeriod);
-
-            _context.MacdData.Add(new MacdData
-            {
-                CompanyId = id,
-                Date = eodData.Date,
-                Value = macdLine - signalLine,
-                ShortPeriod = shortPeriod,
-                LongPeriod = longPeriod,
-                SignalPeriod = signalPeriod
-            });
-
-            index++;
-        }
-
-        await _context.SaveChangesAsync();
+        await _technicalIndicatorsService.CalculateAndStoreMacd(id, shortPeriod, longPeriod, signalPeriod, company);
         return NoContent();
     }
+
 }

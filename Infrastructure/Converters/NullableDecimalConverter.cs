@@ -1,9 +1,9 @@
-﻿namespace YahooFinanceAPI.Services
-{
-    using CsvHelper;
-    using CsvHelper.Configuration;
-    using CsvHelper.TypeConversion;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 
+namespace GptFinance.Infrastructure.Converters
+{
     public class NullableDecimalConverter : DecimalConverter
     {
         public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)

@@ -1,8 +1,8 @@
-﻿using GptFinance.Domain.Entities;
+﻿using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Entities;
+using GptFinance.Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using YahooFinanceAPI.Data;
-using YahooFinanceAPI.Services;
 
 namespace YahooFinanceAPI.Controllers;
 
@@ -10,13 +10,11 @@ namespace YahooFinanceAPI.Controllers;
 [ApiController]
 public class EodDataController : ControllerBase
 {
-    private readonly AppDbContext _context;
-    private readonly YahooFinanceService _yahooFinanceService;
-    private readonly CompanyService _companyService;
+    private readonly IYahooFinanceService<CsvRecord> _yahooFinanceService;
+    private readonly ICompanyService _companyService;
 
-    public EodDataController(AppDbContext context, YahooFinanceService yahooFinanceService, CompanyService companyService)
+    public EodDataController(IYahooFinanceService<CsvRecord> yahooFinanceService, ICompanyService companyService)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
         _yahooFinanceService = yahooFinanceService ?? throw new ArgumentNullException(nameof(yahooFinanceService));
         _companyService = companyService ?? throw new ArgumentNullException(nameof(companyService));
     }
@@ -26,12 +24,7 @@ public class EodDataController : ControllerBase
     public async Task<ActionResult<ICollection<EodData>>> GetEodData(int id)
     {
         var eodData = await _yahooFinanceService.GetQuotesByCompanyId(id).ConfigureAwait(false);
-        if (eodData.HasValue )
-        {
-
-        }
-
-        if (eodData == null || eodData.Count == 0)
+        if (eodData.HasValue || eodData.Value.Count == 0)
         {
             return NotFound();
         }
@@ -43,7 +36,7 @@ public class EodDataController : ControllerBase
     [HttpPost("{id}/historical")]
     public async Task<ActionResult<IEnumerable<EodData>>> FetchHistoricalData(int id, DateTime? startDate, DateTime? endDate)
     {
-        var company = await _context.Companies.FindAsync(id);
+        var company = await _companyService.FindAsync(id);
 
         if (company == null)
         {

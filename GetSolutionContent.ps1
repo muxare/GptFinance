@@ -1,6 +1,6 @@
 # Set your solution file path
-$solutionFilePath = "C:\source\repos\Me\test\GptFinance\GptFinance.sln"
-$outputFilePath = "C:\source\repos\Me\test\GptFinance\OutputFile.txt"
+$solutionFilePath = "C:\source\repos\Me\GptFinance\GptFinance.sln"
+$outputFilePath = "C:\source\repos\Me\GptFinance\OutputFile.txt"
 
 # Check if the solution file exists
 if (-not (Test-Path -Path $solutionFilePath -PathType Leaf)) {

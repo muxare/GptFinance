@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace YahooFinanceAPI.Services;
+namespace GptFinance.Application.Models;
 
 public class YahooSearchResults
 {

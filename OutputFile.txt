@@ -1,7 +1,7 @@
+using GptFinance.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YahooFinanceAPI.Data;
-using YahooFinanceAPI.Models;
 using YahooFinanceAPI.Services;
 namespace YahooFinanceAPI.Controllers
 {
@@ -116,91 +116,6 @@ namespace YahooFinanceAPI.Controllers
         {
             return _context.Companies.Any(e => e.Id == id);
         }
-        [HttpGet("{id}/eoddata")]
-        public async Task<ActionResult<IEnumerable<EODData>>> GetEODData(int id)
-        {
-            var eodData = await _context.EODData.Where(e => e.CompanyId == id).ToListAsync();
-            if (eodData == null || eodData.Count == 0)
-            {
-                return NotFound();
-            }
-            return eodData;
-        }
-        [HttpPost("{id}/historical")]
-        public async Task<ActionResult<IEnumerable<EODData>>> FetchHistoricalData(int id, DateTime? startDate, DateTime? endDate)
-        {
-            var company = await _context.Companies.FindAsync(id);
-            if (company == null)
-            {
-                return NotFound();
-            }
-            startDate ??= DateTime.MinValue;
-            endDate ??= DateTime.UtcNow;
-            var eodDataList = await _yahooFinanceService.GetHistoricalDataAsync(company.Symbol, startDate.Value, endDate.Value);
-            foreach (var eodData in eodDataList)
-            {
-                eodData.CompanyId = id;
-            }
-            _context.EODData.AddRange(eodDataList);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetEODData), new { id = company.Id }, eodDataList);
-        }
-        [HttpPost("{id}/ema")]
-        public async Task<IActionResult> CalculateEMA(int id, int period)
-        {
-            var company = await _context.Companies.Include(c => c.EODData).FirstOrDefaultAsync(c => c.Id == id);
-            if (company == null)
-            {
-                return NotFound();
-            }
-            var closingPrices = company.EODData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
-            decimal previousEMA = (decimal)closingPrices.Take(period).Average();
-            int index = period;
-            foreach (var eodData in company.EODData.Skip(period))
-            {
-                if (eodData.Close == null)
-                    continue;
-                decimal ema = _technicalIndicatorsService.CalculateEMA(previousEMA, eodData.Close.Value, period);
-                _context.EMAData.Add(new EmaData
-                {
-                    CompanyId = id,
-                    Date = eodData.Date,
-                    Value = ema,
-                    Period = period
-                });
-                previousEMA = ema;
-                index++;
-            }
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
-        [HttpPost("{id}/macd")]
-        public async Task<IActionResult> CalculateMACD(int id, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
-        {
-            var company = await _context.Companies.Include(c => c.EODData).FirstOrDefaultAsync(c => c.Id == id);
-            if (company == null)
-            {
-                return NotFound();
-            }
-            var closingPrices = company.EODData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
-            int index = longPeriod - 1;
-            foreach (var eodData in company.EODData.Skip(longPeriod - 1))
-            {
-                var (macdLine, signalLine) = _technicalIndicatorsService.CalculateMACD(closingPrices.Take(index + 1).Where(x => x.HasValue).Select(x => x.Value), shortPeriod, longPeriod, signalPeriod);
-                _context.MACDData.Add(new MACDData
-                {
-                    CompanyId = id,
-                    Date = eodData.Date,
-                    Value = macdLine - signalLine,
-                    ShortPeriod = shortPeriod,
-                    LongPeriod = longPeriod,
-                    SignalPeriod = signalPeriod
-                });
-                index++;
-            }
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
         [HttpGet("search")]
         public async Task<IActionResult> SearchCompanies(string query)
         {
@@ -224,33 +139,213 @@ namespace YahooFinanceAPI.Controllers
         }
     }
 }
-namespace YahooFinanceAPI.Data
+using GptFinance.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using YahooFinanceAPI.Data;
+using YahooFinanceAPI.Services;
+namespace YahooFinanceAPI.Controllers;
+[Route("api/eoddata")]
+[ApiController]
+public class EodDataController : ControllerBase
 {
-    using Microsoft.EntityFrameworkCore;
-    using YahooFinanceAPI.Models;
-    public class AppDbContext : DbContext
+    private readonly YahooFinanceService _yahooFinanceService;
+    private readonly CompanyService _companyService;
+    public EodDataController(AppDbContext context, YahooFinanceService yahooFinanceService, CompanyService companyService)
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        _yahooFinanceService = yahooFinanceService ?? throw new ArgumentNullException(nameof(yahooFinanceService));
+        _companyService = companyService ?? throw new ArgumentNullException(nameof(companyService));
+    }
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ICollection<EodData>>> GetEodData(int id)
+    {
+        var eodData = await _yahooFinanceService.GetQuotesByCompanyId(id).ConfigureAwait(false);
+        if (eodData.HasValue || eodData.Value.Count == 0)
         {
+            return NotFound();
         }
-        public DbSet<Company> Companies { get; set; }
-        public DbSet<EODData> EODData { get; set; }
-        public DbSet<EmaData> EMAData { get; set; }
-        public DbSet<MACDData> MACDData { get; set; }
+        return Ok(eodData);
+    }
+    [HttpPost("{id}/historical")]
+    public async Task<ActionResult<IEnumerable<EodData>>> FetchHistoricalData(int id, DateTime? startDate, DateTime? endDate)
+    {
+        var company = await _companyService.FindAsync(id);
+        if (company == null)
+        {
+            return NotFound();
+        }
+        startDate ??= DateTime.MinValue;
+        endDate ??= DateTime.UtcNow;
+        var _ = await _yahooFinanceService.GetHistoricalDataAsync(company, startDate.Value, endDate.Value);
+        return CreatedAtAction(nameof(GetEodData), new { id = company.Id }, null);
     }
 }
-namespace YahooFinanceAPI.Models
+using GptFinance.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using YahooFinanceAPI.Data;
+using YahooFinanceAPI.Services;
+namespace YahooFinanceAPI.Controllers;
+[Route("api/companies/{companyId}/indicators")]
+[ApiController]
+public class TechnicalIndicatorsController : ControllerBase
+{
+    private readonly AppDbContext _context;
+    private readonly CompanyService _companyService;
+    private readonly TechnicalIndicatorsService _technicalIndicatorsService;
+    public TechnicalIndicatorsController(CompanyService companyService, TechnicalIndicatorsService technicalIndicatorsService, AppDbContext context)
+    {
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _companyService = companyService ?? throw new ArgumentNullException(nameof(companyService));
+        _technicalIndicatorsService = technicalIndicatorsService ?? throw new ArgumentNullException(nameof(technicalIndicatorsService));
+    }
+    [HttpPost("{id}/ema")]
+    public async Task<IActionResult> CalculateEma(int id, int period)
+    {
+        var company = await _companyService.FindWithEodDataAsync(id);
+        if (company == null)
+        {
+            return NotFound();
+        }
+        var closingPrices = company.EodData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
+        var previousEma = (decimal)closingPrices.Take(period).Average();
+        var index = period;
+        ICollection<EmaData> data = new List<EmaData>();
+        foreach (var eodData in company.EodData.Skip(period))
+        {
+            if (eodData.Close == null)
+                continue;
+            decimal ema = _technicalIndicatorsService.CalculateEMA(previousEma, eodData.Close.Value, period);
+            data.Add(new EmaData
+                {
+                    CompanyId = id,
+                    Date = eodData.Date,
+                    Value = ema,
+                    Period = period
+                }
+            );
+            previousEma = ema;
+            index++;
+        }
+        _context.EmaData.AddRange(data);
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+    [HttpPost("{id}/macd")]
+    public async Task<IActionResult> CalculateMACD(int id, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
+    {
+        var company = await _context.Companies.Include(c => c.EodData).FirstOrDefaultAsync(c => c.Id == id);
+        if (company == null)
+        {
+            return NotFound();
+        }
+        var closingPrices = company.EodData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
+        int index = longPeriod - 1;
+        foreach (var eodData in company.EodData.Skip(longPeriod - 1))
+        {
+            var (macdLine, signalLine) = _technicalIndicatorsService.CalculateMACD(closingPrices.Take(index + 1).Where(x => x.HasValue).Select(x => x.Value), shortPeriod, longPeriod, signalPeriod);
+            _context.MacdData.Add(new MacdData
+            {
+                CompanyId = id,
+                Date = eodData.Date,
+                Value = macdLine - signalLine,
+                ShortPeriod = shortPeriod,
+                LongPeriod = longPeriod,
+                SignalPeriod = signalPeriod
+            });
+            index++;
+        }
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+}
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Text.Json.Serialization;
+using YahooFinanceAPI.Data;
+using YahooFinanceAPI.Services;
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+});
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<YahooFinanceService>();
+builder.Services.AddSingleton<TechnicalIndicatorsService>();
+builder.Services.AddSingleton<YahooSearchService>();
+builder.Services.AddScoped<CompanyService>();
+builder.Services.AddSingleton<HttpClient>();
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+var app = builder.Build();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+app.UseResponseCompression();
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
+app.Run();
+using GptFinance.Domain.Entities;
+namespace YahooFinanceAPI.Services;
+public interface ICompanyService
+{
+    Task<Company> AddCompanyAsync(YahooSearchResult searchResult);
+    Task AddMultipleCompaniesAsync(List<Company> companies);
+}
+namespace YahooFinanceAPI.Services;
+public interface ITechnicalIndicatorsService
+{
+    decimal CalculateEMA(decimal previousEMA, decimal currentPrice, int period);
+    (decimal macdLine, decimal signalLine) CalculateMACD(IEnumerable<decimal> closingPrices, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9);
+}
+using GptFinance.Domain.Entities;
+namespace YahooFinanceAPI.Services;
+public interface IYahooFinanceService<T>
+{
+    Task<List<EodData>> GetHistoricalDataAsync(Company company, DateTime startDate, DateTime endDate);
+    List<EodData> Convert(List<T> csvRecords, int companyId);
+    Task<Company?> GetQuoteAsync(string? symbol);
+}
+namespace YahooFinanceAPI.Services;
+public interface IYahooSearchService<T>
+{
+    Task<List<YahooSearchResult>?> SearchCompaniesAsync(string query);
+    Task<List<T>> SearchCompaniesAsync(IEnumerable<string> queries);
+}
+using Newtonsoft.Json;
+namespace YahooFinanceAPI.Services;
+public class YahooSearchResult
+{
+    [JsonProperty("symbol")]
+    public string? Symbol { get; set; }
+    [JsonProperty("shortname")]
+    public string? CompanyName { get; set; }
+}
+using Newtonsoft.Json;
+namespace YahooFinanceAPI.Services;
+public class YahooSearchResults
+{
+    [JsonProperty("quotes")]
+    public List<YahooSearchResult>? Quotes { get; set; }
+}
+namespace GptFinance.Domain.Entities
 {
     public class Company
     {
         public int Id { get; set; }
-        public string Symbol { get; set; }
-        public string Name { get; set; }
+        public string? Symbol { get; set; }
+        public string? Name { get; set; }
         public DateTime LastUpdated { get; set; }
-        public ICollection<EODData> EODData { get; set; } = new List<EODData>();
+        public ICollection<EodData> EodData { get; set; } = new List<EodData>();
     }
 }
-namespace YahooFinanceAPI.Models
+namespace GptFinance.Domain.Entities
 {
     public class EmaData
     {
@@ -259,13 +354,13 @@ namespace YahooFinanceAPI.Models
         public DateTime Date { get; set; }
         public decimal Value { get; set; }
         public int Period { get; set; }
-        public Company Company { get; set; }
+        public Company? Company { get; set; }
     }
 }
 using System.Text.Json.Serialization;
-namespace YahooFinanceAPI.Models
+namespace GptFinance.Domain.Entities
 {
-    public class EODData
+    public class EodData
     {
         public int Id { get; set; }
         public int CompanyId { get; set; }
@@ -276,12 +371,12 @@ namespace YahooFinanceAPI.Models
         public decimal? Close { get; set; }
         public long? Volume { get; set; }
         [JsonIgnore]
-        public Company Company { get; set; }
+        public Company? Company { get; set; }
     }
 }
-namespace YahooFinanceAPI.Models
+namespace GptFinance.Domain.Entities
 {
-    public class MACDData
+    public class MacdData
     {
         public int Id { get; set; }
         public int CompanyId { get; set; }
@@ -290,58 +385,58 @@ namespace YahooFinanceAPI.Models
         public int ShortPeriod { get; set; }
         public int LongPeriod { get; set; }
         public int SignalPeriod { get; set; }
-        public Company Company { get; set; }
+        public Company? Company { get; set; }
     }
 }
---------------------
-namespace YahooFinanceAPI.Services
+namespace GptFinance.Domain;
+public sealed class Maybe<T>
 {
-    using Microsoft.EntityFrameworkCore;
-    using System.Threading.Tasks;
-    using YahooFinanceAPI.Data;
-    using YahooFinanceAPI.Models;
-    public class CompanyService
+    private readonly T _value;
+    public bool HasValue { get; }
+    private Maybe()
     {
-        private readonly AppDbContext _dbContext;
-        public CompanyService(AppDbContext dbContext)
+        HasValue = false;
+    }
+    private Maybe(T value)
+    {
+        if (value == null)
+            throw new ArgumentNullException(nameof(value));
+        _value = value;
+        HasValue = true;
+    }
+    public static Maybe<T> Some(T value) => new Maybe<T>(value);
+    public static Maybe<T> None => new Maybe<T>();
+    public T Value
+    {
+        get
         {
-            _dbContext = dbContext;
-        }
-        public async Task<Company> AddCompanyAsync(YahooSearchResult searchResult)
-        {
-            var company = new Company
-            {
-                Symbol = searchResult.Symbol,
-                Name = searchResult.CompanyName,
-                LastUpdated = DateTime.UtcNow
-            };
-            _dbContext.Companies.Add(company);
-            await _dbContext.SaveChangesAsync();
-            return company;
-        }
-        public async Task AddMultipleCompaniesAsync(List<Company> companies)
-        {
-            await _dbContext.Companies.AddRangeAsync(companies);
-            await _dbContext.SaveChangesAsync();
+            if (!HasValue)
+                throw new InvalidOperationException("Maybe does not have a value.");
+            return _value;
         }
     }
-}
-namespace YahooFinanceAPI.Services
-{
-    using CsvHelper.Configuration;
-    using System.ComponentModel;
-    public class CsvRecordMap : ClassMap<CsvRecord>
+    public Maybe<TResult> Select<TResult>(Func<T, TResult> selector)
     {
-        public CsvRecordMap()
-        {
-            Map(m => m.Date).Name("Date");
-            Map(m => m.Open).Name("Open").TypeConverter<NullableDecimalConverter>();
-            Map(m => m.High).Name("High").TypeConverter<NullableDecimalConverter>();
-            Map(m => m.Low).Name("Low").TypeConverter<NullableDecimalConverter>();
-            Map(m => m.Close).Name("Close").TypeConverter<NullableDecimalConverter>();
-            Map(m => m.AdjClose).Name("Adj Close").TypeConverter<NullableDecimalConverter>();
-            Map(m => m.Volume).Name("Volume").TypeConverter<NullableLongConverter>();
-        }
+        if (selector == null)
+            throw new ArgumentNullException(nameof(selector));
+        return HasValue ? Maybe<TResult>.Some(selector(_value)) : Maybe<TResult>.None;
+    }
+    public TResult GetValueOrFallback<TResult>(TResult fallbackValue)
+    {
+        if (fallbackValue == null)
+            throw new ArgumentNullException(nameof(fallbackValue));
+        return HasValue ? (TResult)Convert.ChangeType(_value, typeof(TResult)) : fallbackValue;
+    }
+}
+public static class MaybeExtensions
+{
+    public static Maybe<T> ToMaybe<T>(this T value) where T : class
+    {
+        return value != null ? Maybe<T>.Some(value) : Maybe<T>.None;
+    }
+    public static Maybe<T> ToMaybe<T>(this T? value) where T : struct
+    {
+        return value.HasValue ? Maybe<T>.Some(value.Value) : Maybe<T>.None;
     }
 }
 namespace YahooFinanceAPI.Services
@@ -351,7 +446,7 @@ namespace YahooFinanceAPI.Services
     using CsvHelper.TypeConversion;
     public class NullableDecimalConverter : DecimalConverter
     {
-        public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+        public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
         {
             if (string.IsNullOrEmpty(text) || text.Trim().Equals("null", StringComparison.OrdinalIgnoreCase))
             {
@@ -369,7 +464,7 @@ namespace YahooFinanceAPI.Services
     using System.Globalization;
     public class NullableLongConverter : DefaultTypeConverter
     {
-        public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+        public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
         {
             if (string.IsNullOrWhiteSpace(text) || text.Equals("null", StringComparison.OrdinalIgnoreCase))
             {
@@ -381,7 +476,7 @@ namespace YahooFinanceAPI.Services
             }
             return base.ConvertFromString(text, row, memberMapData);
         }
-        public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
+        public override string? ConvertToString(object? value, IWriterRow row, MemberMapData memberMapData)
         {
             if (value == null)
             {
@@ -391,9 +486,94 @@ namespace YahooFinanceAPI.Services
         }
     }
 }
+using GptFinance.Domain.Entities;
+namespace YahooFinanceAPI.Data
+{
+    using Microsoft.EntityFrameworkCore;
+    public class AppDbContext : DbContext
+    {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<EodData> EodData { get; set; }
+        public DbSet<EmaData> EmaData { get; set; }
+        public DbSet<MacdData> MacdData { get; set; }
+    }
+}
+using GptFinance.Infrastructure.Models;
 namespace YahooFinanceAPI.Services
 {
-    public class TechnicalIndicatorsService
+    using CsvHelper.Configuration;
+    using System.ComponentModel;
+    public sealed class CsvRecordMap : ClassMap<CsvRecord>
+    {
+        public CsvRecordMap()
+        {
+            Map(m => m.Date).Name("Date");
+            Map(m => m.Open).Name("Open").TypeConverter<NullableDecimalConverter>();
+            Map(m => m.High).Name("High").TypeConverter<NullableDecimalConverter>();
+            Map(m => m.Low).Name("Low").TypeConverter<NullableDecimalConverter>();
+            Map(m => m.Close).Name("Close").TypeConverter<NullableDecimalConverter>();
+            Map(m => m.AdjClose).Name("Adj Close").TypeConverter<NullableDecimalConverter>();
+            Map(m => m.Volume).Name("Volume").TypeConverter<NullableLongConverter>();
+        }
+    }
+}
+namespace GptFinance.Infrastructure.Models;
+public class CsvRecord
+{
+    public DateTime Date { get; set; }
+    public decimal? Open { get; set; }
+    public decimal? High { get; set; }
+    public decimal? Low { get; set; }
+    public decimal? Close { get; set; }
+    public decimal? AdjClose { get; set; }
+    public long? Volume { get; set; }
+}
+using GptFinance.Domain.Entities;
+namespace YahooFinanceAPI.Services
+{
+    using Microsoft.EntityFrameworkCore;
+    using System.Threading.Tasks;
+    using YahooFinanceAPI.Data;
+    public class CompanyService : ICompanyService
+    {
+        private readonly AppDbContext _context;
+        public CompanyService(AppDbContext context)
+        {
+            _context = context;
+        }
+        public async Task<Company> AddCompanyAsync(YahooSearchResult searchResult)
+        {
+            var company = new Company
+            {
+                Symbol = searchResult.Symbol,
+                Name = searchResult.CompanyName,
+                LastUpdated = DateTime.UtcNow
+            };
+            _context.Companies.Add(company);
+            await _context.SaveChangesAsync();
+            return company;
+        }
+        public async Task AddMultipleCompaniesAsync(List<Company> companies)
+        {
+            await _context.Companies.AddRangeAsync(companies);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<Company> FindAsync(int id)
+        {
+            return await _context.Companies.FindAsync(id);
+        }
+        public async Task<Company?> FindWithEodDataAsync(int id)
+        {
+            return await _context.Companies.Include(c => c.EodData).FirstOrDefaultAsync(c => c.Id == id);
+        }
+    }
+}
+namespace YahooFinanceAPI.Services
+{
+    public class TechnicalIndicatorsService : ITechnicalIndicatorsService
     {
         public decimal CalculateEMA(decimal previousEMA, decimal currentPrice, int period)
         {
@@ -411,24 +591,29 @@ namespace YahooFinanceAPI.Services
         }
     }
 }
+using GptFinance.Domain;
+using GptFinance.Domain.Entities;
+using GptFinance.Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
+using YahooFinanceAPI.Data;
 namespace YahooFinanceAPI.Services
 {
     using CsvHelper;
     using CsvHelper.Configuration;
-    using Microsoft.Extensions.Configuration;
     using System.Globalization;
     using System.IO;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using YahooFinanceAPI.Models;
-    public class YahooFinanceService
+    public class YahooFinanceService : IYahooFinanceService<CsvRecord>
     {
+        private readonly AppDbContext _context;
         private readonly HttpClient _httpClient;
-        public YahooFinanceService()
+        public YahooFinanceService(AppDbContext context)
         {
+            _context = context;
             _httpClient = new HttpClient();
         }
-        public async Task<List<EODData>> GetHistoricalDataAsync(string symbol, DateTime startDate, DateTime endDate)
+        public async Task<List<EodData>> GetHistoricalDataAsync(Company company, DateTime startDate, DateTime endDate)
         {
             using (var response = await _httpClient.GetAsync(url))
             {
@@ -445,21 +630,23 @@ namespace YahooFinanceAPI.Services
                     {
                         csvReader.Context.RegisterClassMap<CsvRecordMap>();
                         var r = csvReader.GetRecords<CsvRecord>();
-                        var records = new List<EODData>(Convert(csvReader.GetRecords<CsvRecord>().ToList()));
+                        var records = new List<EodData>(Convert(csvReader.GetRecords<CsvRecord>().ToList(), company.Id));
+                        _context.EodData.AddRange(records);
+                        await _context.SaveChangesAsync();
                         return records;
                     }
                 }
                 else
                 {
-                    throw new Exception($"Failed to fetch historical data for {symbol}: {response.ReasonPhrase}");
+                    throw new Exception($"Failed to fetch historical data for {company.Symbol}: {response.ReasonPhrase}");
                 }
             }
         }
-        private List<EODData> Convert(List<CsvRecord> csvRecords)
+        public List<EodData> Convert(List<CsvRecord> csvRecords, int companyId)
         {
             return csvRecords.Select(r =>
             {
-                return new EODData
+                return new EodData
                 {
                     Id = 0,
                     Date = r.Date,
@@ -467,7 +654,8 @@ namespace YahooFinanceAPI.Services
                     High = r.High.HasValue ? r.High.Value : (decimal?)null,
                     Low = r.Low.HasValue ? r.Low.Value : (decimal?)null,
                     Close = r.Close.HasValue ? r.Close.Value : (decimal?)null,
-                    Volume = r.Volume.HasValue ? r.Volume.Value : (long?)null
+                    Volume = r.Volume.HasValue ? r.Volume.Value : (long?)null,
+                    CompanyId = companyId
                 };
             }).ToList();
         }
@@ -476,7 +664,7 @@ namespace YahooFinanceAPI.Services
             var unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return (long)(dateTime.ToUniversalTime() - unixEpoch).TotalSeconds;
         }
-        public async Task<Company> GetQuoteAsync(string symbol)
+        public async Task<Company?> GetQuoteAsync(string? symbol)
         {
             var httpClient = new HttpClient();
             var url = $"{BaseUrl}{symbol}?interval=1d&events=history&includeAdjustedClose=true";
@@ -485,24 +673,20 @@ namespace YahooFinanceAPI.Services
             {
                 return null;
             }
-            using var stream = await response.Content.ReadAsStreamAsync();
+            await using var stream = await response.Content.ReadAsStreamAsync();
             using var streamReader = new StreamReader(stream);
             using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
             var quote = csvReader.GetRecords<Company>().FirstOrDefault();
             return quote;
         }
-    }
-    public class CsvRecord
-    {
-        public DateTime Date { get; set; }
-        public decimal? Open { get; set; }
-        public decimal? High { get; set; }
-        public decimal? Low { get; set; }
-        public decimal? Close { get; set; }
-        public decimal? AdjClose { get; set; }
-        public long? Volume { get; set; }
+        public async Task<Maybe<ICollection<EodData>>> GetQuotesByCompanyId(int id)
+        {
+            var eodData = await _context.EodData.Where(e => e.CompanyId == id).OrderByDescending(o => o.Date).Take(100).ToListAsync();
+            return eodData.ToMaybe<ICollection<EodData>>();
+        }
     }
 }
+using GptFinance.Domain.Entities;
 namespace YahooFinanceAPI.Services
 {
     using Flurl;
@@ -512,21 +696,20 @@ namespace YahooFinanceAPI.Services
     using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using YahooFinanceAPI.Models;
-    public class YahooSearchService
+    public class YahooSearchService : IYahooSearchService<Company>
     {
         private readonly HttpClient _httpClient;
         public YahooSearchService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
-        public async Task<List<YahooSearchResult>> SearchCompaniesAsync(string query)
+        public async Task<List<YahooSearchResult>?> SearchCompaniesAsync(string query)
         {
             var response = await $"{YahooFinanceApiBaseUrl}/v1/finance/search"
                 .SetQueryParams(new { q = query, quotesCount = 10, newsCount = 0 })
                 .GetStringAsync();
             var searchResults = JsonConvert.DeserializeObject<YahooSearchResults>(response);
-            return searchResults.Quotes;
+            return searchResults?.Quotes;
         }
         public async Task<List<Company>> SearchCompaniesAsync(IEnumerable<string> queries)
         {
@@ -559,44 +742,5 @@ namespace YahooFinanceAPI.Services
             return companies.GroupBy(c => c.Symbol).Select(g => g.First()).ToList();
         }
     }
-    public class YahooSearchResults
-    {
-        [JsonProperty("quotes")]
-        public List<YahooSearchResult> Quotes { get; set; }
-    }
-    public class YahooSearchResult
-    {
-        [JsonProperty("symbol")]
-        public string Symbol { get; set; }
-        [JsonProperty("shortname")]
-        public string CompanyName { get; set; }
-    }
 }
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.Text.Json.Serialization;
-using YahooFinanceAPI.Data;
-using YahooFinanceAPI.Services;
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddSingleton<YahooFinanceService>();
-builder.Services.AddSingleton<TechnicalIndicatorsService>();
-builder.Services.AddSingleton<YahooSearchService>();
-builder.Services.AddScoped<CompanyService>();
-builder.Services.AddSingleton<HttpClient>();
-builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
-var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-app.Run();
 

@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
-using YahooFinanceAPI.Data;
-using YahooFinanceAPI.Services;
+using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Entities;
+using GptFinance.Infrastructure.Data;
+using GptFinance.Infrastructure.Models;
+using GptFinance.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,11 +23,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<YahooFinanceService>();
-builder.Services.AddSingleton<TechnicalIndicatorsService>();
-builder.Services.AddSingleton<YahooSearchService>();
+builder.Services.AddTransient<IYahooFinanceService<CsvRecord>, YahooFinanceService>();
+builder.Services.AddTransient<ITechnicalIndicatorsService, TechnicalIndicatorsService>();
+builder.Services.AddTransient<IYahooSearchService<Company>, YahooSearchService>();
 
-builder.Services.AddScoped<CompanyService>();
+builder.Services.AddTransient<ICompanyService, CompanyService>();
 
 builder.Services.AddSingleton<HttpClient>();
 

@@ -1,4 +1,6 @@
-﻿namespace YahooFinanceAPI.Services;
+﻿using GptFinance.Application.Models;
+
+namespace GptFinance.Application.Interfaces;
 
 public interface IYahooSearchService<T>
 {
