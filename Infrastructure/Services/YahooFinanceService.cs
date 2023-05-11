@@ -7,6 +7,7 @@ using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Data;
 using GptFinance.Infrastructure.Mappings;
 using GptFinance.Infrastructure.Models;
+using GptFinance.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace GptFinance.Infrastructure.Services
@@ -15,12 +16,14 @@ namespace GptFinance.Infrastructure.Services
     public class YahooFinanceService : IYahooFinanceService<CsvRecord>
     {
         private readonly AppDbContext _context;
+        private readonly IRepository<EodData> _eodRepository;
         private const string BaseUrl = "https://query1.finance.yahoo.com/v7/finance/download/";
         private readonly HttpClient _httpClient;
 
-        public YahooFinanceService(AppDbContext context)
+        public YahooFinanceService(AppDbContext context, IRepository<EodData> eodRepository)
         {
             _context = context;
+            _eodRepository = eodRepository ?? throw new ArgumentNullException(nameof(eodRepository));
             _httpClient = new HttpClient();
         }
 
@@ -46,6 +49,7 @@ namespace GptFinance.Infrastructure.Services
                         var r = csvReader.GetRecords<CsvRecord>();
                         var records = new List<EodData>(Convert(csvReader.GetRecords<CsvRecord>().ToList(), company.Id));
 
+                        await _eodRepository.AddRange(records);
                         _context.EodData.AddRange(records);
                         await _context.SaveChangesAsync();
 

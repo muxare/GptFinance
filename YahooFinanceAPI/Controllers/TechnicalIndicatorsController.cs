@@ -34,8 +34,8 @@ public class TechnicalIndicatorsController : ControllerBase
         {
             return NotFound();
         }
-
         await _technicalIndicatorsService.CalculateAndStore(id, period, company);
+
         return NoContent();
     }
 

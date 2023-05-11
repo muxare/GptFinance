@@ -3,25 +3,23 @@ using GptFinance.Application.Models;
 using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Data;
 using GptFinance.Infrastructure.Models;
+using GptFinance.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace GptFinance.Infrastructure.Services
 {
     public class CompanyService : ICompanyService
     {
-        private readonly AppDbContext _context;
         private readonly IYahooFinanceService<CsvRecord> _yahooFinanceService;
+        private readonly ICompanyRepository _companyRepository;
 
-        public CompanyService(AppDbContext context, IYahooFinanceService<CsvRecord> yahooFinanceService)
+        public CompanyService(AppDbContext context, IYahooFinanceService<CsvRecord> yahooFinanceService, ICompanyRepository companyRepository)
         {
-            _context = context;
             _yahooFinanceService = yahooFinanceService ?? throw new ArgumentNullException(nameof(yahooFinanceService));
+            _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
         }
 
-        public async Task<ICollection<Company>> GetAll()
-        {
-            return await _context.Companies.ToListAsync();
-        }
+        public async Task<ICollection<Company>> GetAll() => await _companyRepository.GetAllAsync();
 
         public async Task<Company> AddCompanyAsync(YahooSearchResult searchResult)
         {
@@ -31,26 +29,18 @@ namespace GptFinance.Infrastructure.Services
                 Name = searchResult.CompanyName,
                 LastUpdated = DateTime.UtcNow
             };
-
-            _context.Companies.Add(company);
-            await _context.SaveChangesAsync();
+            await _companyRepository.AddAsync(company);
 
             return company;
         }
 
-        public async Task AddMultipleCompaniesAsync(List<Company> companies)
-        {
-            await _context.Companies.AddRangeAsync(companies);
-            await _context.SaveChangesAsync();
-        }
+        public async Task AddMultipleCompaniesAsync(List<Company> companies) => await _companyRepository.AddRange(companies);
 
         public async Task UpdateCompany(int id, Company company)
         {
-            _context.Entry(company).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _companyRepository.UpdateAsync(company);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -75,38 +65,18 @@ namespace GptFinance.Infrastructure.Services
             }
 
             company.LastUpdated = DateTime.Now;
-
-            _context.Entry(company).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
+            await _companyRepository.UpdateAsync(company);
         }
 
         public async Task DeleteCompany(int id)
         {
-            var company = await _context.Companies.FindAsync(id);
-            if (company == null)
-            {
-                throw new CompanyNotFoundException();
-            }
-
-            _context.Companies.Remove(company);
-            await _context.SaveChangesAsync();
-
+            await _companyRepository.DeleteAsync(id);
         }
 
-        private bool CompanyExists(int id)
-        {
-            return _context.Companies.Any(e => e.Id == id);
-        }
+        private bool CompanyExists(int id) => _companyRepository.Exists(id);
 
-        public async Task<Company> FindAsync(int id)
-        {
-            return await _context.Companies.FindAsync(id);
-        }
+        public async Task<Company> FindAsync(int id) => await _companyRepository.GetByIdAsync(id);
 
-        public async Task<Company?> FindWithEodDataAsync(int id)
-        {
-            return await _context.Companies.Include(c => c.EodData).FirstOrDefaultAsync(c => c.Id == id);
-        }
+        public async Task<Company?> FindWithEodDataAsync(int id) => await _companyRepository.FindWithEodDataAsync(id);
     }
 }
