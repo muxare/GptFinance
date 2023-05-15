@@ -30,40 +30,99 @@ namespace GptFinance.Infrastructure.Services
             return (macdLine, signalLine);
         }
 
-        public async Task CalculateAndStore(int id, int period, Company company)
+        private decimal CalculateRSI(IEnumerable<decimal> closingPrices, int period)
+        {
+            var enumerable = closingPrices as decimal[] ?? closingPrices.ToArray();
+            var gains = new List<decimal>();
+            var losses = new List<decimal>();
+
+            for (int i = 1; i < enumerable.Count(); i++)
+            {
+                var difference = enumerable.ElementAt(i) - enumerable.ElementAt(i - 1);
+                if (difference > 0)
+                    gains.Add(difference);
+                else
+                    losses.Add(Math.Abs(difference));
+            }
+
+            var averageGain = gains.Average();
+            var averageLoss = losses.Average();
+
+            var relativeStrength = averageGain / averageLoss;
+            var rsi = 100 - (100 / (1 + relativeStrength));
+
+            return rsi;
+        }
+
+        private decimal CalculateStochasticOscillator(IEnumerable<decimal> closingPrices, int period)
+        {
+            var enumerable = closingPrices as decimal[] ?? closingPrices.ToArray();
+            var lowest = enumerable.Take(period).Min();
+            var highest = enumerable.Take(period).Max();
+            var current = enumerable.Last();
+
+            var stochasticOscillator = (current - lowest) / (highest - lowest) * 100;
+
+            return stochasticOscillator;
+        }
+
+        private decimal CalculateStochasticRSI(IEnumerable<decimal> closingPrices, int period)
+        {
+            var enumerable = closingPrices as decimal[] ?? closingPrices.ToArray();
+            var lowest = enumerable.Take(period).Min();
+            var highest = enumerable.Take(period).Max();
+            var current = enumerable.Last();
+
+            var stochasticOscillator = (current - lowest) / (highest - lowest) * 100;
+
+            return stochasticOscillator;
+        }
+
+
+        public async Task CalculateAndStoreEma(int id, int period, Company company)
         {
             var closingPrices = company.EodData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
-            var previousEma = (decimal)closingPrices.Take(period).Average();
-            var index = period;
-
-            ICollection<EmaData> data = new List<EmaData>();
-            foreach (var eodData in company.EodData.Skip(period))
-            {
-                if (eodData.Close == null)
-                    continue;
-                decimal ema = CalculateEMA(previousEma, eodData.Close.Value, period);
-
-                data.Add(new EmaData
-                    {
-                        CompanyId = id,
-                        Date = eodData.Date,
-                        Value = ema,
-                        Period = period
-                    }
-                );
-
-                previousEma = ema;
-                index++;
-            }
+            var data = CalculateEma(id, period, closingPrices);
 
             _context.EmaData.AddRange(data);
 
             await _context.SaveChangesAsync();
         }
 
+        private ICollection<EmaData> CalculateEma(int id, int period, List<decimal?> closingPrices)
+        {
+            var previousEma = (decimal)closingPrices.Take(period).Average();
+
+            ICollection<EmaData> data = new List<EmaData>();
+            for (int i = period; i < closingPrices.Count; i++)
+            {
+                var close = closingPrices[i];
+                if (close == null)
+                    continue;
+
+                decimal ema = CalculateEMA(previousEma, close.Value, period);
+
+                data.Add(new EmaData
+                    {
+                        CompanyId = id,
+                        Value = ema,
+                        Period = period
+                    }
+                );
+
+                previousEma = ema;
+            }
+
+            return data;
+        }
+
         public async Task CalculateAndStoreMacd(int id, int shortPeriod, int longPeriod, int signalPeriod, Company company)
         {
             var closingPrices = company.EodData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
+            var emaLong = CalculateEma(id, longPeriod, closingPrices);
+            var emaShort = CalculateEma(id, shortPeriod, closingPrices);
+
+
 
             int index = longPeriod - 1;
             foreach (var eodData in company.EodData.Skip(longPeriod - 1))

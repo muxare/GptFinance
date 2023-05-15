@@ -24,7 +24,7 @@ public class EodDataController : ControllerBase
     public async Task<ActionResult<ICollection<EodData>>> GetEodData(int id)
     {
         var eodData = await _yahooFinanceService.GetQuotesByCompanyId(id).ConfigureAwait(false);
-        if (eodData.HasValue || eodData.Value.Count == 0)
+        if (eodData.Count == 0)
         {
             return NotFound();
         }

@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using CsvHelper;
+﻿using CsvHelper;
 using CsvHelper.Configuration;
 using GptFinance.Application.Interfaces;
 using GptFinance.Domain;
@@ -12,17 +11,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GptFinance.Infrastructure.Services
 {
-    // Services/YahooFinanceService.cs
     public class YahooFinanceService : IYahooFinanceService<CsvRecord>
     {
-        private readonly AppDbContext _context;
-        private readonly IRepository<EodData> _eodRepository;
+        //private readonly AppDbContext _context;
+        private readonly IEodDataRepository _eodRepository;
         private const string BaseUrl = "https://query1.finance.yahoo.com/v7/finance/download/";
         private readonly HttpClient _httpClient;
 
-        public YahooFinanceService(AppDbContext context, IRepository<EodData> eodRepository)
+        public YahooFinanceService(AppDbContext context, IEodDataRepository eodRepository)
         {
-            _context = context;
+            // _context = context;
             _eodRepository = eodRepository ?? throw new ArgumentNullException(nameof(eodRepository));
             _httpClient = new HttpClient();
         }
@@ -50,8 +48,6 @@ namespace GptFinance.Infrastructure.Services
                         var records = new List<EodData>(Convert(csvReader.GetRecords<CsvRecord>().ToList(), company.Id));
 
                         await _eodRepository.AddRange(records);
-                        _context.EodData.AddRange(records);
-                        await _context.SaveChangesAsync();
 
                         return records;
                     }
@@ -62,8 +58,6 @@ namespace GptFinance.Infrastructure.Services
                 }
             }
         }
-
-
 
         public List<EodData> Convert(List<CsvRecord> csvRecords, int companyId)
         {
@@ -125,10 +119,10 @@ namespace GptFinance.Infrastructure.Services
             return quote;
         }
 
-        public async Task<Maybe<ICollection<EodData>>> GetQuotesByCompanyId(int id)
+        public async Task<ICollection<EodData>> GetQuotesByCompanyId(int id)
         {
-            var eodData = await _context.EodData.Where(e => e.CompanyId == id).OrderByDescending(o => o.Date).Take(100).ToListAsync();
-            return eodData.ToMaybe<ICollection<EodData>>();
+            ICollection<EodData> eodData = await _eodRepository.GetQuotesByCompanyId(id);
+            return eodData;
         }
     }
 

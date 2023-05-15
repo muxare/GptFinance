@@ -5,6 +5,7 @@ using GptFinance.Application.Interfaces;
 using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Data;
 using GptFinance.Infrastructure.Models;
+using GptFinance.Infrastructure.Repository;
 using GptFinance.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,8 +25,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddTransient<IYahooFinanceService<CsvRecord>, YahooFinanceService>();
+builder.Services.AddTransient<IEodDataRepository, EodDataRepository>();
+builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
 builder.Services.AddTransient<ITechnicalIndicatorsService, TechnicalIndicatorsService>();
 builder.Services.AddTransient<IYahooSearchService<Company>, YahooSearchService>();
+builder.Services.AddTransient<IEmaRepository, EmaRepository>();
+builder.Services.AddTransient<IMacdRepository, MacdRepository>();
+
 
 builder.Services.AddTransient<ICompanyService, CompanyService>();
 

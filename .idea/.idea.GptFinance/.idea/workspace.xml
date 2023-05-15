@@ -9,15 +9,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Infrastructure/Repository/CompanyRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Infrastructure/Repository/ICompanyRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Infrastructure/Repository/IRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Infrastructure/UnitOfWork/UnitOfWork.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Interfaces/ICompanyScreenerService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Interfaces/IEmaRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Interfaces/IEodDataRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Application/Interfaces/IMacdRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Infrastructure/GlobalUsings.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Infrastructure/Repository/EmaRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Infrastructure/Repository/MacdRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Infrastructure/Services/CompanyScreenerService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/ScreenerController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/CompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/CompanyService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Interfaces/ITechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/ITechnicalIndicatorsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Converters/NullableLongConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Converters/NullableLongConverter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/CompanyRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/CompanyRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/ICompanyRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/ICompanyRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/IRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/TechnicalIndicatorsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/TechnicalIndicatorsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,19 +46,22 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/23e31092363db7107ca21367adea927bccc2e7cf2075f9ee398ad1175b8e87/Nullable.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3dcf4c5a166d5b3167c5d79e7789b39538a5cf476f67654ff1f69e4eddaa4c/CreatedAtActionResult.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ea95343b9387b73062a9b61b7538f826c54ce3529632b4472ba4494044d23/AsyncTaskMethodBuilderT.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/767db1e17d404f86c3c73c54c6b20b5ff9ec43b79ef47681ae34b40a6852cf9/Where.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/77fc393f2a9beaeee7b2142a5831b298b83cb73392c226b366c180faf48a7d/ObjectResult.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7d9a41d47547e1fe7fe548b21ab4de12cc2671170a023bc8c629017837eb5f4/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b8c87f425e3fb6527946450cb8adc65871abb6df52aee10715e64cdf07f2a/DbUpdateConcurrencyException.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c1da7b6c7c71a954fe3eb2531c6476711b3e6d93a8d76795386d326bb9dbc/ExecutionContext.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/cf91eb35ab781c324ad4fa382dce85631ec37cf3813529f7c92208d866c851/TaskContinuation.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d5ddf6f86ce4bae45d39ad7da33c65e79ef2124f9940bd1e88b7fbcaf735a5/Take.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f4708639776589f5ac2739f6fcbfc67343b1f9dac51cc1dbfdb003eef77cc1c/Monitor.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/source/repos/Me/GptFinance/Domain/Entities/EodData.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Services/CompanyService.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="SWEA" />
+  </component>
   <component name="ProjectId" id="2NoeqRkO21hKargzoFGHuCfmLvL" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -54,35 +70,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "TODO_SCOPE": "All Places",
-    "WebServerToolWindowFactoryState": "false",
-    "XThreadsFramesViewSplitterKey": "0.757315",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "project.propVCSSupport.Confirmation",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.757315&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.notifications&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "sqlserver.localdb",
-      "sqlserver"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlserver.localdb&quot;,
+      &quot;sqlserver&quot;
     ],
-    "rider.external.source.directories": [
-      "C:\\Users\\MikaelAxelsson\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\DecompilerCache",
-      "C:\\Users\\MikaelAxelsson\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\SourcesCache",
-      "C:\\Users\\MikaelAxelsson\\AppData\\Local\\Symbols\\src"
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\MikaelAxelsson\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\MikaelAxelsson\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\MikaelAxelsson\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.YahooFinanceAPI">
     <configuration name="YahooFinanceAPI" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/YahooFinanceAPI/YahooFinanceAPI.csproj" />
@@ -137,8 +153,19 @@
       <workItem from="1682783789456" duration="2951000" />
       <workItem from="1683367603657" duration="6883000" />
       <workItem from="1683440762687" duration="8894000" />
-      <workItem from="1683465136674" duration="8495000" />
+      <workItem from="1683465136674" duration="9858000" />
+      <workItem from="1683961155123" duration="124000" />
+      <workItem from="1683961313817" duration="4540000" />
+      <workItem from="1683987335187" duration="11227000" />
     </task>
+    <task id="LOCAL-00001" summary="Added repositories. Need to be used.">
+      <created>1683829659863</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1683829659863</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -200,22 +227,50 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Added repositories. Need to be used." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added repositories. Need to be used." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs</url>
-          <line>50</line>
-          <properties documentPath="C:\source\repos\Me\GptFinance\YahooFinanceAPI\Controllers\EodDataController.cs" initialLine="50" containingFunctionPresentation="Method 'FetchHistoricalData'">
+          <url>file://$PROJECT_DIR$/YahooFinanceAPI/Controllers/TechnicalIndicatorsController.cs</url>
+          <line>40</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\YahooFinanceAPI\Controllers\TechnicalIndicatorsController.cs" initialLine="40" containingFunctionPresentation="Method 'CalculateMacd'">
             <startOffsets>
-              <option value="1706" />
+              <option value="1540" />
             </startOffsets>
             <endOffsets>
-              <option value="1780" />
+              <option value="1591" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="8" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
+          <line>21</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="21" containingFunctionPresentation="Method 'CalculateMACD'">
+            <startOffsets>
+              <option value="877" />
+            </startOffsets>
+            <endOffsets>
+              <option value="878" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
+          <line>119</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="119" containingFunctionPresentation="Method 'CalculateAndStoreMacd'">
+            <startOffsets>
+              <option value="4436" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4437" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

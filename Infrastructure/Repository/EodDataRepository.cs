@@ -1,10 +1,11 @@
-﻿using GptFinance.Domain.Entities;
+﻿using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace GptFinance.Infrastructure.Repository;
 
-public class EodDataRepository : IRepository<EodData>
+public class EodDataRepository : IEodDataRepository
 {
     private readonly AppDbContext _context;
 
@@ -48,5 +49,11 @@ public class EodDataRepository : IRepository<EodData>
     public bool Exists(int id)
     {
         return _context.Set<EodData>().Any(c => c.Id == id);
+    }
+
+    public async Task<ICollection<EodData>> GetQuotesByCompanyId(int id)
+    {
+        var eodData = await _context.EodData.Where(e => e.CompanyId == id).OrderByDescending(o => o.Date).ToListAsync();
+        return eodData;
     }
 }

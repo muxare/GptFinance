@@ -1,4 +1,5 @@
-﻿using GptFinance.Domain.Entities;
+﻿using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
