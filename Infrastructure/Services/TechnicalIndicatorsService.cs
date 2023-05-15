@@ -89,6 +89,7 @@ namespace GptFinance.Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
+        // TODO: All series needs to be indexed by date
         private ICollection<EmaData> CalculateEma(int id, int period, List<decimal?> closingPrices)
         {
             var previousEma = (decimal)closingPrices.Take(period).Average();

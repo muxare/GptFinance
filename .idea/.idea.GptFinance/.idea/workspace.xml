@@ -9,28 +9,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Application/Interfaces/ICompanyScreenerService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Application/Interfaces/IEmaRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Application/Interfaces/IEodDataRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Application/Interfaces/IMacdRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Infrastructure/GlobalUsings.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Infrastructure/Repository/EmaRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Infrastructure/Repository/MacdRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Infrastructure/Services/CompanyScreenerService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/ScreenerController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Interfaces/ITechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/ITechnicalIndicatorsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Converters/NullableLongConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Converters/NullableLongConverter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/CompanyRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/CompanyRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/ICompanyRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/ICompanyRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/IRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/TechnicalIndicatorsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/TechnicalIndicatorsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,6 +137,7 @@
       <workItem from="1683961155123" duration="124000" />
       <workItem from="1683961313817" duration="4540000" />
       <workItem from="1683987335187" duration="11227000" />
+      <workItem from="1684148882104" duration="703000" />
     </task>
     <task id="LOCAL-00001" summary="Added repositories. Need to be used.">
       <created>1683829659863</created>
@@ -261,13 +242,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
-          <line>119</line>
+          <line>120</line>
           <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="119" containingFunctionPresentation="Method 'CalculateAndStoreMacd'">
             <startOffsets>
-              <option value="4436" />
+              <option value="4492" />
             </startOffsets>
             <endOffsets>
-              <option value="4437" />
+              <option value="4493" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="3" />
