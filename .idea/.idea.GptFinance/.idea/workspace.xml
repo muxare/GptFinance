@@ -8,28 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/efCoreDialogsState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/efCoreDialogsState.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Domain/Entities/EmaData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/EmaData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Domain/Entities/EodData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/EodData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Domain/Entities/MacdData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/MacdData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Domain/Maybe.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Data/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Data/AppDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230319084836_InitialMigration.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230319084836_InitialMigration.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230319121100_MadeValuesOfEodDataToNullable.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230319121100_MadeValuesOfEodDataToNullable.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230401154620_Restructure.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230401154620_Restructure.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230402074009_Rename.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230402074009_Rename.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/AppDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Migrations/AppDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OutputFile.txt" beforeDir="false" afterPath="$PROJECT_DIR$/OutputFile.txt" afterDir="false" />
-    </list>
+    <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -157,7 +136,7 @@
       <workItem from="1683987335187" duration="11227000" />
       <workItem from="1684148882104" duration="5307000" />
       <workItem from="1684155602406" duration="1382000" />
-      <workItem from="1684173692936" duration="5375000" />
+      <workItem from="1684173692936" duration="5968000" />
     </task>
     <task id="LOCAL-00001" summary="Added repositories. Need to be used.">
       <created>1683829659863</created>
