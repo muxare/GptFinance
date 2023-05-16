@@ -12,8 +12,5 @@ namespace GptFinance.Domain.Entities
         public decimal? Low { get; set; }
         public decimal? Close { get; set; }
         public long? Volume { get; set; }
-
-        [JsonIgnore]
-        public Company? Company { get; set; }
     }
 }

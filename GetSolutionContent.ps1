@@ -1,6 +1,7 @@
 # Set your solution file path
 $solutionFilePath = "C:\source\repos\Me\GptFinance\GptFinance.sln"
 $outputFilePath = "C:\source\repos\Me\GptFinance\OutputFile.txt"
+$outputFilePathHtml = "C:\source\repos\Me\GptFinance\OutputFile.html"
 
 # Check if the solution file exists
 if (-not (Test-Path -Path $solutionFilePath -PathType Leaf)) {
@@ -91,6 +92,19 @@ foreach ($projectFilePath in $projectFilePaths) {
         }
     }
 }
+
+# Create an HTLM file with the generated content
+Set-Content -Path $outputFilePathHtml -Value @"
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Website Title</title>
+</head>
+<body>
+    $outputFileContent
+</body>
+</html>
+"@
 
 # Write the concatenated content to the output file
 Set-Content -Path $outputFilePath -Value $outputFileContent

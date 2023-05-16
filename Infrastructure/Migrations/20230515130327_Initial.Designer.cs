@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace YahooFinanceAPI.Migrations
+namespace GptFinance.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230319084836_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230515130327_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace YahooFinanceAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("YahooFinanceAPI.Models.Company", b =>
+            modelBuilder.Entity("GptFinance.Domain.Entities.Company", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -37,11 +37,9 @@ namespace YahooFinanceAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Symbol")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -49,13 +47,10 @@ namespace YahooFinanceAPI.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("YahooFinanceAPI.Models.EMAData", b =>
+            modelBuilder.Entity("GptFinance.Domain.Entities.EmaData", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
@@ -69,23 +64,15 @@ namespace YahooFinanceAPI.Migrations
                     b.Property<decimal>("Value")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "CompanyId", "Date");
 
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("EMAData");
+                    b.ToTable("EmaData");
                 });
 
-            modelBuilder.Entity("YahooFinanceAPI.Models.EODData", b =>
+            modelBuilder.Entity("GptFinance.Domain.Entities.EodData", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Close")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
@@ -93,32 +80,32 @@ namespace YahooFinanceAPI.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("High")
+                    b.Property<decimal?>("Close")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Low")
+                    b.Property<decimal?>("High")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Open")
+                    b.Property<decimal?>("Low")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<long>("Volume")
+                    b.Property<decimal?>("Open")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long?>("Volume")
                         .HasColumnType("bigint");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "CompanyId", "Date");
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("EODData");
+                    b.ToTable("EodData");
                 });
 
-            modelBuilder.Entity("YahooFinanceAPI.Models.MACDData", b =>
+            modelBuilder.Entity("GptFinance.Domain.Entities.MacdData", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
@@ -138,49 +125,23 @@ namespace YahooFinanceAPI.Migrations
                     b.Property<decimal>("Value")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "CompanyId", "Date");
 
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("MACDData");
+                    b.ToTable("MacdData");
                 });
 
-            modelBuilder.Entity("YahooFinanceAPI.Models.EMAData", b =>
+            modelBuilder.Entity("GptFinance.Domain.Entities.EodData", b =>
                 {
-                    b.HasOne("YahooFinanceAPI.Models.Company", "Company")
-                        .WithMany()
+                    b.HasOne("GptFinance.Domain.Entities.Company", null)
+                        .WithMany("EodData")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("YahooFinanceAPI.Models.EODData", b =>
+            modelBuilder.Entity("GptFinance.Domain.Entities.Company", b =>
                 {
-                    b.HasOne("YahooFinanceAPI.Models.Company", "Company")
-                        .WithMany("EODData")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("YahooFinanceAPI.Models.MACDData", b =>
-                {
-                    b.HasOne("YahooFinanceAPI.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("YahooFinanceAPI.Models.Company", b =>
-                {
-                    b.Navigation("EODData");
+                    b.Navigation("EodData");
                 });
 #pragma warning restore 612, 618
         }

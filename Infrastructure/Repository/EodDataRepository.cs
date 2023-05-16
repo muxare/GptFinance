@@ -48,7 +48,7 @@ public class EodDataRepository : IEodDataRepository
     }
     public bool Exists(int id)
     {
-        return _context.Set<EodData>().Any(c => c.Id == id);
+        return _context.Set<EodData>().Any(c => c.Id == id && c.CompanyId == id);
     }
 
     public async Task<ICollection<EodData>> GetQuotesByCompanyId(int id)

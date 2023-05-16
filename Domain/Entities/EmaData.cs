@@ -8,7 +8,5 @@
         public DateTime Date { get; set; }
         public decimal Value { get; set; }
         public int Period { get; set; }
-
-        public Company? Company { get; set; }
     }
 }

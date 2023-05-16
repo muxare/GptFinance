@@ -9,8 +9,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/efCoreDialogsState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/efCoreDialogsState.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/Entities/EmaData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/EmaData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/Entities/EodData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/EodData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/Entities/MacdData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/MacdData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/Maybe.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Data/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Data/AppDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230319084836_InitialMigration.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230319084836_InitialMigration.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230319121100_MadeValuesOfEodDataToNullable.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230319121100_MadeValuesOfEodDataToNullable.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230401154620_Restructure.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230401154620_Restructure.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230402074009_Rename.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/20230402074009_Rename.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Migrations/AppDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Migrations/AppDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OutputFile.txt" beforeDir="false" afterPath="$PROJECT_DIR$/OutputFile.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +155,9 @@
       <workItem from="1683961155123" duration="124000" />
       <workItem from="1683961313817" duration="4540000" />
       <workItem from="1683987335187" duration="11227000" />
-      <workItem from="1684148882104" duration="703000" />
+      <workItem from="1684148882104" duration="5307000" />
+      <workItem from="1684155602406" duration="1382000" />
+      <workItem from="1684173692936" duration="5375000" />
     </task>
     <task id="LOCAL-00001" summary="Added repositories. Need to be used.">
       <created>1683829659863</created>
@@ -215,43 +235,56 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/YahooFinanceAPI/Controllers/TechnicalIndicatorsController.cs</url>
-          <line>40</line>
-          <properties documentPath="C:\source\repos\Me\GptFinance\YahooFinanceAPI\Controllers\TechnicalIndicatorsController.cs" initialLine="40" containingFunctionPresentation="Method 'CalculateMacd'">
-            <startOffsets>
-              <option value="1540" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1591" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
-          <line>21</line>
+          <line>22</line>
           <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="21" containingFunctionPresentation="Method 'CalculateMACD'">
             <startOffsets>
-              <option value="877" />
+              <option value="923" />
             </startOffsets>
             <endOffsets>
-              <option value="878" />
+              <option value="924" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
-          <line>120</line>
-          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="119" containingFunctionPresentation="Method 'CalculateAndStoreMacd'">
+          <line>114</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="114" containingFunctionPresentation="Method 'CalculateAndStoreEma'">
             <startOffsets>
-              <option value="4492" />
+              <option value="4468" />
             </startOffsets>
             <endOffsets>
-              <option value="4493" />
+              <option value="4522" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="3" />
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/YahooFinanceAPI/Controllers/TechnicalIndicatorsController.cs</url>
+          <line>39</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\YahooFinanceAPI\Controllers\TechnicalIndicatorsController.cs" initialLine="39" containingFunctionPresentation="Method 'CalculateMacd'">
+            <startOffsets>
+              <option value="1530" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1531" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
+          <line>219</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="219" containingFunctionPresentation="Method 'CalculateMACD'">
+            <startOffsets>
+              <option value="8581" />
+            </startOffsets>
+            <endOffsets>
+              <option value="8598" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -1,6 +1,7 @@
 ﻿using GptFinance.Application.Interfaces;
 using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace GptFinance.Infrastructure.Services
 {
@@ -28,6 +29,227 @@ namespace GptFinance.Infrastructure.Services
             var signalLine = enumerable.Skip(longPeriod).Take(signalPeriod).Average();
 
             return (macdLine, signalLine);
+        }
+
+        public enum ImputationMethod
+        {
+            Mean,
+            Median,
+            Mode,
+            LastObservationCarriedForward,
+            LinearInterpolation
+        }
+
+        public Dictionary<DateTime, decimal> ImputeMissingData(Dictionary<DateTime, decimal?> priceData, ImputationMethod method)
+        {
+            var imputedData = new Dictionary<DateTime, decimal>();
+
+            decimal? lastObservation = null;
+
+            foreach (var dataPoint in priceData)
+            {
+                if (dataPoint.Value.HasValue)
+                {
+                    imputedData[dataPoint.Key] = dataPoint.Value.Value;
+                    lastObservation = dataPoint.Value.Value;
+                }
+                else
+                {
+                    decimal imputedValue = 0;
+
+                    switch (method)
+                    {
+                        case ImputationMethod.Mean:
+                            imputedValue = priceData.Values.Where(v => v.HasValue).Average(v => v.Value);
+                            break;
+                        case ImputationMethod.Median:
+                            imputedValue = Median(priceData.Values.Where(v => v.HasValue).Select(v => v.Value).ToList());
+                            break;
+                        case ImputationMethod.Mode:
+                            imputedValue = priceData.Values.Where(v => v.HasValue).GroupBy(v => v).OrderByDescending(g => g.Count()).First().Key.Value;
+                            break;
+                        case ImputationMethod.LastObservationCarriedForward:
+                            if (lastObservation.HasValue)
+                            {
+                                imputedValue = lastObservation.Value;
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException("Cannot use LastObservationCarriedForward method for the first data point.");
+                            }
+                            break;
+                    }
+
+                    imputedData[dataPoint.Key] = imputedValue;
+                }
+            }
+
+            return imputedData;
+        }
+
+        public decimal Median(List<decimal> values)
+        {
+            int numberCount = values.Count();
+            int halfIndex = values.Count() / 2;
+            var sortedNumbers = values.OrderBy(n => n);
+            decimal median;
+            if ((numberCount % 2) == 0)
+            {
+                median = ((sortedNumbers.ElementAt(halfIndex - 1) +
+                           sortedNumbers.ElementAt(halfIndex)) / 2);
+            }
+            else
+            {
+                median = sortedNumbers.ElementAt(halfIndex);
+            }
+
+            return median;
+        }
+
+
+
+        public async Task CalculateAndStoreEma(int id, int period, Company company)
+        {
+            var closingPrices = company.EodData.OrderBy(e => e.Date).ToDictionary(o => o.Date, o=> o.Close);
+            var imputedClosingPrices = ImputeMissingData(closingPrices, ImputationMethod.LastObservationCarriedForward);
+            var data = CalculateEMA(imputedClosingPrices, period);
+
+            //_context.EmaData.AddRange(data);
+
+            await _context.SaveChangesAsync();
+        }
+
+        // TODO: All series needs to be indexed by date
+        //private Dictionary<DateTime, decimal> CalculateEMA(Dictionary<DateTime, decimal> priceData, int period)
+        private ICollection<EmaData> CalculateEma(int id, int period, Dictionary<DateTime, decimal?> closingPrices)
+        {
+            var previousEma = (decimal)closingPrices.Take(period)
+                .Where(x => x.Value != null)
+                .Average(x => x.Value);
+
+            ICollection<EmaData> data = new List<EmaData>();
+            foreach (var closingPrice in closingPrices.Skip(period))
+            {
+                if (closingPrice.Value == null)
+                    continue;
+
+                decimal ema = CalculateEMA(previousEma, closingPrice.Value.Value, period);
+
+                data.Add(new EmaData
+                    {
+                        CompanyId = id,
+                        Value = ema,
+                        Period = period,
+                        Date = closingPrice.Key
+                    }
+                );
+
+                previousEma = ema;
+            }
+
+            return data;
+        }
+
+        public async Task CalculateAndStoreMacd(int id, int shortPeriod, int longPeriod, int signalPeriod, Company company)
+        {
+            var priceData = company.EodData.ToDictionary(o => o.Date, o => (decimal)o.Close);
+            var macdData = CalculateMACD(priceData, shortPeriod, longPeriod, signalPeriod);
+
+            var entities = macdData.Select(d => new MacdData
+            {
+                CompanyId = company.Id,
+                Date = d.Key,
+                ShortPeriod = shortPeriod,
+                LongPeriod = longPeriod,
+                SignalPeriod = signalPeriod
+            });
+
+            _context.MacdData.AddRange(entities);
+
+            await _context.SaveChangesAsync();
+        }
+
+
+        /// <summary>
+        /// Please note that this code does not handle missing dates in the input data,
+        /// and it assumes that the input data is sorted in ascending order by date.
+        /// If your data does not meet these criteria, you may need to preprocess it
+        /// before passing it to this function.
+        /// </summary>
+        /// <param name="priceData"></param>
+        /// <param name="shortPeriod"></param>
+        /// <param name="longPeriod"></param>
+        /// <param name="signalPeriod"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public Dictionary<DateTime, decimal> CalculateMACD(Dictionary<DateTime, decimal> priceData, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
+        {
+            // Check the data
+            if (priceData.Count < longPeriod)
+                throw new ArgumentException("Insufficient data to calculate MACD.");
+
+            var macdLine = new Dictionary<DateTime, decimal>();
+            var signalLine = new Dictionary<DateTime, decimal>();
+            var histogram = new Dictionary<DateTime, decimal>();
+
+            // Calculate EMA for short period and long period
+            var shortEma = CalculateEMA(priceData, shortPeriod);
+            var longEma = CalculateEMA(priceData, longPeriod);
+
+            // Calculate MACD Line: (12-day EMA - 26-day EMA)
+            foreach (var date in priceData.Keys)
+            {
+                if (shortEma.ContainsKey(date) && longEma.ContainsKey(date))
+                {
+                    macdLine[date] = shortEma[date] - longEma[date];
+                }
+            }
+
+            // Calculate Signal Line: 9-day EMA of MACD Line
+            signalLine = CalculateEMA(macdLine, signalPeriod);
+
+            // Calculate MACD Histogram: MACD Line – Signal Line
+            foreach (var date in macdLine.Keys)
+            {
+                if (signalLine.ContainsKey(date))
+                {
+                    histogram[date] = macdLine[date] - signalLine[date];
+                }
+            }
+
+            return histogram;
+        }
+
+        /// <summary>
+        /// Please note that this code does not handle missing dates in the input data,
+        /// and it assumes that the input data is sorted in ascending order by date.
+        /// If your data does not meet these criteria, you may need to preprocess it
+        /// before passing it to this function.
+        /// </summary>
+        /// <param name="priceData"></param>
+        /// <param name="period"></param>
+        /// <returns></returns>
+        private Dictionary<DateTime, decimal> CalculateEMA(Dictionary<DateTime, decimal> priceData, int period)
+        {
+            var ema = new Dictionary<DateTime, decimal>();
+            decimal multiplier = 2.0M / (period + 1);
+            decimal emaPrev = 0;
+
+            for (int i = 0; i < priceData.Count; i++)
+            {
+                if (i == 0)
+                {
+                    emaPrev = priceData.ElementAt(i).Value; // for the very first data point, SMA and EMA are same
+                }
+                else
+                {
+                    decimal close = priceData.ElementAt(i).Value;
+                    emaPrev = (close - emaPrev) * multiplier + emaPrev; // EMA formula
+                }
+                ema[priceData.ElementAt(i).Key] = emaPrev;
+            }
+
+            return ema;
         }
 
         private decimal CalculateRSI(IEnumerable<decimal> closingPrices, int period)
@@ -78,74 +300,5 @@ namespace GptFinance.Infrastructure.Services
             return stochasticOscillator;
         }
 
-
-        public async Task CalculateAndStoreEma(int id, int period, Company company)
-        {
-            var closingPrices = company.EodData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
-            var data = CalculateEma(id, period, closingPrices);
-
-            _context.EmaData.AddRange(data);
-
-            await _context.SaveChangesAsync();
-        }
-
-        // TODO: All series needs to be indexed by date
-        private ICollection<EmaData> CalculateEma(int id, int period, List<decimal?> closingPrices)
-        {
-            var previousEma = (decimal)closingPrices.Take(period).Average();
-
-            ICollection<EmaData> data = new List<EmaData>();
-            for (int i = period; i < closingPrices.Count; i++)
-            {
-                var close = closingPrices[i];
-                if (close == null)
-                    continue;
-
-                decimal ema = CalculateEMA(previousEma, close.Value, period);
-
-                data.Add(new EmaData
-                    {
-                        CompanyId = id,
-                        Value = ema,
-                        Period = period
-                    }
-                );
-
-                previousEma = ema;
-            }
-
-            return data;
-        }
-
-        public async Task CalculateAndStoreMacd(int id, int shortPeriod, int longPeriod, int signalPeriod, Company company)
-        {
-            var closingPrices = company.EodData.OrderBy(e => e.Date).Select(e => e.Close).ToList();
-            var emaLong = CalculateEma(id, longPeriod, closingPrices);
-            var emaShort = CalculateEma(id, shortPeriod, closingPrices);
-
-
-
-            int index = longPeriod - 1;
-            foreach (var eodData in company.EodData.Skip(longPeriod - 1))
-            {
-                var (macdLine, signalLine) = CalculateMACD(
-                    closingPrices.Take(index + 1).Where(x => x.HasValue).Select(x => x.Value), shortPeriod, longPeriod,
-                    signalPeriod);
-
-                _context.MacdData.Add(new MacdData
-                {
-                    CompanyId = id,
-                    Date = eodData.Date,
-                    Value = macdLine - signalLine,
-                    ShortPeriod = shortPeriod,
-                    LongPeriod = longPeriod,
-                    SignalPeriod = signalPeriod
-                });
-
-                index++;
-            }
-
-            await _context.SaveChangesAsync();
-        }
     }
 }
