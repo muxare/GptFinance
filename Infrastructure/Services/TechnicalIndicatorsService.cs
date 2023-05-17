@@ -114,62 +114,47 @@ namespace GptFinance.Infrastructure.Services
             var imputedClosingPrices = ImputeMissingData(closingPrices, ImputationMethod.LastObservationCarriedForward);
             var data = CalculateEMA(imputedClosingPrices, period);
 
-            //_context.EmaData.AddRange(data);
+            var entities = data.Select(d => new EmaData
+            {
+                CompanyId = company.Id,
+                Date = d.Key,
+                Period = period,
+                Value = d.Value
+            });
+
+            _context.EmaData.AddRange(entities);
 
             await _context.SaveChangesAsync();
         }
 
-        // TODO: All series needs to be indexed by date
-        //private Dictionary<DateTime, decimal> CalculateEMA(Dictionary<DateTime, decimal> priceData, int period)
-        private ICollection<EmaData> CalculateEma(int id, int period, Dictionary<DateTime, decimal?> closingPrices)
-        {
-            var previousEma = (decimal)closingPrices.Take(period)
-                .Where(x => x.Value != null)
-                .Average(x => x.Value);
-
-            ICollection<EmaData> data = new List<EmaData>();
-            foreach (var closingPrice in closingPrices.Skip(period))
-            {
-                if (closingPrice.Value == null)
-                    continue;
-
-                decimal ema = CalculateEMA(previousEma, closingPrice.Value.Value, period);
-
-                data.Add(new EmaData
-                    {
-                        CompanyId = id,
-                        Value = ema,
-                        Period = period,
-                        Date = closingPrice.Key
-                    }
-                );
-
-                previousEma = ema;
-            }
-
-            return data;
-        }
 
         public async Task CalculateAndStoreMacd(int id, int shortPeriod, int longPeriod, int signalPeriod, Company company)
         {
-            var priceData = company.EodData.ToDictionary(o => o.Date, o => (decimal)o.Close);
-            var macdData = CalculateMACD(priceData, shortPeriod, longPeriod, signalPeriod);
+            var priceData = company.EodData.ToDictionary(o => o.Date, o => o.Close);
+            var imputedClosingPrices = ImputeMissingData(priceData, ImputationMethod.LastObservationCarriedForward);
+            var macdData = CalculateMACD(imputedClosingPrices, shortPeriod, longPeriod, signalPeriod);
 
-            var entities = macdData.MACDLine.Select(d => new MacdData
+            var keys = macdData.Histogram.Keys.Union(macdData.MACDLine.Keys).Union(macdData.SignalLine.Keys).Distinct().OrderBy(o => o.Date);
+            var entities = new List<MacdData>();
+            foreach (var date in keys)
             {
-                CompanyId = company.Id,
-                Date = d.Key,
-                ShortPeriod = shortPeriod,
-                LongPeriod = longPeriod,
-                SignalPeriod = signalPeriod,
-                MacdValue = d.Value,
-            });
-
+                var dataPoint = new MacdData
+                {
+                    CompanyId = company.Id,
+                    Date = date,
+                    ShortPeriod = shortPeriod,
+                    LongPeriod = longPeriod,
+                    SignalPeriod = signalPeriod,
+                    MacdValue = macdData.MACDLine[date],
+                    SignalValue = macdData.SignalLine[date],
+                    HistogramValue = macdData.Histogram[date]
+                };
+                entities.Add(dataPoint);
+            }
             _context.MacdData.AddRange(entities);
 
             await _context.SaveChangesAsync();
         }
-
 
         /// <summary>
         /// Please note that this code does not handle missing dates in the input data,
@@ -183,11 +168,13 @@ namespace GptFinance.Infrastructure.Services
         /// <param name="signalPeriod"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public (Dictionary<DateTime, decimal> MACDLine, Dictionary<DateTime, decimal> SignalLine, Dictionary<DateTime, decimal> Histogram) CalculateMACD(Dictionary<DateTime, decimal> priceData, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
+        private (Dictionary<DateTime, decimal> MACDLine, Dictionary<DateTime, decimal> SignalLine, Dictionary<DateTime, decimal> Histogram) CalculateMACD(Dictionary<DateTime, decimal> priceData, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
         {
             // Check the data
             if (priceData.Count < longPeriod)
                 throw new ArgumentException("Insufficient data to calculate MACD.");
+            if (priceData.First().Key > priceData.Last().Key)
+                throw new ArgumentException("Price data must be sorted in ascending order by date.");
 
             var macdLine = new Dictionary<DateTime, decimal>();
             var signalLine = new Dictionary<DateTime, decimal>();
@@ -232,6 +219,9 @@ namespace GptFinance.Infrastructure.Services
         /// <returns></returns>
         private Dictionary<DateTime, decimal> CalculateEMA(Dictionary<DateTime, decimal> priceData, int period)
         {
+            if (priceData.First().Key > priceData.Last().Key)
+                throw new ArgumentException("Price data must be sorted in ascending order by date.");
+
             var ema = new Dictionary<DateTime, decimal>();
             decimal multiplier = 2.0M / (period + 1);
             decimal emaPrev = 0;

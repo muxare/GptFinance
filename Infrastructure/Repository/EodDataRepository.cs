@@ -53,7 +53,7 @@ public class EodDataRepository : IEodDataRepository
 
     public async Task<ICollection<EodData>> GetQuotesByCompanyId(int id)
     {
-        var eodData = await _context.EodData.Where(e => e.CompanyId == id).OrderByDescending(o => o.Date).ToListAsync();
+        var eodData = await _context.EodData.Where(e => e.CompanyId == id).OrderBy(o => o.Date).ToListAsync();
         return eodData;
     }
 }
