@@ -8,7 +8,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="" />
+    <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Domain/Entities/MacdData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Domain/Entities/MacdData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -136,7 +140,7 @@
       <workItem from="1683987335187" duration="11227000" />
       <workItem from="1684148882104" duration="5307000" />
       <workItem from="1684155602406" duration="1382000" />
-      <workItem from="1684173692936" duration="5968000" />
+      <workItem from="1684173692936" duration="7330000" />
     </task>
     <task id="LOCAL-00001" summary="Added repositories. Need to be used.">
       <created>1683829659863</created>
@@ -251,19 +255,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
-          <line>219</line>
-          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="219" containingFunctionPresentation="Method 'CalculateMACD'">
-            <startOffsets>
-              <option value="8581" />
-            </startOffsets>
-            <endOffsets>
-              <option value="8598" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -155,13 +155,14 @@ namespace GptFinance.Infrastructure.Services
             var priceData = company.EodData.ToDictionary(o => o.Date, o => (decimal)o.Close);
             var macdData = CalculateMACD(priceData, shortPeriod, longPeriod, signalPeriod);
 
-            var entities = macdData.Select(d => new MacdData
+            var entities = macdData.MACDLine.Select(d => new MacdData
             {
                 CompanyId = company.Id,
                 Date = d.Key,
                 ShortPeriod = shortPeriod,
                 LongPeriod = longPeriod,
-                SignalPeriod = signalPeriod
+                SignalPeriod = signalPeriod,
+                MacdValue = d.Value,
             });
 
             _context.MacdData.AddRange(entities);
@@ -182,7 +183,7 @@ namespace GptFinance.Infrastructure.Services
         /// <param name="signalPeriod"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public Dictionary<DateTime, decimal> CalculateMACD(Dictionary<DateTime, decimal> priceData, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
+        public (Dictionary<DateTime, decimal> MACDLine, Dictionary<DateTime, decimal> SignalLine, Dictionary<DateTime, decimal> Histogram) CalculateMACD(Dictionary<DateTime, decimal> priceData, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
         {
             // Check the data
             if (priceData.Count < longPeriod)
@@ -217,7 +218,7 @@ namespace GptFinance.Infrastructure.Services
                 }
             }
 
-            return histogram;
+            return (macdLine, signalLine, histogram);
         }
 
         /// <summary>
