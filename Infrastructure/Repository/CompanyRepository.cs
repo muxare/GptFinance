@@ -52,6 +52,15 @@ public class CompanyRepository : ICompanyRepository
         return _context.Set<Company>().Any(c => c.Id == id);
     }
 
+    public async Task<int> DeleteByIdAsync(int id)
+    {
+        if (!Exists(id))
+            throw new Exception($"Company with id {id} not found");
+
+        _context.Companies.Remove(new Company { Id = id });
+        return await _context.SaveChangesAsync();
+    }
+
     public async Task<Company?> FindWithEodDataAsync(int id)
     {
         return await _context.Companies.Include(c => c.EodData).FirstOrDefaultAsync(c => c.Id == id);

@@ -19,7 +19,7 @@ public class EodDataController : ControllerBase
         _companyService = companyService ?? throw new ArgumentNullException(nameof(companyService));
     }
 
-    // GET: api/companies/5
+    // GET: api/eoddata/5
     [HttpGet("{id}")]
     public async Task<ActionResult<ICollection<EodData>>> GetEodData(int id)
     {
@@ -32,7 +32,7 @@ public class EodDataController : ControllerBase
         return Ok(eodData);
     }
 
-    // POST: api/companies/5/historical
+    // POST: api/eoddata/5/historical
     [HttpPost("{id}/historical")]
     public async Task<ActionResult<IEnumerable<EodData>>> FetchHistoricalData(int id, DateTime? startDate, DateTime? endDate)
     {
@@ -49,5 +49,17 @@ public class EodDataController : ControllerBase
         var _ = await _yahooFinanceService.GetHistoricalDataAsync(company, startDate.Value, endDate.Value);
 
         return CreatedAtAction(nameof(GetEodData), new { id = company.Id }, null);
+    }
+
+    // POST: api/eoddata/historical
+    [HttpPost("historical")]
+    public async Task<ActionResult> FetchAllHistoricalData(DateTime? startDate, DateTime? endDate)
+    {
+        startDate ??= DateTime.MinValue;
+        endDate ??= DateTime.UtcNow;
+
+        await _yahooFinanceService.GetAllHistoricalDataAsync(startDate.Value, endDate.Value);
+
+        return Ok();
     }
 }

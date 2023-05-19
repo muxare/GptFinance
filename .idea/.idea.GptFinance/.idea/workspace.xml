@@ -10,8 +10,15 @@
   <component name="ChangeListManager">
     <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IEodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IEodDataRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Interfaces/ITechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/ITechnicalIndicatorsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/CompanyRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/CompanyRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +42,14 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/cf91eb35ab781c324ad4fa382dce85631ec37cf3813529f7c92208d866c851/TaskContinuation.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d5ddf6f86ce4bae45d39ad7da33c65e79ef2124f9940bd1e88b7fbcaf735a5/Take.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f4708639776589f5ac2739f6fcbfc67343b1f9dac51cc1dbfdb003eef77cc1c/Monitor.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Application/Interfaces/ICompanyService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Application/Interfaces/IEodDataRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Repository/CompanyRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Repository/EodDataRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Repository/EodDataRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Repository/EodDataRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Services/CompanyService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/YahooFinanceAPI/Controllers/EodDataController.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -141,7 +156,8 @@
       <workItem from="1684148882104" duration="5307000" />
       <workItem from="1684155602406" duration="1382000" />
       <workItem from="1684173692936" duration="7330000" />
-      <workItem from="1684315938834" duration="6819000" />
+      <workItem from="1684315938834" duration="7839000" />
+      <workItem from="1684393575872" duration="5052000" />
     </task>
     <task id="LOCAL-00001" summary="Added repositories. Need to be used.">
       <created>1683829659863</created>
@@ -190,7 +206,7 @@
               </option>
               <option name="CUSTOM_BOOLEAN_PROPERTIES">
                 <map>
-                  <entry key="Show.Git.Branches" value="false" />
+                  <entry key="Show.Git.Branches" value="true" />
                 </map>
               </option>
               <option name="FILTERS">
@@ -220,26 +236,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
-          <line>22</line>
-          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="21" containingFunctionPresentation="Method 'CalculateMACD'">
-            <startOffsets>
-              <option value="923" />
-            </startOffsets>
-            <endOffsets>
-              <option value="924" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
           <line>114</line>
           <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="114" containingFunctionPresentation="Method 'CalculateAndStoreEma'">
             <startOffsets>
-              <option value="4468" />
+              <option value="4515" />
             </startOffsets>
             <endOffsets>
-              <option value="4522" />
+              <option value="4569" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="4" />
@@ -262,10 +265,10 @@
           <line>134</line>
           <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="134" containingFunctionPresentation="Method 'CalculateAndStoreMacd'">
             <startOffsets>
-              <option value="5203" />
+              <option value="5250" />
             </startOffsets>
             <endOffsets>
-              <option value="5293" />
+              <option value="5340" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="7" />
@@ -275,13 +278,26 @@
           <line>180</line>
           <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="180" containingFunctionPresentation="Method 'CalculateMACD'">
             <startOffsets>
-              <option value="7551" />
+              <option value="7598" />
             </startOffsets>
             <endOffsets>
-              <option value="7603" />
+              <option value="7650" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs</url>
+          <line>130</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\YahooFinanceService.cs" initialLine="130" containingFunctionPresentation="Method 'GetAllHistoricalDataAsync'">
+            <startOffsets>
+              <option value="5298" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5346" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

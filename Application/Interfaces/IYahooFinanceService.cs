@@ -9,4 +9,5 @@ public interface IYahooFinanceService<T>
     List<EodData> Convert(List<T> csvRecords, int companyId);
     Task<Company?> GetQuoteAsync(string? symbol);
     Task<ICollection<EodData>> GetQuotesByCompanyId(int id);
+    Task GetAllHistoricalDataAsync(DateTime startDate, DateTime endDate);
 }

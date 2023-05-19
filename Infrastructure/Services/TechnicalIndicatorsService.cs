@@ -19,17 +19,17 @@ namespace GptFinance.Infrastructure.Services
             return (currentPrice - previousEma) * multiplier + previousEma;
         }
 
-        public (decimal macdLine, decimal signalLine) CalculateMACD(IEnumerable<decimal> closingPrices, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
-        {
-            var enumerable = closingPrices as decimal[] ?? closingPrices.ToArray();
-            var shortEma = enumerable.Take(shortPeriod).Average();
-            var longEma = enumerable.Take(longPeriod).Average();
-
-            var macdLine = shortEma - longEma;
-            var signalLine = enumerable.Skip(longPeriod).Take(signalPeriod).Average();
-
-            return (macdLine, signalLine);
-        }
+        // public (decimal macdLine, decimal signalLine) CalculateMACD(IEnumerable<decimal> closingPrices, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
+        // {
+        //     var enumerable = closingPrices as decimal[] ?? closingPrices.ToArray();
+        //     var shortEma = enumerable.Take(shortPeriod).Average();
+        //     var longEma = enumerable.Take(longPeriod).Average();
+        //
+        //     var macdLine = shortEma - longEma;
+        //     var signalLine = enumerable.Skip(longPeriod).Take(signalPeriod).Average();
+        //
+        //     return (macdLine, signalLine);
+        // }
 
         public enum ImputationMethod
         {

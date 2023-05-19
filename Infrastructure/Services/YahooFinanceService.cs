@@ -10,19 +10,18 @@ namespace GptFinance.Infrastructure.Services
 {
     public class YahooFinanceService : IYahooFinanceService<CsvRecord>
     {
-        //private readonly AppDbContext _context;
         private readonly IEodDataRepository _eodRepository;
+        private readonly ICompanyService _companyService;
         private const string BaseUrl = "https://query1.finance.yahoo.com/v7/finance/download/";
         private readonly HttpClient _httpClient;
 
-        public YahooFinanceService(AppDbContext context, IEodDataRepository eodRepository)
+        public YahooFinanceService(IEodDataRepository eodRepository, ICompanyService companyService)
         {
-            // _context = context;
             _eodRepository = eodRepository ?? throw new ArgumentNullException(nameof(eodRepository));
+            _companyService = companyService ?? throw new ArgumentNullException(nameof(companyService));
             _httpClient = new HttpClient();
         }
 
-        // TODO: The argument should be Company entity instead of ust the symbol.
         public async Task<List<EodData>> GetHistoricalDataAsync(Company company, DateTime startDate, DateTime endDate)
         {
             string url = $"https://query1.finance.yahoo.com/v7/finance/download/{company.Symbol}?period1={ToUnixTimestamp(startDate)}&period2={ToUnixTimestamp(endDate)}&interval=1d&events=history&includeAdjustedClose=true";
@@ -120,6 +119,22 @@ namespace GptFinance.Infrastructure.Services
         {
             ICollection<EodData> eodData = await _eodRepository.GetQuotesByCompanyId(id);
             return eodData;
+        }
+
+        /// <summary>
+        /// Deletes all historical data and fetches new data for all companies
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        public async Task GetAllHistoricalDataAsync(DateTime startDate, DateTime endDate)
+        {
+            var companies = await  _companyService.GetAll();
+            foreach (var company in companies)
+            {
+                await _eodRepository.DeleteByCompanyId(company.Id);
+                var data = await GetHistoricalDataAsync(company, startDate, endDate);
+                await _eodRepository.AddRange(data);
+            }
         }
     }
 
