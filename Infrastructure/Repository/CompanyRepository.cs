@@ -14,7 +14,7 @@ public class CompanyRepository : ICompanyRepository
         _context = context;
     }
 
-    public async Task<Company> GetByIdAsync(int id) => await _context.Companies.FindAsync(id);
+    public async Task<Company> GetByIdAsync(Guid id) => await _context.Companies.FindAsync(id);
 
     public async Task<ICollection<Company>> GetAllAsync() => await _context.Companies.ToListAsync();
 
@@ -37,7 +37,7 @@ public class CompanyRepository : ICompanyRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Guid id)
     {
         var company = await _context.Companies.FindAsync(id);
         if (company != null)
@@ -47,12 +47,12 @@ public class CompanyRepository : ICompanyRepository
         }
     }
 
-    public bool Exists(int id)
+    public bool Exists(Guid id)
     {
         return _context.Set<Company>().Any(c => c.Id == id);
     }
 
-    public async Task<int> DeleteByIdAsync(int id)
+    public async Task<int> DeleteByIdAsync(Guid id)
     {
         if (!Exists(id))
             throw new Exception($"Company with id {id} not found");
@@ -61,7 +61,7 @@ public class CompanyRepository : ICompanyRepository
         return await _context.SaveChangesAsync();
     }
 
-    public async Task<Company?> FindWithEodDataAsync(int id)
+    public async Task<Company?> FindWithEodDataAsync(Guid id)
     {
         return await _context.Companies.Include(c => c.EodData).FirstOrDefaultAsync(c => c.Id == id);
     }

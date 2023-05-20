@@ -15,8 +15,7 @@ namespace GptFinance.Infrastructure.Migrations
                 name: "Companies",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Symbol = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -30,8 +29,8 @@ namespace GptFinance.Infrastructure.Migrations
                 name: "EmaData",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Period = table.Column<int>(type: "int", nullable: false)
@@ -45,10 +44,12 @@ namespace GptFinance.Infrastructure.Migrations
                 name: "MacdData",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Value = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MacdValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SignalValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    HistogramValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ShortPeriod = table.Column<int>(type: "int", nullable: false),
                     LongPeriod = table.Column<int>(type: "int", nullable: false),
                     SignalPeriod = table.Column<int>(type: "int", nullable: false)
@@ -62,8 +63,8 @@ namespace GptFinance.Infrastructure.Migrations
                 name: "EodData",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Open = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     High = table.Column<decimal>(type: "decimal(18,2)", nullable: true),

@@ -3,8 +3,8 @@
     // Models/MACDData.cs
     public class MacdData
     {
-        public int Id { get; set; }
-        public int CompanyId { get; set; }
+        public Guid Id { get; set; }
+        public Guid CompanyId { get; set; }
         public DateTime Date { get; set; }
         public decimal MacdValue { get; set; }
         public decimal SignalValue { get; set; }

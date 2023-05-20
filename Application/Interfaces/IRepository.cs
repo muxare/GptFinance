@@ -12,5 +12,4 @@ public interface IRepository<T>
     Task DeleteAsync(int id);
     bool Exists(int id);
     Task<int> DeleteByIdAsync(int id);
-    //Task<IEnumerable<T>> GetByConditionAsync(Expression<Func<T, bool>> predicate);
 }

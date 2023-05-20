@@ -20,8 +20,8 @@ public class EodDataController : ControllerBase
     }
 
     // GET: api/eoddata/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<ICollection<EodData>>> GetEodData(int id)
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<ICollection<EodData>>> GetEodData(Guid id)
     {
         var eodData = await _yahooFinanceService.GetQuotesByCompanyId(id).ConfigureAwait(false);
         if (eodData.Count == 0)
@@ -33,8 +33,8 @@ public class EodDataController : ControllerBase
     }
 
     // POST: api/eoddata/5/historical
-    [HttpPost("{id}/historical")]
-    public async Task<ActionResult<IEnumerable<EodData>>> FetchHistoricalData(int id, DateTime? startDate, DateTime? endDate)
+    [HttpPost("{id:Guid}/historical")]
+    public async Task<ActionResult<IEnumerable<EodData>>> FetchHistoricalData(Guid id, DateTime? startDate, DateTime? endDate)
     {
         var company = await _companyService.FindAsync(id);
 

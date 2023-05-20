@@ -24,11 +24,9 @@ namespace GptFinance.Infrastructure.Migrations
 
             modelBuilder.Entity("GptFinance.Domain.Entities.Company", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
@@ -46,11 +44,11 @@ namespace GptFinance.Infrastructure.Migrations
 
             modelBuilder.Entity("GptFinance.Domain.Entities.EmaData", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -68,11 +66,11 @@ namespace GptFinance.Infrastructure.Migrations
 
             modelBuilder.Entity("GptFinance.Domain.Entities.EodData", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -101,11 +99,11 @@ namespace GptFinance.Infrastructure.Migrations
 
             modelBuilder.Entity("GptFinance.Domain.Entities.MacdData", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");

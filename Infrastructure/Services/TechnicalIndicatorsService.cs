@@ -108,7 +108,7 @@ namespace GptFinance.Infrastructure.Services
 
 
 
-        public async Task CalculateAndStoreEma(int id, int period, Company company)
+        public async Task CalculateAndStoreEma(int period, Company company)
         {
             var closingPrices = company.EodData.OrderBy(e => e.Date).ToDictionary(o => o.Date, o=> o.Close);
             var imputedClosingPrices = ImputeMissingData(closingPrices, ImputationMethod.LastObservationCarriedForward);
@@ -128,7 +128,7 @@ namespace GptFinance.Infrastructure.Services
         }
 
 
-        public async Task CalculateAndStoreMacd(int id, int shortPeriod, int longPeriod, int signalPeriod, Company company)
+        public async Task CalculateAndStoreMacd(int shortPeriod, int longPeriod, int signalPeriod, Company company)
         {
             var priceData = company.EodData.ToDictionary(o => o.Date, o => o.Close);
             var imputedClosingPrices = ImputeMissingData(priceData, ImputationMethod.LastObservationCarriedForward);

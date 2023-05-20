@@ -55,13 +55,13 @@ namespace GptFinance.Infrastructure.Services
             }
         }
 
-        public List<EodData> Convert(List<CsvRecord> csvRecords, int companyId)
+        public List<EodData> Convert(List<CsvRecord> csvRecords, Guid companyId)
         {
             return csvRecords.Select(r =>
             {
                 return new EodData
                 {
-                    Id = 0,
+                    Id = Guid.NewGuid(),
                     Date = r.Date,
                     Open = r.Open.HasValue ? r.Open.Value : (decimal?)null,
                     High = r.High.HasValue ? r.High.Value : (decimal?)null,
@@ -115,7 +115,7 @@ namespace GptFinance.Infrastructure.Services
             return quote;
         }
 
-        public async Task<ICollection<EodData>> GetQuotesByCompanyId(int id)
+        public async Task<ICollection<EodData>> GetQuotesByCompanyId(Guid id)
         {
             ICollection<EodData> eodData = await _eodRepository.GetQuotesByCompanyId(id);
             return eodData;
@@ -132,7 +132,7 @@ namespace GptFinance.Infrastructure.Services
             {
                 await _eodRepository.DeleteByCompanyId(company.Id);
                 var data = await GetHistoricalDataAsync(company, startDate, endDate);
-                await _eodRepository.AddRange(data);
+                //await _eodRepository.AddRange(data);
             }
         }
     }

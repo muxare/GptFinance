@@ -15,12 +15,12 @@ public class EmaRepository : IEmaRepository
         _context = context;
     }
 
-    public async Task<EmaData> GetByCompanyIdAndDateAsync(int companyId, DateTime date)
+    public async Task<EmaData> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date)
     {
         return await _context.EmaData.FirstOrDefaultAsync(e => e.CompanyId == companyId && e.Date == date);
     }
 
-    public async Task<List<EmaData>> GetByCompanyIdAsync(int companyId)
+    public async Task<List<EmaData>> GetByCompanyIdAsync(Guid companyId)
     {
         return await _context.EmaData.Where(e => e.CompanyId == companyId).ToListAsync();
     }
@@ -38,7 +38,7 @@ public class EmaRepository : IEmaRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> ExistsAsync(int companyId, DateTime date)
+    public async Task<bool> ExistsAsync(Guid companyId, DateTime date)
     {
         return await _context.EmaData.AnyAsync(e => e.CompanyId == companyId && e.Date == date);
     }

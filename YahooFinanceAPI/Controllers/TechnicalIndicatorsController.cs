@@ -18,8 +18,8 @@ public class TechnicalIndicatorsController : ControllerBase
         _eodDataRepository = eodDataRepository ?? throw new ArgumentNullException(nameof(eodDataRepository));
     }
 
-    [HttpPost("{id}/ema")]
-    public async Task<IActionResult> CalculateEma(int id, int period)
+    [HttpPost("{id:Guid}/ema")]
+    public async Task<IActionResult> CalculateEma(Guid id, int period)
     {
         // var company =
         var company = await _companyService.FindWithEodDataAsync(id);
@@ -28,21 +28,21 @@ public class TechnicalIndicatorsController : ControllerBase
         {
             return NotFound();
         }
-        await _technicalIndicatorsService.CalculateAndStoreEma(id, period, company);
+        await _technicalIndicatorsService.CalculateAndStoreEma(period, company);
 
         return NoContent();
     }
 
 
     // POST: api/companies/5/macd
-    [HttpPost("{id}/macd")]
-    public async Task<IActionResult> CalculateMacd(int id, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
+    [HttpPost("{id:Guid}/macd")]
+    public async Task<IActionResult> CalculateMacd(Guid id, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
     {
         var company =  await _companyService.FindAsync(id);
         var eodData = await _eodDataRepository.GetQuotesByCompanyId(id);
         company.EodData = eodData;
 
-        await _technicalIndicatorsService.CalculateAndStoreMacd(id, shortPeriod, longPeriod, signalPeriod, company);
+        await _technicalIndicatorsService.CalculateAndStoreMacd(shortPeriod, longPeriod, signalPeriod, company);
         return NoContent();
     }
 }

@@ -14,12 +14,12 @@ public class MacdRepository : IMacdRepository
         _context = context;
     }
 
-    public async Task<MacdData> GetByCompanyIdAndDateAsync(int companyId, DateTime date)
+    public async Task<MacdData> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date)
     {
         return await _context.MacdData.FirstOrDefaultAsync(m => m.CompanyId == companyId && m.Date == date);
     }
 
-    public async Task<List<MacdData>> GetByCompanyIdAsync(int companyId)
+    public async Task<List<MacdData>> GetByCompanyIdAsync(Guid companyId)
     {
         return await _context.MacdData.Where(m => m.CompanyId == companyId).ToListAsync();
     }
@@ -37,7 +37,7 @@ public class MacdRepository : IMacdRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> ExistsAsync(int companyId, DateTime date)
+    public async Task<bool> ExistsAsync(Guid companyId, DateTime date)
     {
         return await _context.MacdData.AnyAsync(m => m.CompanyId == companyId && m.Date == date);
     }

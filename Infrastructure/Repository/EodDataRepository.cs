@@ -14,7 +14,7 @@ public class EodDataRepository : IEodDataRepository
         _context = context;
     }
 
-    public async Task<EodData> GetByIdAsync(int id) => await _context.EodData.FindAsync(id);
+    public async Task<EodData> GetByIdAsync(Guid id) => await _context.EodData.FindAsync(id);
 
     public async Task<ICollection<EodData>> GetAllAsync() => await _context.EodData.ToListAsync();
 
@@ -37,7 +37,7 @@ public class EodDataRepository : IEodDataRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Guid id)
     {
         var eodData = await _context.EodData.FindAsync(id);
         if (eodData != null)
@@ -46,12 +46,12 @@ public class EodDataRepository : IEodDataRepository
             await _context.SaveChangesAsync();
         }
     }
-    public bool Exists(int id)
+    public bool Exists(Guid id)
     {
         return _context.Set<EodData>().Any(c => c.Id == id && c.CompanyId == id);
     }
 
-    public async Task<int> DeleteByIdAsync(int id)
+    public async Task<int> DeleteByIdAsync(Guid id)
     {
 
         var eodData = await _context.EodData.FindAsync(id);
@@ -62,13 +62,13 @@ public class EodDataRepository : IEodDataRepository
         return await _context.SaveChangesAsync();
     }
 
-    public async Task<ICollection<EodData>> GetQuotesByCompanyId(int id)
+    public async Task<ICollection<EodData>> GetQuotesByCompanyId(Guid id)
     {
         var eodData = await _context.EodData.Where(e => e.CompanyId == id).OrderBy(o => o.Date).ToListAsync();
         return eodData;
     }
 
-    public async Task<int> DeleteByCompanyId(int id)
+    public async Task<int> DeleteByCompanyId(Guid id)
     {
         var dataToBeRemoved = _context.EodData.Where(eod => eod.CompanyId == id).ToList();
         _context.EodData.RemoveRange(dataToBeRemoved);

@@ -4,8 +4,8 @@ namespace GptFinance.Domain.Entities
 {
     public class EodData
     {
-        public int Id { get; set; }
-        public int CompanyId { get; set; }
+        public Guid Id { get; set; }
+        public Guid CompanyId { get; set; }
         public DateTime Date { get; set; }
         public decimal? Open { get; set; }
         public decimal? High { get; set; }

@@ -29,8 +29,8 @@ namespace YahooFinanceAPI.Controllers
         }
 
         // GET: api/companies/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Company>> GetCompany(int id)
+        [HttpGet("{id:Guid}")]
+        public async Task<ActionResult<Company>> GetCompany(Guid id)
         {
             var company = await _companyService.FindAsync(id);
 
@@ -43,8 +43,8 @@ namespace YahooFinanceAPI.Controllers
         }
 
         // PUT: api/companies/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCompany(int id, Company company)
+        [HttpPut("{id:Guid}")]
+        public async Task<IActionResult> UpdateCompany(Guid id, Company company)
         {
             if (id != company.Id)
             {
@@ -78,31 +78,13 @@ namespace YahooFinanceAPI.Controllers
         }
 
         // DELETE: api/companies/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCompany(int id)
+        [HttpDelete("{id:Guid}")]
+        public async Task<IActionResult> DeleteCompany(Guid id)
         {
             await _companyService.DeleteCompany(id);
 
             return NoContent();
         }
-
-        // POST: api/companies/5/fetch
-        /*
-        [HttpPost("{id}/fetch")]
-        public async Task<ActionResult<Company>> FetchCompanyData(int id)
-        {
-            var company = await _companyService.FindAsync(id);
-            if (company == null)
-            {
-                return NotFound();
-            }
-
-            await _companyService.UpdateCompanyData(company);
-
-            return company;
-        }
-        */
-
 
         [HttpGet("search")]
         public async Task<IActionResult> SearchCompanies(string query)

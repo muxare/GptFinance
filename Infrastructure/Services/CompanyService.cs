@@ -36,7 +36,7 @@ namespace GptFinance.Infrastructure.Services
 
         public async Task AddMultipleCompaniesAsync(List<Company> companies) => await _companyRepository.AddRange(companies);
 
-        public async Task UpdateCompany(int id, Company company)
+        public async Task UpdateCompany(Guid id, Company company)
         {
             try
             {
@@ -55,30 +55,15 @@ namespace GptFinance.Infrastructure.Services
             }
         }
 
-        /*
-        public async Task UpdateCompanyData(Company company)
-        {
-            var quote = await _yahooFinanceService.GetQuoteAsync(company.Symbol);
-
-            if (quote == null)
-            {
-                throw new ArgumentException();
-            }
-
-            company.LastUpdated = DateTime.Now;
-            await _companyRepository.UpdateAsync(company);
-        }
-        */
-
-        public async Task DeleteCompany(int id)
+        public async Task DeleteCompany(Guid id)
         {
             await _companyRepository.DeleteAsync(id);
         }
 
-        private bool CompanyExists(int id) => _companyRepository.Exists(id);
+        private bool CompanyExists(Guid id) => _companyRepository.Exists(id);
 
-        public async Task<Company> FindAsync(int id) => await _companyRepository.GetByIdAsync(id);
+        public async Task<Company> FindAsync(Guid id) => await _companyRepository.GetByIdAsync(id);
 
-        public async Task<Company?> FindWithEodDataAsync(int id) => await _companyRepository.FindWithEodDataAsync(id);
+        public async Task<Company?> FindWithEodDataAsync(Guid id) => await _companyRepository.FindWithEodDataAsync(id);
     }
 }
