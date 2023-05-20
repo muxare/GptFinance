@@ -10,12 +10,12 @@ namespace GptFinance.Infrastructure.Services
 {
     public class CompanyService : ICompanyService
     {
-        private readonly IYahooFinanceService<CsvRecord> _yahooFinanceService;
+        //private readonly IYahooFinanceService<CsvRecord> _yahooFinanceService;
         private readonly ICompanyRepository _companyRepository;
 
         public CompanyService(AppDbContext context, IYahooFinanceService<CsvRecord> yahooFinanceService, ICompanyRepository companyRepository)
         {
-            _yahooFinanceService = yahooFinanceService ?? throw new ArgumentNullException(nameof(yahooFinanceService));
+            //_yahooFinanceService = yahooFinanceService ?? throw new ArgumentNullException(nameof(yahooFinanceService));
             _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
         }
 
@@ -55,6 +55,7 @@ namespace GptFinance.Infrastructure.Services
             }
         }
 
+        /*
         public async Task UpdateCompanyData(Company company)
         {
             var quote = await _yahooFinanceService.GetQuoteAsync(company.Symbol);
@@ -67,6 +68,7 @@ namespace GptFinance.Infrastructure.Services
             company.LastUpdated = DateTime.Now;
             await _companyRepository.UpdateAsync(company);
         }
+        */
 
         public async Task DeleteCompany(int id)
         {

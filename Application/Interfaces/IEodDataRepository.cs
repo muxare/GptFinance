@@ -6,4 +6,5 @@ public interface IEodDataRepository : IRepository<EodData>
 {
     Task<ICollection<EodData>> GetQuotesByCompanyId(int id);
     Task<int> DeleteByCompanyId(int id);
+    Task UpdateDataByCompanyId(int companyId, ICollection<EodData> eodData);
 }

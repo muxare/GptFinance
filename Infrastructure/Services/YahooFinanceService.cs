@@ -11,14 +11,14 @@ namespace GptFinance.Infrastructure.Services
     public class YahooFinanceService : IYahooFinanceService<CsvRecord>
     {
         private readonly IEodDataRepository _eodRepository;
-        private readonly ICompanyService _companyService;
+        //private readonly ICompanyService _companyService;
         private const string BaseUrl = "https://query1.finance.yahoo.com/v7/finance/download/";
         private readonly HttpClient _httpClient;
 
-        public YahooFinanceService(IEodDataRepository eodRepository, ICompanyService companyService)
+        public YahooFinanceService(IEodDataRepository eodRepository)
         {
             _eodRepository = eodRepository ?? throw new ArgumentNullException(nameof(eodRepository));
-            _companyService = companyService ?? throw new ArgumentNullException(nameof(companyService));
+            //_companyService = companyService ?? throw new ArgumentNullException(nameof(companyService));
             _httpClient = new HttpClient();
         }
 
@@ -126,9 +126,8 @@ namespace GptFinance.Infrastructure.Services
         /// </summary>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        public async Task GetAllHistoricalDataAsync(DateTime startDate, DateTime endDate)
+        public async Task GetAllHistoricalDataAsync(ICollection<Company> companies, DateTime startDate, DateTime endDate)
         {
-            var companies = await  _companyService.GetAll();
             foreach (var company in companies)
             {
                 await _eodRepository.DeleteByCompanyId(company.Id);

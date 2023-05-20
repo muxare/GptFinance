@@ -8,16 +8,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="">
+    <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="Add delete functionality">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Interfaces/ICompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/ICompanyService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/Interfaces/IEodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IEodDataRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Interfaces/ITechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/ITechnicalIndicatorsService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IYahooFinanceService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/CompanyRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/CompanyRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/CompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/CompanyService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/CompaniesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/CompaniesController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,11 +43,17 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f4708639776589f5ac2739f6fcbfc67343b1f9dac51cc1dbfdb003eef77cc1c/Monitor.CoreCLR.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/source/repos/Me/GptFinance/Application/Interfaces/ICompanyService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/source/repos/Me/GptFinance/Application/Interfaces/IEodDataRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Application/Interfaces/IEodDataRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Application/Interfaces/IRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Application/Interfaces/ITechnicalIndicatorsService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Repository/CompanyRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Repository/CompanyRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Repository/EodDataRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Repository/EodDataRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Repository/EodDataRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Repository/EodDataRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Services/CompanyService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/YahooFinanceAPI/Controllers/EodDataController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/source/repos/Me/GptFinance/YahooFinanceAPI/Controllers/EodDataController.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -80,7 +85,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.notifications&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.VCS&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -157,7 +162,8 @@
       <workItem from="1684155602406" duration="1382000" />
       <workItem from="1684173692936" duration="7330000" />
       <workItem from="1684315938834" duration="7839000" />
-      <workItem from="1684393575872" duration="5052000" />
+      <workItem from="1684393575872" duration="11843000" />
+      <workItem from="1684589787519" duration="860000" />
     </task>
     <task id="LOCAL-00001" summary="Added repositories. Need to be used.">
       <created>1683829659863</created>
@@ -166,7 +172,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683829659863</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Add delete functionality">
+      <created>1684486993735</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1684486993735</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -229,7 +242,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Added repositories. Need to be used." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added repositories. Need to be used." />
+    <MESSAGE value="Add delete functionality" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add delete functionality" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -287,17 +301,17 @@
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs</url>
-          <line>130</line>
-          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\YahooFinanceService.cs" initialLine="130" containingFunctionPresentation="Method 'GetAllHistoricalDataAsync'">
+          <url>file://$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs</url>
+          <line>61</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\YahooFinanceAPI\Controllers\EodDataController.cs" initialLine="61" containingFunctionPresentation="Method 'FetchAllHistoricalData'">
             <startOffsets>
-              <option value="5298" />
+              <option value="2071" />
             </startOffsets>
             <endOffsets>
-              <option value="5346" />
+              <option value="2167" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="9" />
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

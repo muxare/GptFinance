@@ -87,6 +87,7 @@ namespace YahooFinanceAPI.Controllers
         }
 
         // POST: api/companies/5/fetch
+        /*
         [HttpPost("{id}/fetch")]
         public async Task<ActionResult<Company>> FetchCompanyData(int id)
         {
@@ -100,6 +101,7 @@ namespace YahooFinanceAPI.Controllers
 
             return company;
         }
+        */
 
 
         [HttpGet("search")]

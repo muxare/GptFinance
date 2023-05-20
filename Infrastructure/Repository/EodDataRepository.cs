@@ -74,4 +74,11 @@ public class EodDataRepository : IEodDataRepository
         _context.EodData.RemoveRange(dataToBeRemoved);
         return await _context.SaveChangesAsync();
     }
+
+    public async Task UpdateDataByCompanyId(int companyId, ICollection<EodData> eodData)
+    {
+        _context.EodData.RemoveRange(eodData);
+        await _context.EodData.AddRangeAsync(eodData);
+        await _context.SaveChangesAsync();
+    }
 }

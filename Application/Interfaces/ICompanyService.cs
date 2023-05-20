@@ -11,6 +11,6 @@ public interface ICompanyService
     Task<Company> AddCompanyAsync(YahooSearchResult searchResult);
     Task AddMultipleCompaniesAsync(List<Company> companies);
     Task UpdateCompany(int id, Company company);
-    Task UpdateCompanyData(Company company);
+    //Task UpdateCompanyData(Company company);
     Task DeleteCompany(int id);
 }

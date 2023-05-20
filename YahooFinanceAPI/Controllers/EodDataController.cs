@@ -58,7 +58,8 @@ public class EodDataController : ControllerBase
         startDate ??= DateTime.MinValue;
         endDate ??= DateTime.UtcNow;
 
-        await _yahooFinanceService.GetAllHistoricalDataAsync(startDate.Value, endDate.Value);
+        var companies = await _companyService.GetAll();
+        await _yahooFinanceService.GetAllHistoricalDataAsync(companies, startDate.Value, endDate.Value);
 
         return Ok();
     }
