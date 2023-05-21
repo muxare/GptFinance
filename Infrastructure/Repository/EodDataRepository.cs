@@ -81,4 +81,14 @@ public class EodDataRepository : IEodDataRepository
         await _context.EodData.AddRangeAsync(eodData);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<IDictionary<Guid, EodData>> GetLastEods()
+    {
+        var r = await _context.EodData
+            .GroupBy(e => e.CompanyId)
+            .Select(g => g.OrderByDescending(e => e.Date).FirstOrDefault())
+            .ToDictionaryAsync(o => o.CompanyId, o => o);
+
+        return r;
+    }
 }

@@ -23,6 +23,7 @@ namespace GptFinance.Infrastructure.Data
                 .HasKey(o => new {o.Id, o.CompanyId, o.Date});
             modelBuilder.Entity<MacdData>()
                 .HasKey(o => new {o.Id, o.CompanyId, o.Date});
+
             base.OnModelCreating(modelBuilder);
         }
     }

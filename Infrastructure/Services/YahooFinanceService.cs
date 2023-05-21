@@ -135,6 +135,13 @@ namespace GptFinance.Infrastructure.Services
                 //await _eodRepository.AddRange(data);
             }
         }
+
+        public async Task<IDictionary<Guid, EodData>> GetLastEods()
+        {
+            IDictionary<Guid, EodData> res = await _eodRepository.GetLastEods();
+
+            return new Dictionary<Guid, EodData>();
+        }
     }
 
     // public class CsvRecord

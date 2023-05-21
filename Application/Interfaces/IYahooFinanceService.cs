@@ -10,4 +10,5 @@ public interface IYahooFinanceService<T>
     Task<Company?> GetQuoteAsync(string? symbol);
     Task<ICollection<EodData>> GetQuotesByCompanyId(Guid id);
     Task GetAllHistoricalDataAsync(ICollection<Company> companies, DateTime startDate, DateTime endDate);
+    Task<IDictionary<Guid, EodData>> GetLastEods();
 }

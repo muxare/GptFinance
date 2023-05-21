@@ -8,28 +8,13 @@ namespace GptFinance.Infrastructure.Services
     public class TechnicalIndicatorsService : ITechnicalIndicatorsService
     {
         private readonly AppDbContext _context;
-        public TechnicalIndicatorsService(AppDbContext context)
+        private readonly IEodDataRepository _eodDataRepository;
+
+        public TechnicalIndicatorsService(AppDbContext context, IEodDataRepository eodDataRepository)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _eodDataRepository = eodDataRepository ?? throw new ArgumentNullException(nameof(eodDataRepository));
         }
-
-        public decimal CalculateEMA(decimal previousEma, decimal currentPrice, int period)
-        {
-            decimal multiplier = 2.0M / (period + 1);
-            return (currentPrice - previousEma) * multiplier + previousEma;
-        }
-
-        // public (decimal macdLine, decimal signalLine) CalculateMACD(IEnumerable<decimal> closingPrices, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
-        // {
-        //     var enumerable = closingPrices as decimal[] ?? closingPrices.ToArray();
-        //     var shortEma = enumerable.Take(shortPeriod).Average();
-        //     var longEma = enumerable.Take(longPeriod).Average();
-        //
-        //     var macdLine = shortEma - longEma;
-        //     var signalLine = enumerable.Skip(longPeriod).Take(signalPeriod).Average();
-        //
-        //     return (macdLine, signalLine);
-        // }
 
         public enum ImputationMethod
         {
@@ -127,6 +112,32 @@ namespace GptFinance.Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task CalculateAndStoreEmaFan(int[] periods, ICollection<Company> companies)
+        {
+            foreach (var company in companies)
+            {
+                var eods = await _eodDataRepository.GetQuotesByCompanyId(company.Id);
+                var closingPrices = eods.OrderBy(e => e.Date).ToDictionary(o => o.Date, o=> o.Close);
+                var imputedClosingPrices = ImputeMissingData(closingPrices, ImputationMethod.LastObservationCarriedForward);
+
+                foreach (var period in periods)
+                {
+                    var data = CalculateEMA(imputedClosingPrices, period);
+
+                    var entities = data.Select(d => new EmaData
+                    {
+                        Id = Guid.NewGuid(),
+                        CompanyId = company.Id,
+                        Date = d.Key,
+                        Period = period,
+                        Value = d.Value
+                    });
+                    _context.EmaData.AddRange(entities);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
 
         public async Task CalculateAndStoreMacd(int shortPeriod, int longPeriod, int signalPeriod, Company company)
         {
@@ -155,6 +166,15 @@ namespace GptFinance.Infrastructure.Services
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task CalculateAndStoreMacdOnAllCompanies(int shortPeriod, int longPeriod, int signalPeriod, ICollection<Company> companies)
+        {
+            foreach (var company in companies)
+            {
+               await CalculateAndStoreMacd(shortPeriod, longPeriod, signalPeriod, company);
+            }
+        }
+
 
         /// <summary>
         /// Please note that this code does not handle missing dates in the input data,

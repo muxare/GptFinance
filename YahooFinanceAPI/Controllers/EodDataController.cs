@@ -32,6 +32,25 @@ public class EodDataController : ControllerBase
         return Ok(eodData);
     }
 
+    // POST: api/eoddata/update
+    [HttpPost("update")]
+    public async Task<ActionResult<IEnumerable<EodData>>> Update()
+    {
+        var companies = await _companyService.GetAll();
+
+        if (!companies.Any())
+        {
+            return NotFound();
+        }
+
+        var latestEodByCompany = await _yahooFinanceService.GetLastEods();
+
+        //var _ = await _yahooFinanceService.GetHistoricalDataAsync(company, startDate.Value, endDate.Value);
+
+        //return CreatedAtAction(nameof(GetEodData), new { id = company.Id }, null);
+        return Ok();
+    }
+
     // POST: api/eoddata/5/historical
     [HttpPost("{id:Guid}/historical")]
     public async Task<ActionResult<IEnumerable<EodData>>> FetchHistoricalData(Guid id, DateTime? startDate, DateTime? endDate)

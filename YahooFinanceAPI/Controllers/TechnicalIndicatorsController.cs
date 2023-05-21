@@ -1,4 +1,5 @@
 ﻿using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace YahooFinanceAPI.Controllers;
@@ -33,6 +34,33 @@ public class TechnicalIndicatorsController : ControllerBase
         return NoContent();
     }
 
+    [HttpPost("{id:Guid}/emafan")]
+    public async Task<IActionResult> CalculateEmaFan(Guid id)
+    {
+        // var company =
+        var company = await _companyService.FindWithEodDataAsync(id);
+
+        if (company == null)
+        {
+            return NotFound();
+        }
+        await _technicalIndicatorsService.CalculateAndStoreEmaFan(new int[] {18, 50, 100, 200}, new List<Company>{company});
+
+        return NoContent();
+    }
+
+    [HttpPost("emafan")]
+    public async Task<IActionResult> CalculateEmaFan()
+    {
+        var companies = await _companyService.GetAll();
+        if (companies.Count == 0)
+        {
+            return NotFound();
+        }
+        await _technicalIndicatorsService.CalculateAndStoreEmaFan(new int[] {18, 50, 100, 200}, companies);
+
+        return NoContent();
+    }
 
     // POST: api/companies/5/macd
     [HttpPost("{id:Guid}/macd")]
@@ -43,6 +71,26 @@ public class TechnicalIndicatorsController : ControllerBase
         company.EodData = eodData;
 
         await _technicalIndicatorsService.CalculateAndStoreMacd(shortPeriod, longPeriod, signalPeriod, company);
+        return NoContent();
+    }
+
+    // POST: api/companies/5/macd
+    [HttpPost("macd")]
+    public async Task<IActionResult> CalculateMacdOnAllCompanies(int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
+    {
+        var companies = await _companyService.GetAll();
+        if (companies.Count == 0)
+        {
+            return NotFound();
+        }
+
+        foreach (var company in companies)
+        {
+            var eodData = await _eodDataRepository.GetQuotesByCompanyId(company.Id);
+            company.EodData = eodData;
+        }
+
+        await _technicalIndicatorsService.CalculateAndStoreMacdOnAllCompanies(shortPeriod, longPeriod, signalPeriod, companies);
         return NoContent();
     }
 }
