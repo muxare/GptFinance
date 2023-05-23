@@ -31,6 +31,14 @@ public class EodDataRepository : IEodDataRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task UpdateRageAsync(ICollection<EodData> entities)
+    {
+        var startDate = entities.MinBy(data => data.Date)?.Date;
+        var endDate = entities.MaxBy(data => data.Date)?.Date;
+
+        var entitiesInDb = _context.EodData.Where(data => data.Date >= startDate && data.Date < endDate).ToList();
+    }
+
     public async Task UpdateAsync(EodData entity)
     {
         _context.Entry(entity).State = EntityState.Modified;

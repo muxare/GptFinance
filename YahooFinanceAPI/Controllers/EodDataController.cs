@@ -44,10 +44,14 @@ public class EodDataController : ControllerBase
         }
 
         var latestEodByCompany = await _yahooFinanceService.GetLastEods();
+        foreach (var company in companies)
+        {
+            DateTime startDate = latestEodByCompany.Keys.Contains(company.Id) ? latestEodByCompany[company.Id].Date.AddDays(-1) : DateTime.MinValue;
+            DateTime endDate = DateTime.UtcNow;
+            
+            var _ = await _yahooFinanceService.GetHistoricalDataAsync(company, startDate, endDate);
+        }
 
-        //var _ = await _yahooFinanceService.GetHistoricalDataAsync(company, startDate.Value, endDate.Value);
-
-        //return CreatedAtAction(nameof(GetEodData), new { id = company.Id }, null);
         return Ok();
     }
 
