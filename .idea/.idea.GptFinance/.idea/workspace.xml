@@ -10,10 +10,10 @@
   <component name="ChangeListManager">
     <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="Add delete functionality">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/dataSources/2f5bf1ac-62d7-4fcc-8cf0-9d003d707d4d.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/dataSources/2f5bf1ac-62d7-4fcc-8cf0-9d003d707d4d.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IEodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IEodDataRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GetSolutionContent.ps1" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +29,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7d9a41d47547e1fe7fe548b21ab4de12cc2671170a023bc8c629017837eb5f4/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c1da7b6c7c71a954fe3eb2531c6476711b3e6d93a8d76795386d326bb9dbc/ExecutionContext.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/cf91eb35ab781c324ad4fa382dce85631ec37cf3813529f7c92208d866c851/TaskContinuation.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d6f95382468b317a172feb667db83ae826247df59838f7f780cef897689bd83/TaskAwaiter.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -45,35 +46,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.757315&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.VCS&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "TODO_SCOPE": "All Places",
+    "WebServerToolWindowFactoryState": "false",
+    "XThreadsFramesViewSplitterKey": "0.757315",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "settings.codegpt",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;sqlserver.localdb&quot;,
-      &quot;sqlserver&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlserver.localdb",
+      "sqlserver"
     ],
-    &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\MAXELS10\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\MAXELS10\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\SourcesCache&quot;,
-      &quot;C:\\Users\\MAXELS10\\AppData\\Local\\Symbols\\src&quot;
+    "rider.external.source.directories": [
+      "C:\\Users\\MAXELS10\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\DecompilerCache",
+      "C:\\Users\\MAXELS10\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\SourcesCache",
+      "C:\\Users\\MAXELS10\\AppData\\Local\\Symbols\\src"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.YahooFinanceAPI">
     <configuration name="YahooFinanceAPI" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/YahooFinanceAPI/YahooFinanceAPI.csproj" />
@@ -141,6 +142,8 @@
       <workItem from="1684669924257" duration="6315000" />
       <workItem from="1684735797003" duration="626000" />
       <workItem from="1684736852765" duration="16184000" />
+      <workItem from="1684906324603" duration="4317000" />
+      <workItem from="1685006858166" duration="4292000" />
     </task>
     <task id="LOCAL-00001" summary="Added repositories. Need to be used.">
       <created>1683829659863</created>
@@ -255,10 +258,10 @@
           <line>34</line>
           <properties documentPath="C:\source\repos\GptFinance\Infrastructure\Repository\EodDataRepository.cs" initialLine="34" containingFunctionPresentation="Method 'UpdateRageAsync'">
             <startOffsets>
-              <option value="1037" />
+              <option value="994" />
             </startOffsets>
             <endOffsets>
-              <option value="1038" />
+              <option value="995" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="21" />

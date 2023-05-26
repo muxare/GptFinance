@@ -14,21 +14,21 @@ public class EodDataRepository : IEodDataRepository
         _context = context;
     }
 
-    public async Task<EodData> GetByIdAsync(Guid id) => await _context.EodData.FindAsync(id);
+    public ValueTask<EodData?> GetByIdAsync(Guid id) => _context.EodData.FindAsync(id);
 
-    public async Task<ICollection<EodData>> GetAllAsync() => await _context.EodData.ToListAsync();
+    public Task<List<EodData>> GetAllAsync() => _context.EodData.ToListAsync();
 
     public async Task<EodData> AddAsync(EodData entity)
     {
         var result = await _context.EodData.AddAsync(entity);
-        await _context.SaveChangesAsync();
+        await SaveChangesAsync();
         return result.Entity;
     }
 
     public async Task AddRange(ICollection<EodData> entities)
     {
         await _context.EodData.AddRangeAsync(entities);
-        await _context.SaveChangesAsync();
+        await SaveChangesAsync();
     }
 
     public async Task UpdateRageAsync(ICollection<EodData> entities)
@@ -37,6 +37,16 @@ public class EodDataRepository : IEodDataRepository
         var endDate = entities.MaxBy(data => data.Date)?.Date;
 
         var entitiesInDb = _context.EodData.Where(data => data.Date >= startDate && data.Date < endDate).ToList();
+
+        // Need to match on company and date
+        foreach (EodData entity in entities)
+        {
+            var match = entitiesInDb.FirstOrDefault(dbEntity => dbEntity.Id == entity.Id);
+            if (match != null)
+            {
+                match.
+            }
+        }
     }
 
     public async Task UpdateAsync(EodData entity)
@@ -54,10 +64,7 @@ public class EodDataRepository : IEodDataRepository
             await _context.SaveChangesAsync();
         }
     }
-    public bool Exists(Guid id)
-    {
-        return _context.Set<EodData>().Any(c => c.Id == id && c.CompanyId == id);
-    }
+    public bool Exists(Guid id) => _context.Set<EodData>().Any(c => c.Id == id || c.CompanyId == id);
 
     public async Task<int> DeleteByIdAsync(Guid id)
     {
@@ -70,11 +77,8 @@ public class EodDataRepository : IEodDataRepository
         return await _context.SaveChangesAsync();
     }
 
-    public async Task<ICollection<EodData>> GetQuotesByCompanyId(Guid id)
-    {
-        var eodData = await _context.EodData.Where(e => e.CompanyId == id).OrderBy(o => o.Date).ToListAsync();
-        return eodData;
-    }
+    public Task<List<EodData>> GetQuotesByCompanyId(Guid id) =>
+        _context.EodData.Where(e => e.CompanyId == id).OrderBy(o => o.Date).ToListAsync();
 
     public async Task<int> DeleteByCompanyId(Guid id)
     {
@@ -99,4 +103,6 @@ public class EodDataRepository : IEodDataRepository
 
         return r;
     }
+
+    private Task SaveChangesAsync() => _context.SaveChangesAsync();
 }
