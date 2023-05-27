@@ -43,7 +43,8 @@ namespace GptFinance.Infrastructure.Services
                         var r = csvReader.GetRecords<CsvRecord>();
                         var records = new List<EodData>(Convert(csvReader.GetRecords<CsvRecord>().ToList(), company.Id));
 
-                        await _eodRepository.AddRange(records);
+                        await _eodRepository.UpdateRageAsync(records);
+                        //await _eodRepository.AddRange(records);
 
                         return records;
                     }

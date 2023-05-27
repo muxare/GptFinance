@@ -9,6 +9,7 @@ public interface IEodDataRepository // : IRepository<EodData>
     Task<EodData> AddAsync(EodData entity);
     Task AddRange(ICollection<EodData> entities);
     Task UpdateAsync(EodData entity);
+    Task UpdateRageAsync(ICollection<EodData> entities);
     Task DeleteAsync(Guid id);
     bool Exists(Guid id);
     Task<int> DeleteByIdAsync(Guid id);
