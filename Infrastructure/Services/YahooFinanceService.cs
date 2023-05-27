@@ -141,7 +141,7 @@ namespace GptFinance.Infrastructure.Services
         {
             IDictionary<Guid, EodData> res = await _eodRepository.GetLastEods();
 
-            return new Dictionary<Guid, EodData>();
+            return res;
         }
     }
 

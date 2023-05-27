@@ -10,10 +10,11 @@
   <component name="ChangeListManager">
     <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="Add delete functionality">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/dataSources/2f5bf1ac-62d7-4fcc-8cf0-9d003d707d4d.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/dataSources/2f5bf1ac-62d7-4fcc-8cf0-9d003d707d4d.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IEodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IEodDataRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GetSolutionContent.ps1" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/YahooFinanceService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +30,11 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7d9a41d47547e1fe7fe548b21ab4de12cc2671170a023bc8c629017837eb5f4/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c1da7b6c7c71a954fe3eb2531c6476711b3e6d93a8d76795386d326bb9dbc/ExecutionContext.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/cf91eb35ab781c324ad4fa382dce85631ec37cf3813529f7c92208d866c851/TaskContinuation.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d6f95382468b317a172feb667db83ae826247df59838f7f780cef897689bd83/TaskAwaiter.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Application/Interfaces/IEodDataRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Models/CsvRecord.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Repository/EodDataRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/Infrastructure/Services/YahooFinanceService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/source/repos/Me/GptFinance/YahooFinanceAPI/Controllers/EodDataController.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -69,9 +74,9 @@
       "sqlserver"
     ],
     "rider.external.source.directories": [
-      "C:\\Users\\MAXELS10\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\DecompilerCache",
-      "C:\\Users\\MAXELS10\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\SourcesCache",
-      "C:\\Users\\MAXELS10\\AppData\\Local\\Symbols\\src"
+      "C:\\Users\\MikaelAxelsson\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\DecompilerCache",
+      "C:\\Users\\MikaelAxelsson\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\SourcesCache",
+      "C:\\Users\\MikaelAxelsson\\AppData\\Local\\Symbols\\src"
     ]
   }
 }]]></component>
@@ -144,6 +149,7 @@
       <workItem from="1684736852765" duration="16184000" />
       <workItem from="1684906324603" duration="4317000" />
       <workItem from="1685006858166" duration="4292000" />
+      <workItem from="1685194867881" duration="3200000" />
     </task>
     <task id="LOCAL-00001" summary="Added repositories. Need to be used.">
       <created>1683829659863</created>
@@ -223,17 +229,12 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Added repositories. Need to be used." />
     <MESSAGE value="Add delete functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add delete functionality" />
+    <MESSAGE value="Update Range" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update Range" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/YahooFinanceAPI/Controllers/TechnicalIndicatorsController.cs</url>
-          <line>54</line>
-          <properties documentPath="C:\source\repos\Me\GptFinance\YahooFinanceAPI\Controllers\TechnicalIndicatorsController.cs" initialLine="54" containingFunctionPresentation="Method 'CalculateEmaFan'" />
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs</url>
           <line>58</line>
@@ -243,28 +244,73 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs</url>
           <line>38</line>
-          <properties documentPath="C:\source\repos\GptFinance\YahooFinanceAPI\Controllers\EodDataController.cs" initialLine="38" containingFunctionPresentation="Method 'Update'">
-            <startOffsets>
-              <option value="1279" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1326" />
-            </endOffsets>
-          </properties>
+          <properties documentPath="C:\source\repos\GptFinance\YahooFinanceAPI\Controllers\EodDataController.cs" initialLine="38" containingFunctionPresentation="Method 'Update'" />
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs</url>
-          <line>34</line>
-          <properties documentPath="C:\source\repos\GptFinance\Infrastructure\Repository\EodDataRepository.cs" initialLine="34" containingFunctionPresentation="Method 'UpdateRageAsync'">
+          <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
+          <line>134</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="134" containingFunctionPresentation="Method 'CalculateAndStoreEmaFan'">
             <startOffsets>
-              <option value="994" />
+              <option value="5202" />
             </startOffsets>
             <endOffsets>
-              <option value="995" />
+              <option value="5238" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="21" />
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
+          <line>124</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="124" containingFunctionPresentation="Method 'CalculateAndStoreEmaFan'">
+            <startOffsets>
+              <option value="4804" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4858" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
+          <line>250</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="250" containingFunctionPresentation="Method 'CalculateEMA'">
+            <startOffsets>
+              <option value="10398" />
+            </startOffsets>
+            <endOffsets>
+              <option value="10409" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/YahooFinanceAPI/Controllers/TechnicalIndicatorsController.cs</url>
+          <line>80</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\YahooFinanceAPI\Controllers\TechnicalIndicatorsController.cs" initialLine="80" containingFunctionPresentation="Method 'CalculateMacdOnAllCompanies'">
+            <startOffsets>
+              <option value="2902" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2949" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs</url>
+          <line>172</line>
+          <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="172" containingFunctionPresentation="Method 'CalculateAndStoreMacdOnAllCompanies'">
+            <startOffsets>
+              <option value="6864" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6865" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="29" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

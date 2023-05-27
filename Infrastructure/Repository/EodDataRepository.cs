@@ -42,12 +42,22 @@ public class EodDataRepository : IEodDataRepository
         // Need to match on company and date
         foreach (EodData entity in entities)
         {
-            var match = entitiesInDb.FirstOrDefault(dbEntity => dbEntity.Id == entity.Id);
+            var match = entitiesInDb.FirstOrDefault(dbEntity => dbEntity.CompanyId == entity.CompanyId && dbEntity.Date.Date == entity.Date.Date);
             if (match != null)
             {
-                //match.
+                match.Open = entity.Open;
+                match.High = entity.High;
+                match.Low = entity.Low;
+                match.Close = entity.Close;
+                match.Volume = entity.Volume;
+            }
+            else
+            {
+                _context.EodData.Add(entity);
             }
         }
+
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(EodData entity)
