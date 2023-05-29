@@ -237,10 +237,12 @@ namespace GptFinance.Infrastructure.Services
         /// <param name="priceData"></param>
         /// <param name="period"></param>
         /// <returns></returns>
-        private Dictionary<DateTime, decimal> CalculateEMA(Dictionary<DateTime, decimal> priceData, int period)
+        public Dictionary<DateTime, decimal> CalculateEMA(Dictionary<DateTime, decimal> priceData, int period)
         {
             if (priceData.First().Key > priceData.Last().Key)
                 throw new ArgumentException("Price data must be sorted in ascending order by date.");
+            if (priceData.Count() < period)
+                throw new ArgumentException("Insufficient data to calculate EMA.");
 
             var ema = new Dictionary<DateTime, decimal>();
             decimal multiplier = 2.0M / (period + 1);
@@ -260,6 +262,13 @@ namespace GptFinance.Infrastructure.Services
                 ema[priceData.ElementAt(i).Key] = emaPrev;
             }
 
+            return ema;
+        }
+
+        private decimal CalculateNextEmaPoint(decimal previousEmaPoint, decimal currentPrice, int period)
+        {
+            var multiplier = 2.0M / (period + 1);
+            var ema = (currentPrice - previousEmaPoint) * multiplier + previousEmaPoint;
             return ema;
         }
 
