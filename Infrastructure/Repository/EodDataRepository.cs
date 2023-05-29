@@ -40,7 +40,7 @@ public class EodDataRepository : IEodDataRepository
             .Where(data => data.CompanyId == entities.First().CompanyId && data.Date >= startDate && data.Date < endDate).ToList();
 
         // Need to match on company and date
-        foreach (EodData entity in entities)
+        foreach (var entity in entities)
         {
             var match = entitiesInDb.FirstOrDefault(dbEntity => dbEntity.CompanyId == entity.CompanyId && dbEntity.Date.Date == entity.Date.Date);
             if (match != null)

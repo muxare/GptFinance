@@ -91,8 +91,6 @@ namespace GptFinance.Infrastructure.Services
             return median;
         }
 
-
-
         public async Task CalculateAndStoreEma(int period, Company company)
         {
             var closingPrices = company.EodData.OrderBy(e => e.Date).ToDictionary(o => o.Date, o=> o.Close);

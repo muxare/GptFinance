@@ -1,4 +1,5 @@
-﻿using GptFinance.Application.Interfaces;
+﻿using System.Linq.Expressions;
+using GptFinance.Application.Interfaces;
 using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -40,5 +41,10 @@ public class MacdRepository : IMacdRepository
     public async Task<bool> ExistsAsync(Guid companyId, DateTime date)
     {
         return await _context.MacdData.AnyAsync(m => m.CompanyId == companyId && m.Date == date);
+    }
+
+    public async Task<List<MacdData>> GetAsync(Expression<Func<MacdData, bool>> filter)
+    {
+        return await _context.MacdData.Where(filter).ToListAsync();
     }
 }

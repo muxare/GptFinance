@@ -1,4 +1,5 @@
-﻿using GptFinance.Domain.Entities;
+﻿using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace YahooFinanceAPI.Controllers;
@@ -7,18 +8,20 @@ namespace YahooFinanceAPI.Controllers;
 [ApiController]
 public class ScreenerController : ControllerBase
 {
-    public ScreenerController()
-    {
+    private readonly ICompanyScreenerService _companyScreenerService;
 
+    public ScreenerController(ICompanyScreenerService companyScreenerService)
+    {
+        _companyScreenerService = companyScreenerService ?? throw new ArgumentNullException(nameof(companyScreenerService));
     }
 
 
     // POST: api/screener/uptrend
-    // [HttpPost("uptrend")]
-    // public async Task<IActionResult<ICollection<Company>>> Uptrend()
-    // {
-    //
-    //     return Ok();
-    // }
+    [HttpPost("uptrend")]
+    public async Task<ActionResult<ICollection<Company>>> Uptrend()
+    {
+        var res= await _companyScreenerService.ScreenAsync();
+        return Ok(res);
+    }
 
 }

@@ -20,8 +20,8 @@ public class CompanyScreenerService : ICompanyScreenerService
     //public async Task<ICollection<Company>> ScreenAsync(Expression<Func<EmaData, bool>> filter)
     public async Task<ICollection<Company>> ScreenAsync()
     {
-        // var emas = await _emaDataRepository.GetAsync(e => e.Date == DateTime.Today);
-        // var macds = await _macdDataRepository.GetAsync(e => e.Date == DateTime.Today);
+        var emas = await _emaDataRepository.GetAsync(e => e.Date == DateTime.Today);
+        List<MacdData> macds = await _macdDataRepository.GetAsync(e => e.Date == DateTime.Today);
 
         var companies = await _companyRepository.GetAllAsync();
         return companies;
