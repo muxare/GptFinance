@@ -28,6 +28,12 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: './publish'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'Visual Studio Enterprise Subscription – MPN (fb20c78f-38ea-4b98-b457-339386adfa43)'
