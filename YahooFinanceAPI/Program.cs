@@ -31,6 +31,7 @@ builder.Services.AddTransient<ITechnicalIndicatorsService, TechnicalIndicatorsSe
 builder.Services.AddTransient<IYahooSearchService<Company>, YahooSearchService>();
 builder.Services.AddTransient<IEmaRepository, EmaRepository>();
 builder.Services.AddTransient<IMacdRepository, MacdRepository>();
+builder.Services.AddTransient<ICompanyScreenerService, CompanyScreenerService>();
 
 
 builder.Services.AddTransient<ICompanyService, CompanyService>();

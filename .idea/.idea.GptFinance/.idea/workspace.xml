@@ -8,16 +8,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="Add delete functionality">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/dataSources/2f5bf1ac-62d7-4fcc-8cf0-9d003d707d4d.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/dataSources/2f5bf1ac-62d7-4fcc-8cf0-9d003d707d4d.xml" afterDir="false" />
+    <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/Interfaces/IMacdRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Application/Interfaces/IMacdRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/EodDataRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Repository/MacdRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Repository/MacdRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Infrastructure/Services/CompanyScreenerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/CompanyScreenerService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/ScreenerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Controllers/ScreenerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,15 +27,23 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7d9a41d47547e1fe7fe548b21ab4de12cc2671170a023bc8c629017837eb5f4/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c1da7b6c7c71a954fe3eb2531c6476711b3e6d93a8d76795386d326bb9dbc/ExecutionContext.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/cf91eb35ab781c324ad4fa382dce85631ec37cf3813529f7c92208d866c851/TaskContinuation.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/source/repos/GptFinance/Infrastructure/Repository/MacdRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/source/repos/GptFinance/YahooFinanceAPI/Controllers/ScreenerController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Application/Interfaces/ICompanyScreenerService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Application/Interfaces/IMacdRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Infrastructure/Repository/CompanyRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Infrastructure/Repository/EmaRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Infrastructure/Repository/MacdRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Infrastructure/Services/CompanyScreenerService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Infrastructure/Services/TechnicalIndicatorsService.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/YahooFinanceAPI/Controllers/EodDataController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/YahooFinanceAPI/Controllers/ScreenerController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/YahooFinanceAPI/Program.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="SWEA" />
+    <option name="selectedTabId" value="Toolset" />
   </component>
   <component name="ProjectId" id="2NoeqRkO21hKargzoFGHuCfmLvL" />
   <component name="ProjectLevelVcsManager">
@@ -152,7 +154,8 @@
       <workItem from="1685194867881" duration="3200000" />
       <workItem from="1685280347817" duration="5206000" />
       <workItem from="1685366787908" duration="115000" />
-      <workItem from="1685367631254" duration="3229000" />
+      <workItem from="1685367631254" duration="3424000" />
+      <workItem from="1685428502145" duration="5967000" />
     </task>
     <task id="LOCAL-00001" summary="Added repositories. Need to be used.">
       <created>1683829659863</created>
@@ -168,7 +171,13 @@
       <option name="project" value="LOCAL" />
       <updated>1684486993735</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL−00003" summary="Add initial code for the screener controller and service.">
+      <created>1685372985519</created>
+      <option name="number" value="LOCAL−00003" />
+      <option name="presentableId" value="LOCAL−00003" />
+      <updated>1685372985519</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -233,7 +242,8 @@
     <MESSAGE value="Added repositories. Need to be used." />
     <MESSAGE value="Add delete functionality" />
     <MESSAGE value="Update Range" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update Range" />
+    <MESSAGE value="Add initial code for the screener controller and service." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add initial code for the screener controller and service." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -273,6 +283,19 @@
           <line>170</line>
           <properties documentPath="C:\source\repos\Me\GptFinance\Infrastructure\Services\TechnicalIndicatorsService.cs" initialLine="172" containingFunctionPresentation="Method 'CalculateAndStoreMacdOnAllCompanies'" />
           <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Infrastructure/Services/CompanyScreenerService.cs</url>
+          <line>31</line>
+          <properties documentPath="C:\source\repos\GptFinance\Infrastructure\Services\CompanyScreenerService.cs" initialLine="31" containingFunctionPresentation="Method 'ScreenAsync'">
+            <startOffsets>
+              <option value="1504" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1521" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="30" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
