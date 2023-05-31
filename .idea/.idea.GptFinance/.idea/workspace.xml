@@ -10,8 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="15b778ff-f40a-482d-934e-2aec547792ba" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GptFinance/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Services/CompanyScreenerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Services/CompanyScreenerService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/YahooFinanceAPI/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/YahooFinanceAPI/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GptFinance.Infrastructure.Services.Tests/TechnicalIndicatorsServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GptFinance.Infrastructure.Services.Tests/TechnicalIndicatorsServiceTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -287,14 +286,7 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Infrastructure/Services/CompanyScreenerService.cs</url>
           <line>31</line>
-          <properties documentPath="C:\source\repos\GptFinance\Infrastructure\Services\CompanyScreenerService.cs" initialLine="31" containingFunctionPresentation="Method 'ScreenAsync'">
-            <startOffsets>
-              <option value="1504" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1521" />
-            </endOffsets>
-          </properties>
+          <properties documentPath="C:\source\repos\GptFinance\Infrastructure\Services\CompanyScreenerService.cs" initialLine="31" containingFunctionPresentation="Method 'ScreenAsync'" />
           <option name="timeStamp" value="30" />
         </line-breakpoint>
       </breakpoints>

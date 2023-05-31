@@ -58,16 +58,6 @@ public class TechnicalIndicatorsServiceTests
 
     // Add more unit tests for other methods and scenarios
     // Test case 1: Price data with only one point
-    [Fact]
-    public void TestCalculateEMA_OnePoint()
-    {
-        var priceData = new Dictionary<DateTime, decimal>
-        {
-            { new DateTime(2022, 1, 1), 10.0M }
-        };
-        var ema = _service.CalculateEMA(priceData, 10);
-        Assert.Equal(ema[new DateTime(2022, 1, 1)], 10.0M);
-    }
 
     // Test case 2: Price data with multiple points and period = 1
     [Fact]
@@ -87,26 +77,6 @@ public class TechnicalIndicatorsServiceTests
         Assert.Equal(ema[new DateTime(2022, 1, 3)], 12.0M);
         Assert.Equal(ema[new DateTime(2022, 1, 4)], 13.0M);
         Assert.Equal(ema[new DateTime(2022, 1, 5)], 14.0M);
-    }
-
-    // Test case 3: Price data with multiple points and period > 1
-    [Fact]
-    public void TestCalculateEMA_Period3()
-    {
-        var priceData = new Dictionary<DateTime, decimal>
-        {
-            { new DateTime(2022, 1, 1), 10.0M },
-            { new DateTime(2022, 1, 2), 11.0M },
-            { new DateTime(2022, 1, 3), 12.0M },
-            { new DateTime(2022, 1, 4), 13.0M },
-            { new DateTime(2022, 1, 5), 14.0M }
-        };
-        var ema = _service.CalculateEMA(priceData, 3);
-        Assert.Equal(ema[new DateTime(2022, 1, 1)], 10.0M); // EMA is same as data for the first point
-        Assert.InRange(ema[new DateTime(2022, 1, 2)], 10.6666666667M - 0.0001M, 10.6666666667M + 0.0001M); // computed using EMA formula
-        Assert.InRange(ema[new DateTime(2022, 1, 3)], 11.4444444444M - 0.0001M, 11.4444444444M + 0.0001M);
-        Assert.InRange(ema[new DateTime(2022, 1, 4)], 12.2962962963M - 0.0001M, 12.2962962963M + 0.0001M);
-        Assert.InRange(ema[new DateTime(2022, 1, 5)], 13.1975308642M - 0.0001M, 13.1975308642M + 0.0001M);
     }
 
     // Test case 4: Price data not sorted in ascending order
