@@ -47,4 +47,19 @@ public class EmaRepository : IEmaRepository
     {
         return await _context.EmaData.Where(filter).ToListAsync();
     }
+
+    public async Task<IDictionary<Guid, DateTime>> GetLastEodByCompany()
+    {
+        var t =
+            from p in _context.Set<EmaData>()
+            group p by p.CompanyId
+            into p2
+            select new
+            {
+                companyId = p2.Key,
+                latest = p2.Max(e => e.Date)
+            };
+
+        return await t.ToDictionaryAsync(o => o.companyId, o => o.latest);
+    }
 }

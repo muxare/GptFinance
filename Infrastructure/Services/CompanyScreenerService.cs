@@ -20,13 +20,14 @@ public class CompanyScreenerService : ICompanyScreenerService
     //public async Task<ICollection<Company>> ScreenAsync(Expression<Func<EmaData, bool>> filter)
     public async Task<ICollection<Company>> ScreenAsync()
     {
-        var emas = await _emaDataRepository.GetAsync(e => e.Date == DateTime.Today);
+        var emas = await _emaDataRepository.GetLastEodByCompany();
+        //var emas = await _emaDataRepository.GetAsync(e => e.Date == DateTime.Today);
         List<MacdData> macds = await _macdDataRepository.GetAsync(e => e.Date == DateTime.Today);
 
         var companies = await _companyRepository.GetAllAsync();
-        
+
         // Filter out companies that are in an up trend
-        var emasByCompany = emas.GroupBy(ema => ema.CompanyId);
+        var emasByCompany = emas.GroupBy(ema => ema.Key);
         var macdByCompany = macds.GroupBy(macd => macd.CompanyId);
         
         return companies;

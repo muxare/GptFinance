@@ -11,4 +11,5 @@ public interface IEmaRepository
     Task AddRangeAsync(IEnumerable<EmaData> entities);
     Task<bool> ExistsAsync(Guid companyId, DateTime date);
     Task<List<EmaData>> GetAsync(Expression<Func<EmaData, bool>> filter);
+    Task<IDictionary<Guid, DateTime>> GetLastEodByCompany();
 }
