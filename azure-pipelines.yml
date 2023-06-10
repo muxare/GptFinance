@@ -21,6 +21,8 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+# VSBuild@1 Buildin the application package but does not deploy
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/vsbuild-v1?view=azure-pipelines
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
@@ -28,6 +30,8 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+# PublishBuildArtifacts@1: Use this task in a build pipeline to publish build artifacts to Azure Pipelines, TFS, or a file share.
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/publish-build-artifacts-v1?view=azure-pipelines
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: './publish'
