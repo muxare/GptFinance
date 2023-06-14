@@ -1,6 +1,6 @@
 ﻿namespace GptFinance.Domain.Entities
 {
-    // Models/EMAData.cs
+    // Models/EmaData.cs
     public class EmaData
     {
         public Guid Id { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace GptFinance.Domain.Entities
 {
-    // Models/MACDData.cs
+    // Models/MacdData.cs
     public class MacdData
     {
         public Guid Id { get; set; }
