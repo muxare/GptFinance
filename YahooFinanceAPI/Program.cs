@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using GptFinance.Application.Interfaces;
 using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Data;
+using GptFinance.Infrastructure.Middleware;
 using GptFinance.Infrastructure.Models;
 using GptFinance.Infrastructure.Repository;
 using GptFinance.Infrastructure.Services;
@@ -43,6 +44,8 @@ builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializ
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
