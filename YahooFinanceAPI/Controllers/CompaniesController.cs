@@ -63,6 +63,7 @@ namespace YahooFinanceAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Company>> CreateCompany(YahooSearchResult searchResult)
         {
+            _logger.LogInformation("Agruments: {searchResult}", searchResult);
             var company = await _companyService.AddCompanyAsync(searchResult);
 
             return CreatedAtAction("GetCompany", new { id = company.Id }, company);
