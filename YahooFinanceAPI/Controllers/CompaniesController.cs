@@ -28,7 +28,12 @@ namespace YahooFinanceAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<Company>>> GetCompanies()
         {
-            _logger.Log(LogLevel.Information, "test logging");
+            _logger.Log(LogLevel.Information, "test logging Info");
+            _logger.Log(LogLevel.Error, "test logging Error");
+            _logger.Log(LogLevel.Critical, "test logging Critical");
+            _logger.Log(LogLevel.Debug, "test logging Debug");
+            _logger.Log(LogLevel.Trace, "test logging Trace");
+            _logger.Log(LogLevel.Warning, "test logging Warning");
             return Ok(await _companyService.GetAll());
         }
 
