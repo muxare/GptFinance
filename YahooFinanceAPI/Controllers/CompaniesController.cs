@@ -12,19 +12,23 @@ namespace YahooFinanceAPI.Controllers
     {
         private readonly IYahooSearchService<Company> _yahooSearchService;
         private readonly ICompanyService _companyService;
+        private readonly ILogger<CompaniesController> _logger;
 
         public CompaniesController(
             IYahooSearchService<Company> yahooSearchService,
-            ICompanyService companyService)
+            ICompanyService companyService,
+            ILogger<CompaniesController> logger)
         {
             _yahooSearchService = yahooSearchService;
             _companyService = companyService;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         // GET: api/companies
         [HttpGet]
         public async Task<ActionResult<ICollection<Company>>> GetCompanies()
         {
+            _logger.Log(LogLevel.Information, "test logging");
             return Ok(await _companyService.GetAll());
         }
 
