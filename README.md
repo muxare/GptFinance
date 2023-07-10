@@ -1,5 +1,3 @@
-Test
-
 Certainly! Based on your use of EMAs, MACD, and Stochastic RSI, here's an adapted swing trading strategy:
 
 ### Identify the trend: 
