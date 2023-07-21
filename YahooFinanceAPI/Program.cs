@@ -32,11 +32,10 @@ builder.Services.AddTransient<IYahooFinanceService<CsvRecord>, YahooFinanceServi
 builder.Services.AddTransient<IEodDataRepository, EodDataRepository>();
 builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
 builder.Services.AddTransient<ITechnicalIndicatorsService, TechnicalIndicatorsService>();
-builder.Services.AddTransient<IYahooSearchService<Company>, YahooSearchService>();
+builder.Services.AddTransient<IYahooSearchService, YahooSearchService>();
 builder.Services.AddTransient<IEmaRepository, EmaRepository>();
 builder.Services.AddTransient<IMacdRepository, MacdRepository>();
 builder.Services.AddTransient<ICompanyScreenerService, CompanyScreenerService>();
-
 
 builder.Services.AddTransient<ICompanyService, CompanyService>();
 
@@ -49,12 +48,11 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-} 
+}
 else
 {
     app.UseSwagger();

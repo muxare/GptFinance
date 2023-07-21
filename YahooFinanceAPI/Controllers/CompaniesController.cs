@@ -10,12 +10,12 @@ namespace YahooFinanceAPI.Controllers
     [ApiController]
     public class CompaniesController : ControllerBase
     {
-        private readonly IYahooSearchService<Company> _yahooSearchService;
+        private readonly IYahooSearchService _yahooSearchService;
         private readonly ICompanyService _companyService;
         private readonly ILogger<CompaniesController> _logger;
 
         public CompaniesController(
-            IYahooSearchService<Company> yahooSearchService,
+            IYahooSearchService yahooSearchService,
             ICompanyService companyService,
             ILogger<CompaniesController> logger)
         {

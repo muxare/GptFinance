@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace GptFinance.Infrastructure.Services
 {
-    public class YahooSearchService : IYahooSearchService<Company>
+    public class YahooSearchService : IYahooSearchService
     {
         private const string YahooFinanceApiBaseUrl = "https://query1.finance.yahoo.com";
 
@@ -19,19 +19,20 @@ namespace GptFinance.Infrastructure.Services
             _httpClient = httpClient;
         }
 
-        public async Task<List<YahooSearchResult>?> SearchCompaniesAsync(string query)
+        public async Task<SearchResult> SearchCompaniesAsync(string query)
         {
             var response = await $"{YahooFinanceApiBaseUrl}/v1/finance/search"
                 .SetQueryParams(new { q = query, quotesCount = 10, newsCount = 0 })
                 .GetStringAsync();
 
-            var searchResults = JsonConvert.DeserializeObject<YahooSearchResults>(response);
-            return searchResults?.Quotes;
+            var searchResults = JsonConvert.DeserializeObject<SearchResult>(response);
+
+            return searchResults ?? new SearchResult();
         }
 
-        public async Task<List<Company>> SearchCompaniesAsync(IEnumerable<string> queries)
+        public async Task<List<SearchResult>> SearchCompaniesAsync(IEnumerable<string> queries)
         {
-            var companies = new List<Company>();
+            var companies = new List<SearchResult>();
 
             foreach (var query in queries)
             {
@@ -42,28 +43,12 @@ namespace GptFinance.Infrastructure.Services
                     var jsonObject = JObject.Parse(jsonResponse);
                     var quoteResults = jsonObject["quotes"] as JArray;
 
-                    if (quoteResults != null)
-                    {
-                        foreach (var quote in quoteResults)
-                        {
-                            var symbol = quote["symbol"]?.ToString();
-                            var name = quote["shortname"]?.ToString();
-
-                            if (!string.IsNullOrWhiteSpace(symbol) && !string.IsNullOrWhiteSpace(name))
-                            {
-                                companies.Add(new Company
-                                {
-                                    Symbol = symbol,
-                                    Name = name
-                                });
-                            }
-                        }
-                    }
+                    SearchResult myDeserializedClass = JsonConvert.DeserializeObject<SearchResult>(jsonResponse);
+                    companies.Add(myDeserializedClass);
                 }
             }
 
-            // Removing duplicates
-            return companies.GroupBy(c => c.Symbol).Select(g => g.First()).ToList();
+            return companies;
         }
     }
 }
