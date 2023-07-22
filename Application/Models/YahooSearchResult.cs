@@ -60,3 +60,31 @@ public class News
     public Thumbnail thumbnail { get; set; }
     public List<string> relatedTickers { get; set; }
 }
+
+public class YahooCompanySearchResult
+{
+    public List<Quote> Companies { get; set; }
+}
+
+public static class Extentions
+{
+    public static YahooCompanySearchResult MapSearchResultToYahooCompanySearchResult(this List<SearchResult> searchResults)
+    {
+        var yahooCompanySearchResult = new YahooCompanySearchResult
+        {
+            Companies = searchResults.SelectMany(sr => sr.quotes).ToList()
+        };
+
+        return yahooCompanySearchResult;
+    }
+
+    public static YahooCompanySearchResult MapSearchResultToYahooCompanySearchResult(this SearchResult searchResult)
+    {
+        var yahooCompanySearchResult = new YahooCompanySearchResult
+        {
+            Companies = searchResult.quotes
+        };
+
+        return yahooCompanySearchResult;
+    }
+}

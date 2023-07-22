@@ -40,9 +40,7 @@ namespace GptFinance.Infrastructure.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    var jsonObject = JObject.Parse(jsonResponse);
-                    var quoteResults = jsonObject["quotes"] as JArray;
-
+                    
                     SearchResult myDeserializedClass = JsonConvert.DeserializeObject<SearchResult>(jsonResponse);
                     companies.Add(myDeserializedClass);
                 }
