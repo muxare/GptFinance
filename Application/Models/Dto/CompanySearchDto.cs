@@ -1,4 +1,4 @@
-﻿namespace GptFinance.Application.Models;
+﻿namespace GptFinance.Application.Models.Dto;
 
 public class CompanySearchDto
 {

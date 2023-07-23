@@ -1,4 +1,6 @@
-﻿namespace GptFinance.Application.Models;
+﻿using GptFinance.Application.Models.Dto;
+
+namespace GptFinance.Application.Models;
 
 public class YahooCompanySearchResult
 {

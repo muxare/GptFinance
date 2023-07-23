@@ -1,4 +1,5 @@
-﻿using GptFinance.Application.Models.Yahoo;
+﻿using GptFinance.Application.Models.Dto;
+using GptFinance.Application.Models.Yahoo;
 
 namespace GptFinance.Application.Models;
 
