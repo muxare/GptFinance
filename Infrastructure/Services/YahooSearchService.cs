@@ -1,7 +1,7 @@
 ﻿using Flurl;
 using Flurl.Http;
 using GptFinance.Application.Interfaces;
-using GptFinance.Application.Models;
+using GptFinance.Application.Models.Yahoo;
 using GptFinance.Domain.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,6 +19,9 @@ namespace GptFinance.Infrastructure.Services
             _httpClient = httpClient;
         }
 
+        // This function calls the Yahoo Finance API with a URL like:
+        // https://query1.finance.yahoo.com/v1/finance/search?q=QUERY&quotesCount=10&newsCount=0
+        // where QUERY is replaced by the actual query string.
         public async Task<SearchResult> SearchCompaniesAsync(string query)
         {
             var response = await $"{YahooFinanceApiBaseUrl}/v1/finance/search"
@@ -30,6 +33,9 @@ namespace GptFinance.Infrastructure.Services
             return searchResults ?? new SearchResult();
         }
 
+        // This function calls the Yahoo Finance API with a URL like:
+        // https://query1.finance.yahoo.com/v1/finance/search?q=QUERY&quotesCount=10&newsCount=0
+        // where QUERY is replaced by each query string in the queries list.
         public async Task<List<SearchResult>> SearchCompaniesAsync(IEnumerable<string> queries)
         {
             var companies = new List<SearchResult>();
@@ -40,7 +46,7 @@ namespace GptFinance.Infrastructure.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    
+
                     SearchResult myDeserializedClass = JsonConvert.DeserializeObject<SearchResult>(jsonResponse);
                     companies.Add(myDeserializedClass);
                 }

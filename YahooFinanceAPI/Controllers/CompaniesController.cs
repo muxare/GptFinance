@@ -99,7 +99,7 @@ namespace YahooFinanceAPI.Controllers
             }
 
             var results = await _yahooSearchService.SearchCompaniesAsync(query);
-            return Ok(results.MapSearchResultToYahooCompanySearchResult());
+            return Ok(results.ToYahooCompanySearchResult());
         }
 
         [HttpGet("search-multiple")]
@@ -112,7 +112,7 @@ namespace YahooFinanceAPI.Controllers
 
             var searchQueries = queries.Split(',').Select(q => q.Trim());
             var results = await _yahooSearchService.SearchCompaniesAsync(searchQueries);
-            return Ok(results.MapSearchResultToYahooCompanySearchResult());
+            return Ok(results.ToYahooCompanySearchResult());
         }
     }
 }

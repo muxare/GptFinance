@@ -1,4 +1,4 @@
-﻿using GptFinance.Application.Models;
+﻿using GptFinance.Application.Models.Yahoo;
 
 namespace GptFinance.Application.Interfaces;
 
