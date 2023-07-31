@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using GptFinance.Application.Interfaces;
 using GptFinance.Domain.Entities;
+using GptFinance.Infrastructure.Models.Entities;
 
 namespace GptFinance.Infrastructure.Services;
 
@@ -29,7 +30,7 @@ public class CompanyScreenerService : ICompanyScreenerService
         // Filter out companies that are in an up trend
         var emasByCompany = emas.GroupBy(ema => ema.Key);
         var macdByCompany = macds.GroupBy(macd => macd.CompanyId);
-        
+
         return companies;
     }
 }

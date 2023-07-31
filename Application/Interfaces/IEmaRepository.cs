@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using GptFinance.Domain.Entities;
 
 namespace GptFinance.Application.Interfaces;
 

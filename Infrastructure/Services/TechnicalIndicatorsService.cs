@@ -1,6 +1,7 @@
 ﻿using GptFinance.Application.Interfaces;
 using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Data;
+using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace GptFinance.Infrastructure.Services
@@ -47,12 +48,15 @@ namespace GptFinance.Infrastructure.Services
                         case ImputationMethod.Mean:
                             imputedValue = priceData.Values.Where(v => v.HasValue).Average(v => v.Value);
                             break;
+
                         case ImputationMethod.Median:
                             imputedValue = Median(priceData.Values.Where(v => v.HasValue).Select(v => v.Value).ToList());
                             break;
+
                         case ImputationMethod.Mode:
                             imputedValue = priceData.Values.Where(v => v.HasValue).GroupBy(v => v).OrderByDescending(g => g.Count()).First().Key.Value;
                             break;
+
                         case ImputationMethod.LastObservationCarriedForward:
                             if (lastObservation.HasValue)
                             {
@@ -93,7 +97,7 @@ namespace GptFinance.Infrastructure.Services
 
         public async Task CalculateAndStoreEma(int period, Company company)
         {
-            var closingPrices = company.EodData.OrderBy(e => e.Date).ToDictionary(o => o.Date, o=> o.Close);
+            var closingPrices = company.EodData.OrderBy(e => e.Date).ToDictionary(o => o.Date, o => o.Close);
             var imputedClosingPrices = ImputeMissingData(closingPrices, ImputationMethod.LastObservationCarriedForward);
             var data = CalculateEMA(imputedClosingPrices, period);
 
@@ -115,7 +119,7 @@ namespace GptFinance.Infrastructure.Services
             foreach (var company in companies)
             {
                 var eods = await _eodDataRepository.GetQuotesByCompanyId(company.Id);
-                var closingPrices = eods.OrderBy(e => e.Date).ToDictionary(o => o.Date, o=> o.Close);
+                var closingPrices = eods.OrderBy(e => e.Date).ToDictionary(o => o.Date, o => o.Close);
                 var imputedClosingPrices = ImputeMissingData(closingPrices, ImputationMethod.LastObservationCarriedForward);
 
                 foreach (var period in periods)
@@ -169,10 +173,9 @@ namespace GptFinance.Infrastructure.Services
         {
             foreach (var company in companies)
             {
-               await CalculateAndStoreMacd(shortPeriod, longPeriod, signalPeriod, company);
+                await CalculateAndStoreMacd(shortPeriod, longPeriod, signalPeriod, company);
             }
         }
-
 
         /// <summary>
         /// Please note that this code does not handle missing dates in the input data,
@@ -317,6 +320,5 @@ namespace GptFinance.Infrastructure.Services
 
             return stochasticOscillator;
         }
-
     }
 }

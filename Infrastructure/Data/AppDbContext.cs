@@ -1,4 +1,4 @@
-﻿using GptFinance.Domain.Entities;
+﻿using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GptFinance.Infrastructure.Data
@@ -17,12 +17,12 @@ namespace GptFinance.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EodData>()
-                .HasKey(o => new {o.Id, o.CompanyId, o.Date});
+                .HasKey(o => new { o.Id, o.CompanyId, o.Date });
 
             modelBuilder.Entity<EmaData>()
-                .HasKey(o => new {o.Id, o.CompanyId, o.Date});
+                .HasKey(o => new { o.Id, o.CompanyId, o.Date });
             modelBuilder.Entity<MacdData>()
-                .HasKey(o => new {o.Id, o.CompanyId, o.Date});
+                .HasKey(o => new { o.Id, o.CompanyId, o.Date });
 
             base.OnModelCreating(modelBuilder);
         }

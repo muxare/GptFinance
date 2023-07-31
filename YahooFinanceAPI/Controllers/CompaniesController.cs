@@ -1,6 +1,6 @@
 ﻿using GptFinance.Application.Interfaces;
 using GptFinance.Application.Models;
-using GptFinance.Domain.Entities;
+using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
