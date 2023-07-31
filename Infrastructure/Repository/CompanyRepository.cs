@@ -1,6 +1,6 @@
 ﻿using GptFinance.Application.Interfaces;
-using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Data;
+using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GptFinance.Infrastructure.Repository;

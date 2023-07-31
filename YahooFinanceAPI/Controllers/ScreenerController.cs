@@ -1,5 +1,5 @@
 ﻿using GptFinance.Application.Interfaces;
-using GptFinance.Domain.Entities;
+using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace YahooFinanceAPI.Controllers;

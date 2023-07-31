@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace GptFinance.Domain.Entities
+namespace GptFinance.Infrastructure.Models.Entities
 {
     public class EodData
     {

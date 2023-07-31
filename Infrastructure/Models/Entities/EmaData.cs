@@ -1,4 +1,4 @@
-﻿namespace GptFinance.Domain.Entities
+﻿namespace GptFinance.Infrastructure.Models.Entities
 {
     // Models/EmaData.cs
     public class EmaData

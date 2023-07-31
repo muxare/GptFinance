@@ -1,6 +1,6 @@
 ﻿using GptFinance.Application.Interfaces;
-using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Data;
+using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GptFinance.Infrastructure.Repository;
@@ -75,11 +75,11 @@ public class EodDataRepository : IEodDataRepository
             await _context.SaveChangesAsync();
         }
     }
+
     public bool Exists(Guid id) => _context.Set<EodData>().Any(c => c.Id == id || c.CompanyId == id);
 
     public async Task<int> DeleteByIdAsync(Guid id)
     {
-
         var eodData = await _context.EodData.FindAsync(id);
         if (eodData == null)
             throw new Exception($"EodData with id {id} not found");

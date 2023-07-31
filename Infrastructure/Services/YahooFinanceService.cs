@@ -1,18 +1,20 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using GptFinance.Application.Interfaces;
-using GptFinance.Domain.Entities;
 using GptFinance.Infrastructure.Data;
 using GptFinance.Infrastructure.Mappings;
 using GptFinance.Infrastructure.Models;
+using GptFinance.Infrastructure.Models.Entities;
 
 namespace GptFinance.Infrastructure.Services
 {
     public class YahooFinanceService : IYahooFinanceService<CsvRecord>
     {
         private readonly IEodDataRepository _eodRepository;
+
         //private readonly ICompanyService _companyService;
         private const string BaseUrl = "https://query1.finance.yahoo.com/v7/finance/download/";
+
         private readonly HttpClient _httpClient;
 
         public YahooFinanceService(IEodDataRepository eodRepository)
