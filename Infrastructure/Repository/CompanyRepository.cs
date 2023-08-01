@@ -1,6 +1,6 @@
 ﻿using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Aggregate;
 using GptFinance.Infrastructure.Data;
-using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GptFinance.Infrastructure.Repository;
@@ -20,7 +20,7 @@ public class CompanyRepository : ICompanyRepository
 
     public async Task<Company> AddAsync(Company entity)
     {
-        var result = await _context.Companies.AddAsync(entity);
+        var result = await _context.Companies.AddAsync(new Infrastructure.Models.Entities.Company(entity));
         await _context.SaveChangesAsync();
         return result.Entity;
     }

@@ -1,4 +1,5 @@
 ﻿using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Entity;
 using GptFinance.Infrastructure.Data;
 using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -14,20 +15,20 @@ public class EodDataRepository : IEodDataRepository
         _context = context;
     }
 
-    public ValueTask<EodData?> GetByIdAsync(Guid id) => _context.EodData.FindAsync(id);
+    public ValueTask<Eod?> GetByIdAsync(Guid id) => _context.EodData.FindAsync(id);
 
-    public Task<List<EodData>> GetAllAsync() => _context.EodData.ToListAsync();
+    public Task<List<Eod>> GetAllAsync() => _context.EodData.ToListAsync();
 
-    public async Task<EodData> AddAsync(EodData entity)
+    public async Task<Eod> AddAsync(Eod entity)
     {
-        var result = await _context.EodData.AddAsync(entity);
+        var result = await _context.EodData.AddAsync(entity.Map());
         await SaveChangesAsync();
         return result.Entity;
     }
 
-    public async Task AddRange(ICollection<EodData> entities)
+    public async Task AddRange(ICollection<Eod> entities)
     {
-        await _context.EodData.AddRangeAsync(entities);
+        await _context.EodData.AddRangeAsync(entities.Select(e => e.Map()));
         await SaveChangesAsync();
     }
 

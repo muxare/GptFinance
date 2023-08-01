@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application\GptFinance.Application.csproj" />
-    <ProjectReference Include="..\Infrastructure\GptFinance.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

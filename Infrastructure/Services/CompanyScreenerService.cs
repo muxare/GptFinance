@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-using GptFinance.Application.Interfaces;
-using GptFinance.Domain.Entities;
+﻿using GptFinance.Application.Interfaces;
 using GptFinance.Infrastructure.Models.Entities;
 
 namespace GptFinance.Infrastructure.Services;

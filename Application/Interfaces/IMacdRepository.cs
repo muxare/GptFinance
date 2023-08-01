@@ -1,14 +1,19 @@
-﻿using System.Linq.Expressions;
-using GptFinance.Domain.Entities;
+﻿using GptFinance.Domain.Entity;
+using System.Linq.Expressions;
 
 namespace GptFinance.Application.Interfaces;
 
 public interface IMacdRepository
 {
-    Task<MacdData> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date);
-    Task<List<MacdData>> GetByCompanyIdAsync(Guid companyId);
-    Task<MacdData> AddAsync(MacdData entity);
-    Task AddRangeAsync(IEnumerable<MacdData> entities);
+    Task<Macd> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date);
+
+    Task<List<Macd>> GetByCompanyIdAsync(Guid companyId);
+
+    Task<Macd> AddAsync(Macd entity);
+
+    Task AddRangeAsync(IEnumerable<Macd> entities);
+
     Task<bool> ExistsAsync(Guid companyId, DateTime date);
-    Task<List<MacdData>> GetAsync(Expression<Func<MacdData, bool>> filter);
+
+    Task<List<Macd>> GetAsync(Expression<Func<Macd, bool>> filter);
 }

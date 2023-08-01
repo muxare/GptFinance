@@ -1,4 +1,4 @@
-﻿using GptFinance.Domain.Entity;
+﻿using GptFinance.Domain.Aggregate;
 
 namespace GptFinance.Application.Interfaces;
 

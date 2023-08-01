@@ -1,20 +1,33 @@
-﻿using GptFinance.Domain.Entities;
+﻿using GptFinance.Domain.Aggregate;
+using GptFinance.Domain.Entity;
 
 namespace GptFinance.Application.Interfaces;
 
 public interface IEodDataRepository // : IRepository<EodData>
 {
-    ValueTask<EodData?> GetByIdAsync(Guid id);
-    Task<List<EodData>> GetAllAsync();
-    Task<EodData> AddAsync(EodData entity);
-    Task AddRange(ICollection<EodData> entities);
-    Task UpdateAsync(EodData entity);
-    Task UpdateRageAsync(ICollection<EodData> entities);
+    ValueTask<Eod?> GetByIdAsync(Guid id);
+
+    Task<List<Eod>> GetAllAsync();
+
+    Task<Eod> AddAsync(Eod entity);
+
+    Task AddRange(ICollection<Eod> entities);
+
+    Task UpdateAsync(Eod entity);
+
+    Task UpdateRageAsync(ICollection<Eod> entities);
+
     Task DeleteAsync(Guid id);
+
     bool Exists(Guid id);
+
     Task<int> DeleteByIdAsync(Guid id);
-    Task<List<EodData>> GetQuotesByCompanyId(Guid id);
+
+    Task<List<Eod>> GetQuotesByCompanyId(Guid id);
+
     Task<int> DeleteByCompanyId(Guid id);
-    Task UpdateDataByCompanyId(int companyId, ICollection<EodData> eodData);
-    Task<IDictionary<Guid, EodData>> GetLastEods();
+
+    Task UpdateDataByCompanyId(int companyId, ICollection<Eod> eodData);
+
+    Task<IDictionary<Guid, Eod>> GetLastEods();
 }

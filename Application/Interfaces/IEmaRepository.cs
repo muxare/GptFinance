@@ -1,14 +1,21 @@
-﻿using System.Linq.Expressions;
+﻿using GptFinance.Domain.Entity;
+using System.Linq.Expressions;
 
 namespace GptFinance.Application.Interfaces;
 
 public interface IEmaRepository
 {
-    Task<EmaData> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date);
-    Task<List<EmaData>> GetByCompanyIdAsync(Guid companyId);
-    Task<EmaData> AddAsync(EmaData entity);
-    Task AddRangeAsync(IEnumerable<EmaData> entities);
+    Task<Ema> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date);
+
+    Task<List<Ema>> GetByCompanyIdAsync(Guid companyId);
+
+    Task<Ema> AddAsync(Ema entity);
+
+    Task AddRangeAsync(IEnumerable<Ema> entities);
+
     Task<bool> ExistsAsync(Guid companyId, DateTime date);
-    Task<List<EmaData>> GetAsync(Expression<Func<EmaData, bool>> filter);
+
+    Task<List<Ema>> GetAsync(Expression<Func<Ema, bool>> filter);
+
     Task<IDictionary<Guid, DateTime>> GetLastEodByCompany();
 }

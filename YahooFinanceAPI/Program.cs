@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
 using GptFinance.Application.Interfaces;
-using GptFinance.Domain.Entities;
+using GptFinance.Domain.Entity;
 using GptFinance.Infrastructure.Data;
 using GptFinance.Infrastructure.Middleware;
 using GptFinance.Infrastructure.Models;

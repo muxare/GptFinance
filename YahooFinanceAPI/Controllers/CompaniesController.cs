@@ -3,6 +3,7 @@ using GptFinance.Application.Models;
 using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using YahooFinanceAPI.Dto;
 
 namespace YahooFinanceAPI.Controllers
 {

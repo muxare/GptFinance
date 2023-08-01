@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GptFinance.Domain.Entity
+namespace GptFinance.Domain.Aggregate
 {
     public class Company
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Symbol { get; set; }
+        public FinancialData FinancialData { get; set; }
         public DateTime LastUpdate { get; set; }
 
         public Company()
@@ -19,6 +20,7 @@ namespace GptFinance.Domain.Entity
             Name = string.Empty;
             Symbol = string.Empty;
             LastUpdate = DateTime.Now;
+            FinancialData = new FinancialData();
         }
     }
 }

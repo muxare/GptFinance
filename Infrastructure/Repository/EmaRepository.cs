@@ -1,6 +1,8 @@
 ﻿using System.Linq.Expressions;
 using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Entity;
 using GptFinance.Infrastructure.Data;
+using GptFinance.Infrastructure.Mappings;
 using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,26 +17,27 @@ public class EmaRepository : IEmaRepository
         _context = context;
     }
 
-    public async Task<EmaData> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date)
+    public async Task<Ema> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date)
     {
-        return await _context.EmaData.FirstOrDefaultAsync(e => e.CompanyId == companyId && e.Date == date);
+        var emaData = await _context.EmaData.FirstOrDefaultAsync(e => e.CompanyId == companyId && e.Date == date);
+        return emaData.Map();
     }
 
-    public async Task<List<EmaData>> GetByCompanyIdAsync(Guid companyId)
+    public async Task<List<Ema>> GetByCompanyIdAsync(Guid companyId)
     {
-        return await _context.EmaData.Where(e => e.CompanyId == companyId).ToListAsync();
+        return await _context.EmaData.Where(e => e.CompanyId == companyId).Select(ema => ema.Map()).ToListAsync();
     }
 
-    public async Task<EmaData> AddAsync(EmaData entity)
+    public async Task<Ema> AddAsync(Ema entity)
     {
-        _context.EmaData.Add(entity);
+        _context.EmaData.Add(entity.Map());
         await _context.SaveChangesAsync();
         return entity;
     }
 
-    public async Task AddRangeAsync(IEnumerable<EmaData> entities)
+    public async Task AddRangeAsync(IEnumerable<Ema> entities)
     {
-        _context.EmaData.AddRange(entities);
+        _context.EmaData.AddRange(entities.Select(ema => ema.Map()));
         await _context.SaveChangesAsync();
     }
 
@@ -43,11 +46,12 @@ public class EmaRepository : IEmaRepository
         return await _context.EmaData.AnyAsync(e => e.CompanyId == companyId && e.Date == date);
     }
 
-    public async Task<List<EmaData>> GetAsync(Expression<Func<EmaData, bool>> filter)
+    public async Task<List<Ema>> GetAsync(Expression<Func<Ema, bool>> filter)
     {
         return await _context.EmaData.Where(filter).ToListAsync();
     }
 
+    // ToDo: Does this method belong here?
     public async Task<IDictionary<Guid, DateTime>> GetLastEodByCompany()
     {
         var t =
