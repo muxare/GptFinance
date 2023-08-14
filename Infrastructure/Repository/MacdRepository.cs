@@ -1,6 +1,8 @@
 ﻿using System.Linq.Expressions;
 using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Entity;
 using GptFinance.Infrastructure.Data;
+using GptFinance.Infrastructure.Mappings;
 using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,26 +17,26 @@ public class MacdRepository : IMacdRepository
         _context = context;
     }
 
-    public async Task<MacdData> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date)
+    public async Task<MacdDomainEntity> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date)
     {
-        return await _context.MacdData.FirstOrDefaultAsync(m => m.CompanyId == companyId && m.Date == date);
+        return (await _context.MacdData.FirstOrDefaultAsync(m => m.CompanyId == companyId && m.Date == date)).Map();
     }
 
-    public async Task<List<MacdData>> GetByCompanyIdAsync(Guid companyId)
+    public async Task<List<MacdDomainEntity>> GetByCompanyIdAsync(Guid companyId)
     {
-        return await _context.MacdData.Where(m => m.CompanyId == companyId).ToListAsync();
+        return (await _context.MacdData.Where(m => m.CompanyId == companyId).ToListAsync()).Select(o => o.Map()).ToList();
     }
 
-    public async Task<MacdData> AddAsync(MacdData entity)
+    public async Task<MacdDomainEntity> AddAsync(MacdDomainEntity entity)
     {
-        _context.MacdData.Add(entity);
+        _context.MacdData.Add(entity.Map());
         await _context.SaveChangesAsync();
         return entity;
     }
 
-    public async Task AddRangeAsync(IEnumerable<MacdData> entities)
+    public async Task AddRangeAsync(IEnumerable<MacdDomainEntity> entities)
     {
-        _context.MacdData.AddRange(entities);
+        _context.MacdData.AddRange(entities.Select(o => o.Map()));
         await _context.SaveChangesAsync();
     }
 
@@ -43,8 +45,8 @@ public class MacdRepository : IMacdRepository
         return await _context.MacdData.AnyAsync(m => m.CompanyId == companyId && m.Date == date);
     }
 
-    public async Task<List<MacdData>> GetAsync(Expression<Func<MacdData, bool>> filter)
+    public async Task<List<MacdDomainEntity>> GetAsync(Expression<Func<MacdDomainEntity, bool>> filter)
     {
-        return await _context.MacdData.Where(filter).ToListAsync();
+        return (await _context.MacdData.Where(MapperExtentions.ConvertExpression(filter)).ToListAsync()).Select(o => o.Map()).ToList();
     }
 }

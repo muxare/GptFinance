@@ -6,25 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GptFinance.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Companies",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Symbol = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Companies", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "EmaData",
                 columns: table => new
@@ -60,6 +46,46 @@ namespace GptFinance.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StockExchange",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Marketplace = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Ranking = table.Column<int>(type: "int", nullable: false),
+                    TimeZone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TradingHours_Open = table.Column<TimeSpan>(type: "time", nullable: false),
+                    TradingHours_Close = table.Column<TimeSpan>(type: "time", nullable: false),
+                    LunchBreak_Start = table.Column<TimeSpan>(type: "time", nullable: false),
+                    LunchBreak_End = table.Column<TimeSpan>(type: "time", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockExchange", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Companies",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Symbol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StockExchangeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Companies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Companies_StockExchange_StockExchangeId",
+                        column: x => x.StockExchangeId,
+                        principalTable: "StockExchange",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EodData",
                 columns: table => new
                 {
@@ -84,6 +110,11 @@ namespace GptFinance.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Companies_StockExchangeId",
+                table: "Companies",
+                column: "StockExchangeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EodData_CompanyId",
                 table: "EodData",
                 column: "CompanyId");
@@ -103,6 +134,9 @@ namespace GptFinance.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Companies");
+
+            migrationBuilder.DropTable(
+                name: "StockExchange");
         }
     }
 }

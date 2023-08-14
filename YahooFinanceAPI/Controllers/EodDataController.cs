@@ -48,7 +48,7 @@ public class EodDataController : ControllerBase
         {
             DateTime startDate = latestEodByCompany.Keys.Contains(company.Id) ? latestEodByCompany[company.Id].Date.AddDays(-10) : DateTime.MinValue;
             DateTime endDate = DateTime.UtcNow;
-            
+
             var _ = await _yahooFinanceService.GetHistoricalDataAsync(company, startDate, endDate);
         }
 
@@ -83,6 +83,16 @@ public class EodDataController : ControllerBase
 
         var companies = await _companyService.GetAll();
         await _yahooFinanceService.GetAllHistoricalDataAsync(companies, startDate.Value, endDate.Value);
+
+        return Ok();
+    }
+
+    // POST: api/eoddata/historical
+    [HttpPost("updatehistory")]
+    public async Task<ActionResult> FetchHistoricalData()
+    {
+        var companies = await _companyService.GetAll(1);
+        await _yahooFinanceService.GetHistoricalDataAsync(companies.Where(o => o.MarketIsClosed()).ToList());
 
         return Ok();
     }

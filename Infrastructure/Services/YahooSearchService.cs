@@ -2,9 +2,7 @@
 using Flurl.Http;
 using GptFinance.Application.Interfaces;
 using GptFinance.Application.Models.Yahoo;
-using GptFinance.Domain.Entities;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace GptFinance.Infrastructure.Services
 {

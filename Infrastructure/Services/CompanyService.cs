@@ -1,10 +1,10 @@
 ﻿using GptFinance.Application.Interfaces;
 using GptFinance.Application.Models;
-using GptFinance.Infrastructure.Data;
 using GptFinance.Infrastructure.Models;
-using GptFinance.Infrastructure.Models.Entities;
+using GptFinance.Domain.Aggregate;
 using GptFinance.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace GptFinance.Infrastructure.Services
 {
@@ -13,30 +13,34 @@ namespace GptFinance.Infrastructure.Services
         //private readonly IYahooFinanceService<CsvRecord> _yahooFinanceService;
         private readonly ICompanyRepository _companyRepository;
 
-        public CompanyService(AppDbContext context, IYahooFinanceService<CsvRecord> yahooFinanceService, ICompanyRepository companyRepository)
+        public CompanyService(IYahooFinanceService<CsvRecord> yahooFinanceService, ICompanyRepository companyRepository)
         {
             //_yahooFinanceService = yahooFinanceService ?? throw new ArgumentNullException(nameof(yahooFinanceService));
             _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
         }
 
-        public async Task<ICollection<Company>> GetAll() => await _companyRepository.GetAllAsync();
-
-        public async Task<Company> AddCompanyAsync(YahooSearchResult searchResult)
+        public async Task<ICollection<CompanyAggregate>> GetAll(int take = 1000)
         {
-            var company = new Company
+            // Fetch the stock exchanges for each company.
+            return await _companyRepository.GetAllAsync(take);
+        }
+
+        public async Task<CompanyAggregate> AddCompanyAsync(YahooSearchResult searchResult)
+        {
+            var company = new CompanyAggregate
             {
                 Symbol = searchResult.Symbol,
                 Name = searchResult.CompanyName,
-                LastUpdated = DateTime.UtcNow
+                LastUpdate = DateTime.UtcNow
             };
             await _companyRepository.AddAsync(company);
 
             return company;
         }
 
-        public async Task AddMultipleCompaniesAsync(List<Company> companies) => await _companyRepository.AddRange(companies);
+        public async Task AddMultipleCompaniesAsync(List<CompanyAggregate> companies) => await _companyRepository.AddRange(companies);
 
-        public async Task UpdateCompany(Guid id, Company company)
+        public async Task UpdateCompany(Guid id, CompanyAggregate company)
         {
             try
             {
@@ -62,8 +66,19 @@ namespace GptFinance.Infrastructure.Services
 
         private bool CompanyExists(Guid id) => _companyRepository.Exists(id);
 
-        public async Task<Company> FindAsync(Guid id) => await _companyRepository.GetByIdAsync(id);
+        public async Task<CompanyAggregate> FindAsync(Guid id) => await _companyRepository.GetByIdAsync(id);
 
-        public async Task<Company?> FindWithEodDataAsync(Guid id) => await _companyRepository.FindWithEodDataAsync(id);
+        public async Task<CompanyAggregate?> FindWithEodDataAsync(Guid id) => await _companyRepository.FindWithEodDataAsync(id);
+
+        public async Task<ICollection<UpdateStatusAggregate>> GetCompanyUpdateStatus()
+        {
+            var companies = await _companyRepository.GetAllAsync(100);
+            var latest = companies.Select(o => new UpdateStatusAggregate
+            {
+                EodLatestDateTime = o.FinancialData.EodData.First().Date,
+                EodCount = o.FinancialData.EodData.Count()
+            }).ToList();
+            return latest;
+        }
     }
 }

@@ -1,19 +1,21 @@
-﻿using GptFinance.Domain.Entity;
-using GptFinance.Domain.Aggregate;
+﻿using GptFinance.Domain.Aggregate;
+using GptFinance.Domain.Entity;
 
 namespace GptFinance.Application.Interfaces;
 
 public interface IYahooFinanceService<T>
 {
-    Task<List<Eod>> GetHistoricalDataAsync(Company company, DateTime startDate, DateTime endDate);
+    Task<CompanyAggregate> GetHistoricalDataAsync(CompanyAggregate company, DateTime startDate, DateTime endDate);
 
-    List<Eod> Convert(List<T> csvRecords, Guid companyId);
+    List<EodDomainEntity> Convert(List<T> csvRecords, Guid companyId);
 
-    Task<Company?> GetQuoteAsync(string? symbol);
+    Task<CompanyAggregate?> GetQuoteAsync(string? symbol);
 
-    Task<ICollection<Eod>> GetQuotesByCompanyId(Guid id);
+    Task<ICollection<EodDomainEntity>> GetQuotesByCompanyId(Guid id);
 
-    Task GetAllHistoricalDataAsync(ICollection<Company> companies, DateTime startDate, DateTime endDate);
+    Task GetAllHistoricalDataAsync(ICollection<CompanyAggregate> companies, DateTime startDate, DateTime endDate);
 
-    Task<IDictionary<Guid, Eod>> GetLastEods();
+    Task GetHistoricalDataAsync(ICollection<CompanyAggregate> companies);
+
+    Task<IDictionary<Guid, EodDomainEntity>> GetLastEods();
 }

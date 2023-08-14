@@ -8,17 +8,17 @@ public interface ICompanyRepository //: IRepository<Company>
 
     Task<int> DeleteByIdAsync(Guid id);
 
-    Task<Company?> FindWithEodDataAsync(Guid id);
+    Task<CompanyAggregate?> FindWithEodDataAsync(Guid id);
 
-    Task<ICollection<Company>> GetAllAsync();
+    Task<ICollection<CompanyAggregate>> GetAllAsync(int take = 1000);
 
-    Task<Company> AddAsync(Company company);
+    Task<CompanyAggregate> AddAsync(CompanyAggregate company);
 
-    Task AddRange(ICollection<Company> companies);
+    Task AddRange(ICollection<CompanyAggregate> companies);
 
-    Task UpdateAsync(Company company);
+    Task UpdateAsync(CompanyAggregate company);
 
     Task DeleteAsync(Guid id);
 
-    Task<Company> GetByIdAsync(Guid id);
+    Task<CompanyAggregate> GetByIdAsync(Guid id);
 }

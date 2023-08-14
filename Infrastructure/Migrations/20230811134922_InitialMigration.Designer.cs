@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GptFinance.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230520144714_Initial")]
-    partial class Initial
+    [Migration("20230811134922_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace GptFinance.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GptFinance.Domain.Entities.Company", b =>
+            modelBuilder.Entity("GptFinance.Infrastructure.Models.Entities.Company", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -37,15 +37,20 @@ namespace GptFinance.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("StockExchangeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Symbol")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("StockExchangeId");
+
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("GptFinance.Domain.Entities.EmaData", b =>
+            modelBuilder.Entity("GptFinance.Infrastructure.Models.Entities.EmaData", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -67,7 +72,7 @@ namespace GptFinance.Infrastructure.Migrations
                     b.ToTable("EmaData");
                 });
 
-            modelBuilder.Entity("GptFinance.Domain.Entities.EodData", b =>
+            modelBuilder.Entity("GptFinance.Infrastructure.Models.Entities.EodData", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -100,7 +105,7 @@ namespace GptFinance.Infrastructure.Migrations
                     b.ToTable("EodData");
                 });
 
-            modelBuilder.Entity("GptFinance.Domain.Entities.MacdData", b =>
+            modelBuilder.Entity("GptFinance.Infrastructure.Models.Entities.MacdData", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -134,16 +139,100 @@ namespace GptFinance.Infrastructure.Migrations
                     b.ToTable("MacdData");
                 });
 
-            modelBuilder.Entity("GptFinance.Domain.Entities.EodData", b =>
+            modelBuilder.Entity("GptFinance.Infrastructure.Models.Entities.StockExchange", b =>
                 {
-                    b.HasOne("GptFinance.Domain.Entities.Company", null)
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Marketplace")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ranking")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TimeZone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StockExchange");
+                });
+
+            modelBuilder.Entity("GptFinance.Infrastructure.Models.Entities.Company", b =>
+                {
+                    b.HasOne("GptFinance.Infrastructure.Models.Entities.StockExchange", "StockExchange")
+                        .WithMany()
+                        .HasForeignKey("StockExchangeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StockExchange");
+                });
+
+            modelBuilder.Entity("GptFinance.Infrastructure.Models.Entities.EodData", b =>
+                {
+                    b.HasOne("GptFinance.Infrastructure.Models.Entities.Company", null)
                         .WithMany("EodData")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GptFinance.Domain.Entities.Company", b =>
+            modelBuilder.Entity("GptFinance.Infrastructure.Models.Entities.StockExchange", b =>
+                {
+                    b.OwnsOne("GptFinance.Domain.Entity.LunchBreak", "LunchBreak", b1 =>
+                        {
+                            b1.Property<Guid>("StockExchangeId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<TimeSpan>("End")
+                                .HasColumnType("time");
+
+                            b1.Property<TimeSpan>("Start")
+                                .HasColumnType("time");
+
+                            b1.HasKey("StockExchangeId");
+
+                            b1.ToTable("StockExchange");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StockExchangeId");
+                        });
+
+                    b.OwnsOne("GptFinance.Domain.Entity.TradingHours", "TradingHours", b1 =>
+                        {
+                            b1.Property<Guid>("StockExchangeId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<TimeSpan>("Close")
+                                .HasColumnType("time");
+
+                            b1.Property<TimeSpan>("Open")
+                                .HasColumnType("time");
+
+                            b1.HasKey("StockExchangeId");
+
+                            b1.ToTable("StockExchange");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StockExchangeId");
+                        });
+
+                    b.Navigation("LunchBreak")
+                        .IsRequired();
+
+                    b.Navigation("TradingHours")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GptFinance.Infrastructure.Models.Entities.Company", b =>
                 {
                     b.Navigation("EodData");
                 });

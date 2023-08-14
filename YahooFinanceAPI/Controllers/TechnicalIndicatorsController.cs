@@ -1,4 +1,5 @@
 ﻿using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Aggregate;
 using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,7 +45,7 @@ public class TechnicalIndicatorsController : ControllerBase
         {
             return NotFound();
         }
-        await _technicalIndicatorsService.CalculateAndStoreEmaFan(new int[] {18, 50, 100, 200}, new List<Company>{company});
+        await _technicalIndicatorsService.CalculateAndStoreEmaFan(new int[] { 18, 50, 100, 200 }, new List<CompanyAggregate> { company });
 
         return NoContent();
     }
@@ -57,7 +58,7 @@ public class TechnicalIndicatorsController : ControllerBase
         {
             return NotFound();
         }
-        await _technicalIndicatorsService.CalculateAndStoreEmaFan(new int[] {18, 50, 100, 200}, companies);
+        await _technicalIndicatorsService.CalculateAndStoreEmaFan(new int[] { 18, 50, 100, 200 }, companies);
 
         return NoContent();
     }
@@ -66,9 +67,9 @@ public class TechnicalIndicatorsController : ControllerBase
     [HttpPost("{id:Guid}/macd")]
     public async Task<IActionResult> CalculateMacd(Guid id, int shortPeriod = 12, int longPeriod = 26, int signalPeriod = 9)
     {
-        var company =  await _companyService.FindAsync(id);
+        var company = await _companyService.FindAsync(id);
         var eodData = await _eodDataRepository.GetQuotesByCompanyId(id);
-        company.EodData = eodData;
+        company.FinancialData.EodData = eodData;
 
         await _technicalIndicatorsService.CalculateAndStoreMacd(shortPeriod, longPeriod, signalPeriod, company);
         return NoContent();
@@ -87,7 +88,7 @@ public class TechnicalIndicatorsController : ControllerBase
         foreach (var company in companies)
         {
             var eodData = await _eodDataRepository.GetQuotesByCompanyId(company.Id);
-            company.EodData = eodData;
+            company.FinancialData.EodData = eodData;
         }
 
         await _technicalIndicatorsService.CalculateAndStoreMacdOnAllCompanies(shortPeriod, longPeriod, signalPeriod, companies);

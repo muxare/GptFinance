@@ -1,6 +1,8 @@
 ﻿using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Aggregate;
 using GptFinance.Domain.Entity;
 using GptFinance.Infrastructure.Data;
+using GptFinance.Infrastructure.Mappings;
 using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,35 +17,36 @@ public class EodDataRepository : IEodDataRepository
         _context = context;
     }
 
-    public ValueTask<Eod?> GetByIdAsync(Guid id) => _context.EodData.FindAsync(id);
+    public ValueTask<EodDomainEntity?> GetByIdAsync(Guid id) => _context.EodData.FindAsync(id).Map();
 
-    public Task<List<Eod>> GetAllAsync() => _context.EodData.ToListAsync();
+    public Task<List<EodDomainEntity>> GetAllAsync() => _context.EodData.Select(o => o.Map()).ToListAsync();
 
-    public async Task<Eod> AddAsync(Eod entity)
+    public async Task<EodDomainEntity> AddAsync(EodDomainEntity entity)
     {
         var result = await _context.EodData.AddAsync(entity.Map());
         await SaveChangesAsync();
-        return result.Entity;
+        return result.Entity.Map();
     }
 
-    public async Task AddRange(ICollection<Eod> entities)
+    public async Task AddRange(ICollection<EodDomainEntity> entities)
     {
         await _context.EodData.AddRangeAsync(entities.Select(e => e.Map()));
         await SaveChangesAsync();
     }
 
-    public async Task UpdateRageAsync(ICollection<EodData> entities)
+    public async Task UpdateRageAsync(CompanyAggregate company)
     {
+        var entities = company.FinancialData.EodData;
         var startDate = entities.MinBy(data => data.Date)?.Date;
         var endDate = entities.MaxBy(data => data.Date)?.Date;
 
         var entitiesInDb = _context.EodData
-            .Where(data => data.CompanyId == entities.First().CompanyId && data.Date >= startDate && data.Date < endDate).ToList();
+            .Where(data => data.CompanyId == company.Id && data.Date >= startDate && data.Date < endDate).ToList();
 
         // Need to match on company and date
         foreach (var entity in entities)
         {
-            var match = entitiesInDb.FirstOrDefault(dbEntity => dbEntity.CompanyId == entity.CompanyId && dbEntity.Date.Date == entity.Date.Date);
+            var match = entitiesInDb.FirstOrDefault(dbEntity => dbEntity.CompanyId == company.Id && dbEntity.Date.Date == entity.Date.Date);
             if (match != null)
             {
                 match.Open = entity.Open;
@@ -54,14 +57,17 @@ public class EodDataRepository : IEodDataRepository
             }
             else
             {
-                _context.EodData.Add(entity);
+                var entityDb = entity.Map();
+                entityDb.Id = Guid.NewGuid();
+                entityDb.CompanyId = company.Id;
+                _context.EodData.Add(entityDb);
             }
         }
 
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(EodData entity)
+    public async Task UpdateAsync(EodDomainEntity entity)
     {
         _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
@@ -89,8 +95,8 @@ public class EodDataRepository : IEodDataRepository
         return await _context.SaveChangesAsync();
     }
 
-    public Task<List<EodData>> GetQuotesByCompanyId(Guid id) =>
-        _context.EodData.Where(e => e.CompanyId == id).OrderBy(o => o.Date).ToListAsync();
+    public Task<List<EodDomainEntity>> GetQuotesByCompanyId(Guid id) =>
+        _context.EodData.Where(e => e.CompanyId == id).OrderBy(o => o.Date).Select(o => o.Map()).ToListAsync();
 
     public async Task<int> DeleteByCompanyId(Guid id)
     {
@@ -99,19 +105,19 @@ public class EodDataRepository : IEodDataRepository
         return await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateDataByCompanyId(int companyId, ICollection<EodData> eodData)
+    public async Task UpdateDataByCompanyId(int companyId, ICollection<EodDomainEntity> eodData)
     {
-        _context.EodData.RemoveRange(eodData);
-        await _context.EodData.AddRangeAsync(eodData);
+        _context.EodData.RemoveRange(eodData.Select(o => o.Map()));
+        await _context.EodData.AddRangeAsync(eodData.Select(o => o.Map()));
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IDictionary<Guid, EodData>> GetLastEods()
+    public async Task<IDictionary<Guid, EodDomainEntity>> GetLastEods()
     {
         var r = await _context.EodData
             .GroupBy(e => e.CompanyId)
-            .Select(g => g.OrderByDescending(e => e.Date).FirstOrDefault())
-            .ToDictionaryAsync(o => o.CompanyId, o => o);
+            .Select(g => new { g.Key, Value = g.OrderByDescending(e => e.Date).FirstOrDefault().Map() })
+            .ToDictionaryAsync(o => o.Key, o => o.Value);
 
         return r;
     }

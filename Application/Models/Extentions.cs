@@ -32,6 +32,20 @@ public static class Extentions
 
     public static CompanySearchDto ToCompanySearchDto(this Quote quote)
     {
-        return new CompanySearchDto();
+        return new CompanySearchDto()
+        {
+            ExchangeName = quote.exchange,
+            ShortName = quote.shortname,
+            QuoteType = quote.quoteType,
+            Symbol = quote.symbol,
+            Index = quote.index,
+            TypeDisp = quote.typeDisp,
+            LongName = quote.longname,
+            ExchDisp = quote.exchDisp,
+            Sector= quote.sector,
+            Industry= quote.industry,
+            DispSecIndFlag = quote.dispSecIndFlag,
+            IsYahooFinance = quote.isYahooFinance
+        };
     }
 }

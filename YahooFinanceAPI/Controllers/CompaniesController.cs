@@ -1,8 +1,9 @@
 ﻿using GptFinance.Application.Interfaces;
 using GptFinance.Application.Models;
-using GptFinance.Infrastructure.Models.Entities;
+using GptFinance.Application.Models.Dto;
+using GptFinance.Domain.Aggregate;
+using GptFinance.Infrastructure.Mappings;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using YahooFinanceAPI.Dto;
 
 namespace YahooFinanceAPI.Controllers
@@ -27,41 +28,43 @@ namespace YahooFinanceAPI.Controllers
 
         // GET: api/companies
         [HttpGet]
-        public async Task<ActionResult<ICollection<Company>>> GetCompanies()
+        public async Task<ActionResult> GetCompanies()
         {
             return Ok(await _companyService.GetAll());
         }
 
         // GET: api/companies/5
         [HttpGet("{id:Guid}")]
-        public async Task<ActionResult<Company>> GetCompany(Guid id)
+        public async Task<ActionResult> GetCompany(Guid id)
         {
-            var company = await _companyService.FindAsync(id);
+            CompanyAggregate company = await _companyService.FindAsync(id);
 
-            if (company == null)
-            {
-                return NotFound();
-            }
-
-            return company;
+            return Ok(company);
         }
 
         // PUT: api/companies/5
         [HttpPut("{id:Guid}")]
-        public async Task<IActionResult> UpdateCompany(Guid id, Company company)
+        public async Task<ActionResult> UpdateCompany(Guid id, CompanyDto company)
         {
             if (id != company.Id)
             {
                 return BadRequest();
             }
 
-            await _companyService.UpdateCompany(id, company);
+            var companyAggregate = new CompanyAggregate
+            {
+                Id = id,
+                Symbol = company.Symbol,
+                Name = company.Name
+            };
+
+            await _companyService.UpdateCompany(id, companyAggregate);
             return NoContent();
         }
 
         // POST: api/companies
         [HttpPost]
-        public async Task<ActionResult<Company>> CreateCompany(YahooSearchResult searchResult)
+        public async Task<ActionResult<CompanyDto>> CreateCompany(YahooSearchResult searchResult)
         {
             _logger.LogWarning("Agruments: {searchResult}", searchResult);
             var company = await _companyService.AddCompanyAsync(searchResult);
@@ -70,21 +73,21 @@ namespace YahooFinanceAPI.Controllers
         }
 
         [HttpPost("add-multiple")]
-        public async Task<IActionResult> AddMultipleCompaniesAsync([FromBody] List<Company> companies)
+        public async Task<ActionResult> AddMultipleCompaniesAsync([FromBody] List<CompanySearchDto> companies)
         {
             if (companies == null || companies.Count == 0)
             {
                 return BadRequest("No companies provided");
             }
-
-            await _companyService.AddMultipleCompaniesAsync(companies);
+            var companyAggregates = companies.Select(c => c.Map()).ToList();
+            await _companyService.AddMultipleCompaniesAsync(companyAggregates);
 
             return Ok("Companies added successfully");
         }
 
         // DELETE: api/companies/5
         [HttpDelete("{id:Guid}")]
-        public async Task<IActionResult> DeleteCompany(Guid id)
+        public async Task<ActionResult> DeleteCompany(Guid id)
         {
             await _companyService.DeleteCompany(id);
 
@@ -92,7 +95,7 @@ namespace YahooFinanceAPI.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchCompanies(string query)
+        public async Task<ActionResult> SearchCompanies(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
             {
@@ -104,7 +107,7 @@ namespace YahooFinanceAPI.Controllers
         }
 
         [HttpGet("search-multiple")]
-        public async Task<IActionResult> SearchCompaniesMultiple(string queries)
+        public async Task<ActionResult> SearchCompaniesMultiple(string queries)
         {
             if (string.IsNullOrWhiteSpace(queries))
             {
@@ -114,6 +117,13 @@ namespace YahooFinanceAPI.Controllers
             var searchQueries = queries.Split(',').Select(q => q.Trim());
             var results = await _yahooSearchService.SearchCompaniesAsync(searchQueries);
             return Ok(results.ToYahooCompanySearchResult());
+        }
+
+        [HttpGet("stats")]
+        public async Task<ActionResult> CompaniesStats()
+        {
+            var results = await _companyService.GetCompanyUpdateStatus();
+            return Ok(results);
         }
     }
 }

@@ -17,25 +17,25 @@ public class EmaRepository : IEmaRepository
         _context = context;
     }
 
-    public async Task<Ema> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date)
+    public async Task<EmaDomainEntity> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date)
     {
         var emaData = await _context.EmaData.FirstOrDefaultAsync(e => e.CompanyId == companyId && e.Date == date);
         return emaData.Map();
     }
 
-    public async Task<List<Ema>> GetByCompanyIdAsync(Guid companyId)
+    public async Task<List<EmaDomainEntity>> GetByCompanyIdAsync(Guid companyId)
     {
         return await _context.EmaData.Where(e => e.CompanyId == companyId).Select(ema => ema.Map()).ToListAsync();
     }
 
-    public async Task<Ema> AddAsync(Ema entity)
+    public async Task<EmaDomainEntity> AddAsync(EmaDomainEntity entity)
     {
         _context.EmaData.Add(entity.Map());
         await _context.SaveChangesAsync();
         return entity;
     }
 
-    public async Task AddRangeAsync(IEnumerable<Ema> entities)
+    public async Task AddRangeAsync(IEnumerable<EmaDomainEntity> entities)
     {
         _context.EmaData.AddRange(entities.Select(ema => ema.Map()));
         await _context.SaveChangesAsync();
@@ -46,9 +46,9 @@ public class EmaRepository : IEmaRepository
         return await _context.EmaData.AnyAsync(e => e.CompanyId == companyId && e.Date == date);
     }
 
-    public async Task<List<Ema>> GetAsync(Expression<Func<Ema, bool>> filter)
+    public async Task<List<EmaDomainEntity>> GetAsync(Expression<Func<EmaDomainEntity, bool>> filter)
     {
-        return await _context.EmaData.Where(filter).ToListAsync();
+        return (await _context.EmaData.Where(MapperExtentions.ConvertExpression(filter)).ToListAsync()).Select(o => o.Map()).ToList();
     }
 
     // ToDo: Does this method belong here?

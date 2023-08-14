@@ -1,6 +1,8 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Aggregate;
+using GptFinance.Domain.Entity;
 using GptFinance.Infrastructure.Data;
 using GptFinance.Infrastructure.Mappings;
 using GptFinance.Infrastructure.Models;
@@ -24,7 +26,7 @@ namespace GptFinance.Infrastructure.Services
             _httpClient = new HttpClient();
         }
 
-        public async Task<List<EodData>> GetHistoricalDataAsync(Company company, DateTime startDate, DateTime endDate)
+        public async Task<CompanyAggregate> GetHistoricalDataAsync(CompanyAggregate company, DateTime startDate, DateTime endDate)
         {
             string url = $"https://query1.finance.yahoo.com/v7/finance/download/{company.Symbol}?period1={ToUnixTimestamp(startDate)}&period2={ToUnixTimestamp(endDate)}&interval=1d&events=history&includeAdjustedClose=true";
 
@@ -42,13 +44,15 @@ namespace GptFinance.Infrastructure.Services
                     using (var csvReader = new CsvReader(reader, config))
                     {
                         csvReader.Context.RegisterClassMap<CsvRecordMap>();
-                        var r = csvReader.GetRecords<CsvRecord>();
-                        var records = new List<EodData>(Convert(csvReader.GetRecords<CsvRecord>().ToList(), company.Id));
-
-                        await _eodRepository.UpdateRageAsync(records);
+                        //var r = csvReader.GetRecords<CsvRecord>();
+                        var records = new List<EodDomainEntity>(Convert(csvReader.GetRecords<CsvRecord>().ToList(), company.Id));
+                        company.FinancialData.EodData = records;
+                        await _eodRepository.UpdateRageAsync(company);
                         //await _eodRepository.AddRange(records);
 
-                        return records;
+                        company.FinancialData.EodData = records;
+
+                        return company;
                     }
                 }
                 else
@@ -58,21 +62,20 @@ namespace GptFinance.Infrastructure.Services
             }
         }
 
-        public List<EodData> Convert(List<CsvRecord> csvRecords, Guid companyId)
+        public List<EodDomainEntity> Convert(List<CsvRecord> csvRecords, Guid companyId)
         {
             return csvRecords.Select(r =>
             {
-                return new EodData
-                {
-                    Id = Guid.NewGuid(),
-                    Date = r.Date,
-                    Open = r.Open.HasValue ? r.Open.Value : (decimal?)null,
-                    High = r.High.HasValue ? r.High.Value : (decimal?)null,
-                    Low = r.Low.HasValue ? r.Low.Value : (decimal?)null,
-                    Close = r.Close.HasValue ? r.Close.Value : (decimal?)null,
-                    Volume = r.Volume.HasValue ? r.Volume.Value : (long?)null,
-                    CompanyId = companyId
-                };
+                return new EodDomainEntity
+                (
+                    Date: r.Date,
+                    Open: r.Open.HasValue ? r.Open.Value : (decimal?)null,
+                    High: r.High.HasValue ? r.High.Value : (decimal?)null,
+                    Low: r.Low.HasValue ? r.Low.Value : (decimal?)null,
+                    Close: r.Close.HasValue ? r.Close.Value : (decimal?)null,
+                    AdjClose: r.Close.HasValue ? r.Close.Value : (decimal?)null,
+                    Volume: r.Volume.HasValue ? (int?)r.Volume.Value : (int?)null
+                );
             }).ToList();
         }
 
@@ -94,7 +97,7 @@ namespace GptFinance.Infrastructure.Services
             return (long)(dateTime.ToUniversalTime() - unixEpoch).TotalSeconds;
         }
 
-        public async Task<Company?> GetQuoteAsync(string? symbol)
+        public async Task<CompanyAggregate?> GetQuoteAsync(string? symbol)
         {
             var httpClient = new HttpClient();
             var url = $"{BaseUrl}{symbol}?interval=1d&events=history&includeAdjustedClose=true";
@@ -113,14 +116,14 @@ namespace GptFinance.Infrastructure.Services
             //csvReader.Configuration.HeaderValidated = null;
             //csvReader.Configuration.MissingFieldFound = null;
 
-            var quote = csvReader.GetRecords<Company>().FirstOrDefault();
+            var quote = csvReader.GetRecords<CompanyAggregate>().FirstOrDefault();
 
             return quote;
         }
 
-        public async Task<ICollection<EodData>> GetQuotesByCompanyId(Guid id)
+        public async Task<ICollection<EodDomainEntity>> GetQuotesByCompanyId(Guid id)
         {
-            ICollection<EodData> eodData = await _eodRepository.GetQuotesByCompanyId(id);
+            ICollection<EodDomainEntity> eodData = await _eodRepository.GetQuotesByCompanyId(id);
             return eodData;
         }
 
@@ -129,7 +132,7 @@ namespace GptFinance.Infrastructure.Services
         /// </summary>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        public async Task GetAllHistoricalDataAsync(ICollection<Company> companies, DateTime startDate, DateTime endDate)
+        public async Task GetAllHistoricalDataAsync(ICollection<CompanyAggregate> companies, DateTime startDate, DateTime endDate)
         {
             foreach (var company in companies)
             {
@@ -139,9 +142,26 @@ namespace GptFinance.Infrastructure.Services
             }
         }
 
-        public async Task<IDictionary<Guid, EodData>> GetLastEods()
+        /// <summary>
+        /// Deletes all historical data and fetches new data for all companies
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        public async Task GetHistoricalDataAsync(ICollection<CompanyAggregate> companies)
         {
-            IDictionary<Guid, EodData> res = await _eodRepository.GetLastEods();
+            var now = DateTime.UtcNow;
+            foreach (var company in companies)
+            {
+                var startDate = company.FinancialData.EodData.Any() ? company.FinancialData.EodData.Max(e => e.Date).AddDays(1) : DateTime.MinValue;
+                // Also check if the stock market is open or closed for trade of the company, only get eod data if it is losed
+                if (startDate <= now)
+                    await GetHistoricalDataAsync(company, startDate, now);
+            }
+        }
+
+        public async Task<IDictionary<Guid, EodDomainEntity>> GetLastEods()
+        {
+            IDictionary<Guid, EodDomainEntity> res = await _eodRepository.GetLastEods();
 
             return res;
         }

@@ -1,4 +1,4 @@
-﻿using GptFinance.Domain.Entity;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GptFinance.Domain.Aggregate
 {

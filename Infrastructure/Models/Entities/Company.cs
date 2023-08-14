@@ -8,6 +8,7 @@
         public string? Name { get; set; }
         public DateTime LastUpdated { get; set; }
 
+        public StockExchange StockExchange { get; set; }
         public ICollection<EodData> EodData { get; set; } = new List<EodData>();
     }
 }

@@ -1,4 +1,7 @@
-﻿using GptFinance.Application.Interfaces;
+﻿using Flurl.Util;
+using GptFinance.Application.Interfaces;
+using GptFinance.Domain.Aggregate;
+using GptFinance.Domain.Entity;
 using GptFinance.Infrastructure.Models.Entities;
 
 namespace GptFinance.Infrastructure.Services;
@@ -17,17 +20,12 @@ public class CompanyScreenerService : ICompanyScreenerService
     }
 
     //public async Task<ICollection<Company>> ScreenAsync(Expression<Func<EmaData, bool>> filter)
-    public async Task<ICollection<Company>> ScreenAsync()
+    public async Task<ICollection<CompanyAggregate>> ScreenAsync()
     {
-        var emas = await _emaDataRepository.GetLastEodByCompany();
-        //var emas = await _emaDataRepository.GetAsync(e => e.Date == DateTime.Today);
-        List<MacdData> macds = await _macdDataRepository.GetAsync(e => e.Date == DateTime.Today);
-
         var companies = await _companyRepository.GetAllAsync();
 
         // Filter out companies that are in an up trend
-        var emasByCompany = emas.GroupBy(ema => ema.Key);
-        var macdByCompany = macds.GroupBy(macd => macd.CompanyId);
+        companies = companies.Where(c => c.InUptrend()).ToList();
 
         return companies;
     }

@@ -5,17 +5,17 @@ namespace GptFinance.Application.Interfaces;
 
 public interface IEmaRepository
 {
-    Task<Ema> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date);
+    Task<EmaDomainEntity> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date);
 
-    Task<List<Ema>> GetByCompanyIdAsync(Guid companyId);
+    Task<List<EmaDomainEntity>> GetByCompanyIdAsync(Guid companyId);
 
-    Task<Ema> AddAsync(Ema entity);
+    Task<EmaDomainEntity> AddAsync(EmaDomainEntity entity);
 
-    Task AddRangeAsync(IEnumerable<Ema> entities);
+    Task AddRangeAsync(IEnumerable<EmaDomainEntity> entities);
 
     Task<bool> ExistsAsync(Guid companyId, DateTime date);
 
-    Task<List<Ema>> GetAsync(Expression<Func<Ema, bool>> filter);
+    Task<List<EmaDomainEntity>> GetAsync(Expression<Func<EmaDomainEntity, bool>> filter);
 
     Task<IDictionary<Guid, DateTime>> GetLastEodByCompany();
 }

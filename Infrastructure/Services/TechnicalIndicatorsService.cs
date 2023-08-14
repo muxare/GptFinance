@@ -1,5 +1,5 @@
 ﻿using GptFinance.Application.Interfaces;
-using GptFinance.Domain.Entities;
+using GptFinance.Domain.Aggregate;
 using GptFinance.Infrastructure.Data;
 using GptFinance.Infrastructure.Models.Entities;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -95,9 +95,9 @@ namespace GptFinance.Infrastructure.Services
             return median;
         }
 
-        public async Task CalculateAndStoreEma(int period, Company company)
+        public async Task CalculateAndStoreEma(int period, CompanyAggregate company)
         {
-            var closingPrices = company.EodData.OrderBy(e => e.Date).ToDictionary(o => o.Date, o => o.Close);
+            var closingPrices = company.FinancialData.EodData.OrderBy(e => e.Date).ToDictionary(o => o.Date, o => o.Close);
             var imputedClosingPrices = ImputeMissingData(closingPrices, ImputationMethod.LastObservationCarriedForward);
             var data = CalculateEMA(imputedClosingPrices, period);
 
@@ -114,7 +114,7 @@ namespace GptFinance.Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task CalculateAndStoreEmaFan(int[] periods, ICollection<Company> companies)
+        public async Task CalculateAndStoreEmaFan(int[] periods, ICollection<CompanyAggregate> companies)
         {
             foreach (var company in companies)
             {
@@ -141,9 +141,9 @@ namespace GptFinance.Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task CalculateAndStoreMacd(int shortPeriod, int longPeriod, int signalPeriod, Company company)
+        public async Task CalculateAndStoreMacd(int shortPeriod, int longPeriod, int signalPeriod, CompanyAggregate company)
         {
-            var priceData = company.EodData.ToDictionary(o => o.Date, o => o.Close);
+            var priceData = company.FinancialData.EodData.ToDictionary(o => o.Date, o => o.Close);
             var imputedClosingPrices = ImputeMissingData(priceData, ImputationMethod.LastObservationCarriedForward);
             var macdData = CalculateMACD(imputedClosingPrices, shortPeriod, longPeriod, signalPeriod);
 
@@ -169,7 +169,7 @@ namespace GptFinance.Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task CalculateAndStoreMacdOnAllCompanies(int shortPeriod, int longPeriod, int signalPeriod, ICollection<Company> companies)
+        public async Task CalculateAndStoreMacdOnAllCompanies(int shortPeriod, int longPeriod, int signalPeriod, ICollection<CompanyAggregate> companies)
         {
             foreach (var company in companies)
             {

@@ -5,15 +5,15 @@ namespace GptFinance.Application.Interfaces;
 
 public interface IMacdRepository
 {
-    Task<Macd> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date);
+    Task<MacdDomainEntity> GetByCompanyIdAndDateAsync(Guid companyId, DateTime date);
 
-    Task<List<Macd>> GetByCompanyIdAsync(Guid companyId);
+    Task<List<MacdDomainEntity>> GetByCompanyIdAsync(Guid companyId);
 
-    Task<Macd> AddAsync(Macd entity);
+    Task<MacdDomainEntity> AddAsync(MacdDomainEntity entity);
 
-    Task AddRangeAsync(IEnumerable<Macd> entities);
+    Task AddRangeAsync(IEnumerable<MacdDomainEntity> entities);
 
     Task<bool> ExistsAsync(Guid companyId, DateTime date);
 
-    Task<List<Macd>> GetAsync(Expression<Func<Macd, bool>> filter);
+    Task<List<MacdDomainEntity>> GetAsync(Expression<Func<MacdDomainEntity, bool>> filter);
 }

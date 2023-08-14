@@ -2,11 +2,11 @@
 {
     public class Predicate
     {
-        public FinancialData FinancialData { get; set; }
+        public FinancialDataAggregate FinancialData { get; set; }
 
         public Predicate()
         {
-            FinancialData = new FinancialData();
+            FinancialData = new FinancialDataAggregate();
         }
     }
 }
