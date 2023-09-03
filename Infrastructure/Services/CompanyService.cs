@@ -10,13 +10,13 @@ namespace GptFinance.Infrastructure.Services
 {
     public class CompanyService : ICompanyService
     {
-        //private readonly IYahooFinanceService<CsvRecord> _yahooFinanceService;
         private readonly ICompanyRepository _companyRepository;
+        private readonly IStockExchangeRepository _stockExchangeRepository;
 
-        public CompanyService(IYahooFinanceService<CsvRecord> yahooFinanceService, ICompanyRepository companyRepository)
+        public CompanyService(ICompanyRepository companyRepository, IStockExchangeRepository stockExchangeRepository)
         {
-            //_yahooFinanceService = yahooFinanceService ?? throw new ArgumentNullException(nameof(yahooFinanceService));
             _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
+            _stockExchangeRepository = stockExchangeRepository ?? throw new ArgumentNullException(nameof(stockExchangeRepository));
         }
 
         public async Task<ICollection<CompanyAggregate>> GetAll(int take = 1000)
@@ -38,7 +38,19 @@ namespace GptFinance.Infrastructure.Services
             return company;
         }
 
-        public async Task AddMultipleCompaniesAsync(List<CompanyAggregate> companies) => await _companyRepository.AddRange(companies);
+        public async Task AddMultipleCompaniesAsync(List<CompanyAggregate> companies)
+        {
+            //var exchanges = companies.Select(c => c.StockExchange).Distinct();
+            //var exchangesInDb = await _stockExchangeRepository.GetAllAsync();
+
+            //var notInDb = exchanges.Except(exchangesInDb);
+            //if (notInDb.Any())
+            //    await _stockExchangeRepository.AddRangeAsync(notInDb);
+
+            //exchangesInDb = await _stockExchangeRepository.GetAllAsync();
+
+            await _companyRepository.AddRange(companies);
+        }
 
         public async Task UpdateCompany(Guid id, CompanyAggregate company)
         {

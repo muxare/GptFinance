@@ -106,6 +106,12 @@ namespace YahooFinanceAPI.Controllers
             return Ok(results.ToYahooCompanySearchResult());
         }
 
+        /// <summary>
+        /// Search for multiple companies by comma separated tickers
+        /// ^OMXS30: SHB-A.ST, SWED-A.ST, SEB-A.ST, SCA-B.ST, ATCO-A.ST, GETI-B.ST, HEXA-B.ST, NDA-SE.ST, ALIV-SDB.ST, AZN.ST, SINCH.ST, HM-B.ST, TEL2-B.ST, ABB.ST, SAND.ST, SKF-B.ST, ASSA-B.ST, VOLV-B.ST, INVE-B.ST, ALFA.ST, ERIC-B.ST, EVO.ST, ESSITY-B.ST, ATCO-B.ST, BOL.ST, TELIA.ST, ELUX-B.ST, SBB-B.ST, NIBE-B.ST, KINV-B.ST
+        /// </summary>
+        /// <param name="queries"></param>
+        /// <returns></returns>
         [HttpGet("search-multiple")]
         public async Task<ActionResult> SearchCompaniesMultiple(string queries)
         {

@@ -28,6 +28,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddTransient<IYahooFinanceService<CsvRecord>, YahooFinanceService>();
 builder.Services.AddTransient<IEodDataRepository, EodDataRepository>();
+builder.Services.AddTransient<IStockExchangeRepository, StockExchangeRepository>();
 builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
 builder.Services.AddTransient<ITechnicalIndicatorsService, TechnicalIndicatorsService>();
 builder.Services.AddTransient<IYahooSearchService, YahooSearchService>();

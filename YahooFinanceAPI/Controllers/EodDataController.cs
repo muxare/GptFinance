@@ -92,7 +92,8 @@ public class EodDataController : ControllerBase
     public async Task<ActionResult> FetchHistoricalData()
     {
         var companies = await _companyService.GetAll(1);
-        await _yahooFinanceService.GetHistoricalDataAsync(companies.Where(o => o.MarketIsClosed()).ToList());
+        //await _yahooFinanceService.GetHistoricalDataAsync(companies.Where(o => o.MarketIsClosed()).ToList());
+        await _yahooFinanceService.GetHistoricalDataAsync(companies.ToList());
 
         return Ok();
     }
