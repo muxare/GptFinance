@@ -107,33 +107,33 @@ namespace GptFinance.Infrastructure.Mappings
             };
         }
 
-        public static Models.Entities.StockExchange Map(this StockExchangeAggregate o)
-        {
-            return new StockExchange()
-            {
-                Id = o.Id,
-                Name = o.Name,
-                Marketplace = o.Marketplace,
-                Ranking = o.Ranking,
-                TimeZone = o.TimeZone,
-                TradingHours = o.TradingHours,
-                LunchBreak = o.LunchBreak
-            };
-        }
+        //public static Models.Entities.StockExchange Map(this StockExchangeAggregate o)
+        //{
+        //    return new StockExchange()
+        //    {
+        //        Id = o.Id,
+        //        Name = o.Name,
+        //        Marketplace = o.Marketplace,
+        //        Ranking = o.Ranking,
+        //        TimeZone = o.TimeZone,
+        //        TradingHours = o.TradingHours,
+        //        LunchBreak = o.LunchBreak
+        //    };
+        //}
 
-        public static StockExchangeAggregate Map(this StockExchange o)
-        {
-            return new StockExchangeAggregate()
-            {
-                Id = o.Id,
-                Name = o.Name,
-                Marketplace = o.Marketplace,
-                Ranking = o.Ranking,
-                TimeZone = o.TimeZone,
-                TradingHours = o.TradingHours,
-                LunchBreak = o.LunchBreak
-            };
-        }
+        //public static StockExchangeAggregate Map(this StockExchange o)
+        //{
+        //    return new StockExchangeAggregate()
+        //    {
+        //        Id = o.Id,
+        //        Name = o.Name,
+        //        Marketplace = o.Marketplace,
+        //        Ranking = o.Ranking,
+        //        TimeZone = o.TimeZone,
+        //        TradingHours = o.TradingHours,
+        //        LunchBreak = o.LunchBreak
+        //    };
+        //}
 
         /*public static DomainEntity.MacdDomainEntity Map(this Models.Entities.MacdData macd)
         {

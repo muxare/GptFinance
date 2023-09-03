@@ -11,12 +11,12 @@ namespace GptFinance.Infrastructure.Services
     public class CompanyService : ICompanyService
     {
         private readonly ICompanyRepository _companyRepository;
-        private readonly IStockExchangeRepository _stockExchangeRepository;
+        //private readonly IStockExchangeRepository _stockExchangeRepository;
 
-        public CompanyService(ICompanyRepository companyRepository, IStockExchangeRepository stockExchangeRepository)
+        public CompanyService(ICompanyRepository companyRepository)
         {
             _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
-            _stockExchangeRepository = stockExchangeRepository ?? throw new ArgumentNullException(nameof(stockExchangeRepository));
+            //_stockExchangeRepository = stockExchangeRepository ?? throw new ArgumentNullException(nameof(stockExchangeRepository));
         }
 
         public async Task<ICollection<CompanyAggregate>> GetAll(int take = 1000)

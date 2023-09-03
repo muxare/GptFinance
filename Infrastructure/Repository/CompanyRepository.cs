@@ -39,24 +39,29 @@ public class CompanyRepository : ICompanyRepository
     public async Task<ICollection<CompanyAggregate>> GetAllAsync(int take = 1000)
     {
         var companies = await _context.Companies.OrderBy(o => o.Id)
-            .Include(c => c.EodData.OrderByDescending(o => o.Date).Take(take))
-            .Include(c => c.StockExchange).ToListAsync();
+            .Include(c => c.EodData.OrderByDescending(o => o.Date).Take(take)).ToListAsync();
         var emas = await _context.EmaData.GroupBy(e => e.CompanyId).OrderBy(o => o.Key).Select(e => e.OrderByDescending(o => o.Date).ThenByDescending(o => o.Value).Take(take)).ToListAsync();
         var macds = await _context.MacdData.GroupBy(e => e.CompanyId).OrderBy(o => o.Key).Select(e => e.OrderByDescending(o => o.Date).Take(take)).ToListAsync();
-        var markets = await _context.StockExchange.ToListAsync();
+        //var markets = await _context.StockExchange.ToListAsync();
 
-        var companyAggregates = companies.Zip(emas, macds).Select(o => new CompanyAggregate
+       //var companyAggregates = companies.Zip(emas, macds).Select(o => new CompanyAggregate
+       // {
+       //     Id = o.First.Id,
+       //     Name = o.First.Name,
+       //     Symbol = o.First.Symbol,
+       //     FinancialData = new FinancialDataAggregate
+       //     {
+       //         EodData = o.First.EodData.Select(eod => eod.Map()).OrderByDescending(o => o.Date).Take(12).ToList(),
+       //         EmaData = o.Second.Select(s => s.Map()).ToList(),
+       //         MacdData = o.Third.Select(s => s.Map()).ToList()
+       //     }
+       // }).ToList();
+
+        var companyAggregates = companies.Select(o => new CompanyAggregate
         {
-            Id = o.First.Id,
-            Name = o.First.Name,
-            Symbol = o.First.Symbol,
-            FinancialData = new FinancialDataAggregate
-            {
-                EodData = o.First.EodData.Select(eod => eod.Map()).OrderByDescending(o => o.Date).Take(12).ToList(),
-                EmaData = o.Second.Select(s => s.Map()).ToList(),
-                MacdData = o.Third.Select(s => s.Map()).ToList()
-            },
-            StockExchange = o.First.StockExchange.Map()
+            Id = o.Id,
+            Name = o.Name,
+            Symbol = o.Symbol
         }).ToList();
 
         return companyAggregates;
